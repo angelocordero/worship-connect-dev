@@ -13,6 +13,11 @@ class CreateJoinTeamFirebaseAPI {
     required String creatorID,
     required String creatorName,
   }) async {
+    if (creatorName.isEmpty) {
+      EasyLoading.showError('User name cannot be empty');
+      return;
+    }
+
     if (teamName.isEmpty) {
       EasyLoading.showError('Team name cannot be empty');
       return;
@@ -41,6 +46,7 @@ class CreateJoinTeamFirebaseAPI {
 
     //update creator data
     _writeBatch.update(WCUSerFirebaseAPI().wcUserDataCollection.doc(creatorID), {
+      'userName': creatorName,
       'teamID': _teamID,
       'userStatusString': UserStatus.leader.name,
     });
@@ -69,6 +75,11 @@ class CreateJoinTeamFirebaseAPI {
     required String joinerName,
     required String joinerID,
   }) async {
+    if (joinerName.isEmpty) {
+      EasyLoading.showError('User name cannot be empty');
+      return;
+    }
+
     if (teamID.isEmpty) {
       EasyLoading.showError('Team ID cannot be empty');
       return;
@@ -106,6 +117,7 @@ class CreateJoinTeamFirebaseAPI {
 
     // update user data
     _writeBatch.update(WCUSerFirebaseAPI().wcUserDataCollection.doc(joinerID), {
+      'userName': joinerName,
       'teamID': teamID,
       'userStatusString': UserStatus.member.name,
     });

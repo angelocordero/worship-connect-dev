@@ -18,7 +18,9 @@ class _EditNameWidgetState extends State<EditNameWidget> {
 
   @override
   void dispose() {
-    _textEditingController.dispose();
+    if(mounted){
+      _textEditingController.dispose();
+    }
 
     super.dispose();
   }
@@ -30,7 +32,7 @@ class _EditNameWidgetState extends State<EditNameWidget> {
         height: WCUtils().screenHeightSafeArea(context)! / 4,
         decoration: BoxDecoration(
           color: Colors.black38,
-          border: Border.all(color: Color(0xff00d8d8)),
+          border: Border.all(color: wcPrimaryColor),
           borderRadius: BorderRadius.vertical(
             bottom: Radius.elliptical(
               WCUtils().screenWidth(context)!,
@@ -45,7 +47,7 @@ class _EditNameWidgetState extends State<EditNameWidget> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               GradientText('Welcome,',
-                  colors: wcColors,
+                  colors: wcGradientColors,
                   style: GoogleFonts.exo2(
                     textStyle: const TextStyle(
                       fontSize: 20,
@@ -56,17 +58,19 @@ class _EditNameWidgetState extends State<EditNameWidget> {
               ),
               Consumer(
                 builder: (BuildContext context, WidgetRef ref, _) {
-                  String userName = ref.watch(userNameNotifier)!;
+                  String userName = ref.watch(userNameProvider)!;
 
-                  WidgetsBinding.instance?.addPostFrameCallback((_) {
-                    _textEditingController.text = userName;
-                    _textEditingController.selection = TextSelection.fromPosition(TextPosition(offset: userName.length));
-                  });
+                  WidgetsBinding.instance?.addPostFrameCallback(
+                    (_) {
+                      _textEditingController.text = userName;
+                      _textEditingController.selection = TextSelection.fromPosition(TextPosition(offset: userName.length));
+                    },
+                  );
 
                   return TextField(
                     controller: _textEditingController,
                     onChanged: (value) {
-                      ref.watch(userNameNotifier.state).state = value;
+                      ref.watch(userNameProvider.state).state = value;
                     },
                     style: GoogleFonts.exo2(
                       textStyle: const TextStyle(

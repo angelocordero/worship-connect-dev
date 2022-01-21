@@ -18,7 +18,9 @@ class _EnterNameWidgetState extends ConsumerState<EnterNameWidget> {
 
   @override
   void dispose() {
-    _userNameTextEditingController.dispose();
+    if(mounted){
+      _userNameTextEditingController.dispose();
+    }
     super.dispose();
   }
 

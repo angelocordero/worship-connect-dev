@@ -31,14 +31,16 @@ TextStyle wcSignInLogoTextStyle = const TextStyle(
   fontWeight: FontWeight.w600,
 );
 
-List<Color> wcColors = const [
+List<Color> wcGradientColors = const [
   Color(0xff31a6dc),
   Color(0xff00d8d8),
   Color(0xff1eff8e),
 ];
 
+Color wcPrimaryColor = const Color(0xff00d8d8);
+
 LinearGradient wcLinearGradient = LinearGradient(
-  colors: wcColors,
+  colors: wcGradientColors,
   begin: Alignment.centerLeft,
   end: Alignment.centerRight,
 );

@@ -33,17 +33,16 @@ class WCUSerFirebaseAPI {
   Future updateUserName({required String userID, required String userName, String? teamID}) async {
     EasyLoading.show();
 
-    if (userName.isNotEmpty) {
-      return await wcUserDataCollection.doc(userID).update({
-        'userName': userName,
-      }).then((value) {
-        EasyLoading.dismiss();
-      });
-    } else {
-      String _error = 'Username must not be empty';
-      EasyLoading.showError(_error);
+    if (userName.isEmpty) {
+      EasyLoading.showError('User name must not be empty');
       return;
     }
+
+    await wcUserDataCollection.doc(userID).update({
+      'userName': userName,
+    });
+
+    EasyLoading.dismiss();
 
     // TODO: also change user name in team member list
   }

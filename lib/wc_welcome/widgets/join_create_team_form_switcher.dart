@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
-import 'package:worship_connect/wc_core/wc_user_firebase_api.dart';
 import 'package:worship_connect/wc_core/worship_connect.dart';
 import 'package:worship_connect/wc_core/worship_connect_constants.dart';
 import 'package:worship_connect/wc_sign_in/data_classes/wc_user_info_data.dart';
@@ -31,7 +30,7 @@ class _JoinCreateTeamFormSwitcherState extends State<JoinCreateTeamFormSwitcher>
   int currentIndex = 0;
   double? dividerRight = 146;
   List<Color> inactiveButtonColor = [Colors.white38, Colors.white38];
-  List<Color> joinColor = wcColors;
+  List<Color> joinColor = wcGradientColors;
   List<Widget> pages = const [
     JoinTeamForm(),
     CreateTeamForm(),
@@ -45,13 +44,15 @@ class _JoinCreateTeamFormSwitcherState extends State<JoinCreateTeamFormSwitcher>
       height: 30,
       child: TextButton(
         onPressed: () {
-          setState(() {
-            buttonText = 'Join Team';
-            joinColor = wcColors;
-            createColor = inactiveButtonColor;
-            currentIndex = 0;
-            dividerRight = 146;
-          });
+          setState(
+            () {
+              buttonText = 'Join Team';
+              joinColor = wcGradientColors;
+              createColor = inactiveButtonColor;
+              currentIndex = 0;
+              dividerRight = 146;
+            },
+          );
         },
         child: GradientText(
           'JOIN',
@@ -69,13 +70,15 @@ class _JoinCreateTeamFormSwitcherState extends State<JoinCreateTeamFormSwitcher>
       height: 30,
       child: TextButton(
         onPressed: () {
-          setState(() {
-            buttonText = 'Create Team';
-            joinColor = inactiveButtonColor;
-            createColor = wcColors;
-            currentIndex = 1;
-            dividerRight = 33;
-          });
+          setState(
+            () {
+              buttonText = 'Create Team';
+              joinColor = inactiveButtonColor;
+              createColor = wcGradientColors;
+              currentIndex = 1;
+              dividerRight = 33;
+            },
+          );
         },
         child: GradientText(
           'CREATE',
@@ -122,7 +125,7 @@ class _JoinCreateTeamFormSwitcherState extends State<JoinCreateTeamFormSwitcher>
         builder: (context, ref, child) {
           String _joinTeamID = ref.watch<String>(joinTeamIDProvider);
           String _createTeamName = ref.watch<String>(createTeamNameProvider);
-          String _userName = ref.watch<String>(userNameNotifier);
+          String _userName = ref.watch<String>(userNameProvider);
 
           AsyncData<WCUserInfoData?>? _wcUserInfoData = ref.watch(wcUserInfoDataStream).asData;
 
@@ -134,28 +137,19 @@ class _JoinCreateTeamFormSwitcherState extends State<JoinCreateTeamFormSwitcher>
               shape: wcButtonShape,
             ),
             onPressed: () async {
-              await WCUSerFirebaseAPI()
-                  .updateUserName(
-                userID: _userID ?? '',
-                userName: _userName,
-              )
-                  .then(
-                (value) async {
-                  if (currentIndex == 0) {
-                    await CreateJoinTeamFirebaseAPI().joinTeam(
-                      teamID: _joinTeamID,
-                      joinerName: _userName,
-                      joinerID: _userID ?? '',
-                    );
-                  } else {
-                    await CreateJoinTeamFirebaseAPI().createTeam(
-                      teamName: _createTeamName,
-                      creatorID: _userID ?? '',
-                      creatorName: _userName,
-                    );
-                  }
-                },
-              );
+              if (currentIndex == 0) {
+                await CreateJoinTeamFirebaseAPI().joinTeam(
+                  teamID: _joinTeamID,
+                  joinerName: _userName,
+                  joinerID: _userID ?? '',
+                );
+              } else {
+                await CreateJoinTeamFirebaseAPI().createTeam(
+                  teamName: _createTeamName,
+                  creatorID: _userID ?? '',
+                  creatorName: _userName,
+                );
+              }
             },
             child: Ink(
               decoration: BoxDecoration(
@@ -202,7 +196,7 @@ class _JoinCreateTeamFormSwitcherState extends State<JoinCreateTeamFormSwitcher>
         borderRadius: const BorderRadius.all(
           Radius.circular(10),
         ),
-        border: Border.all(color: Color(0xff00d8d8)),
+        border: Border.all(color: wcPrimaryColor),
       ),
       child: Padding(
         padding: const EdgeInsets.all(14.0),

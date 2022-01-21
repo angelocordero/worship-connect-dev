@@ -13,7 +13,7 @@ import 'package:worship_connect/wc_welcome/widgets/edit_name_widget.dart';
 import 'package:worship_connect/wc_welcome/widgets/enter_name_widget.dart';
 import 'package:worship_connect/wc_welcome/widgets/join_create_team_form_switcher.dart';
 
-final userNameNotifier = StateProvider.autoDispose<String>((ref) {
+final userNameProvider = StateProvider.autoDispose<String>((ref) {
   AsyncData<WCUserInfoData?>? wcUserInfoData = ref.watch(wcUserInfoDataStream).asData;
 
   return wcUserInfoData?.value?.userName ?? '';
@@ -27,11 +27,11 @@ class WelcomePage extends ConsumerStatefulWidget {
 }
 
 class WelcomePageState extends ConsumerState<WelcomePage> {
+  Duration? enterNameWidgetDuration;
   double? editNameWidgetOpacityAnimated;
   double? enterNameWidgetBottom;
   double? enterNameWidgetBottomAnimated;
   double? enterNameWidgetBottomFinal;
-  Duration? enterNameWidgetDuration;
   double? enterNameWidgetLeftAnimated;
   double? enterNameWidgetLeftDisplay;
   double? enterNameWidgetLeftFinal;
@@ -144,7 +144,7 @@ class WelcomePageState extends ConsumerState<WelcomePage> {
       logoWidgetTopAnimated = logoWidgetTopFinal;
       editNameWidgetOpacityAnimated = 1;
 
-      if (wcUserInfoData.value!.teamID.isNotEmpty) {
+      if (wcUserInfoData.value!.teamID.isNotEmpty & mounted) {
         enterNameWidgetDuration = const Duration(seconds: 0);
         WidgetsBinding.instance?.addPostFrameCallback(
           (_) {
@@ -181,7 +181,7 @@ class WelcomePageState extends ConsumerState<WelcomePage> {
             child: Stack(
               alignment: AlignmentDirectional.topCenter,
               children: [
-                //testingButton(),
+                testingButton(),
                 _logoWidget(),
                 _signInWidget(),
                 _enterNameWidget(),
