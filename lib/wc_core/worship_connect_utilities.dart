@@ -46,4 +46,9 @@ class WCUtils {
   String dateToString(DateTime _dateTime) {
     return '${DateFormat.EEEE().format(_dateTime)} ${DateFormat.yMMMd().format(_dateTime)}';
   }
+
+  String dateTimeToString(DateTime _dateTime) {
+    return '${DateFormat.EEEE().format(_dateTime)} ${DateFormat.yMMMd().format(_dateTime)} ${DateFormat.jm().format(_dateTime)}';
+  }
+
 }

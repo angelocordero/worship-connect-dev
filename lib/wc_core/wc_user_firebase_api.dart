@@ -45,5 +45,6 @@ class WCUSerFirebaseAPI {
     EasyLoading.dismiss();
 
     // TODO: also change user name in team member list
+    // TODO: also change user name in announcements data
   }
 }
