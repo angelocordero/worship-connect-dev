@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "944079003927",
+    "project_id": "worship-connect-2021",
+    "storage_bucket": "worship-connect-2021.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:944079003927:android:53e5f8c6229a8031919752",
+        "android_client_info": {
+          "package_name": "com.angelocordero.worship_connect"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "944079003927-tko1mg3jtjl07irhiu3717rdj7v7elj3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.angelocordero.worship_connect",
+            "certificate_hash": "ef4075da988b89efa2a31b705cc6336fc0d18364"
+          }
+        },
+        {
+          "client_id": "944079003927-uqb88m7sphahufs5p3men1mgndddj69c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAIDo_2hQ_zQB8Wkr9dcIwF9fPmMHGa6U4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "944079003927-uqb88m7sphahufs5p3men1mgndddj69c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
