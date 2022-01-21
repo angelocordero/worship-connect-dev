@@ -1,7 +1,7 @@
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:worship_connect/wc_sign_in/services/wc_user_authentication_service.dart';
+import 'package:worship_connect/sign_in/services/wc_user_authentication_service.dart';
 
 class WCSignIn {
   Future googleSignIn() async {

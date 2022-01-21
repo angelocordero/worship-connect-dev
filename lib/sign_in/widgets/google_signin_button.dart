@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:worship_connect/wc_core/worship_connect_constants.dart';
-import 'package:worship_connect/wc_sign_in/services/sign_in_service.dart';
+import 'package:worship_connect/sign_in/services/sign_in_service.dart';
 
 class GoogleSignInButton extends StatelessWidget {
   const GoogleSignInButton({Key? key}) : super(key: key);
@@ -28,7 +28,6 @@ class GoogleSignInButton extends StatelessWidget {
         ),
         onPressed: () async {
           await WCSignIn().googleSignIn();
-          
         },
       ),
     );

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:worship_connect/wc_core/worship_connect_constants.dart';
-import 'package:worship_connect/wc_welcome/widgets/join_create_team_form_switcher.dart';
+import 'package:worship_connect/welcome/widgets/join_create_team_form_switcher.dart';
 
 class JoinTeamForm extends ConsumerWidget {
   const JoinTeamForm({Key? key}) : super(key: key);

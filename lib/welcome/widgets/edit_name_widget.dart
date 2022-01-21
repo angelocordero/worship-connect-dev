@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 import 'package:worship_connect/wc_core/worship_connect_constants.dart';
 import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
-import 'package:worship_connect/wc_welcome/screens/welcome_page.dart';
+import 'package:worship_connect/welcome/screens/welcome_page.dart';
 
 class EditNameWidget extends StatefulWidget {
   const EditNameWidget({Key? key}) : super(key: key);
@@ -18,7 +18,7 @@ class _EditNameWidgetState extends State<EditNameWidget> {
 
   @override
   void dispose() {
-    if(mounted){
+    if (mounted) {
       _textEditingController.dispose();
     }
 
