@@ -32,13 +32,13 @@ class AnnouncementsFirebaseAPI {
   }
 
   Future<void> editAnnouncement({
-    required String newAnnouncementText,
+    required String announcementText,
     required String announcementID,
   }) async {
     EasyLoading.show();
 
     await _teamAnnouncementsData.update({
-      '$announcementID.announcementText': newAnnouncementText,
+      '$announcementID.announcementText': announcementText,
     });
 
     EasyLoading.dismiss();

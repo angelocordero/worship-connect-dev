@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:worship_connect/announcements/screens/announcements_home_page.dart';
 import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
 
 class SendAnnouncementForm extends StatelessWidget {
-  const SendAnnouncementForm({Key? key, required this.tag}) : super(key: key);
-  
+  const SendAnnouncementForm({Key? key, required this.tag, required this.sendOrEdit}) : super(key: key);
+
   final String tag;
-  static final TextEditingController _announcementController = TextEditingController();
+  final String sendOrEdit;
 
   @override
   Widget build(BuildContext context) {
@@ -23,32 +25,14 @@ class SendAnnouncementForm extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  const Text(
-                    'Send Announcement',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                   Text(
+                    '$sendOrEdit Announcement',
+                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(
                     height: 10,
                   ),
-                  TextField(
-                    controller: _announcementController,
-                    minLines: 5,
-                    maxLines: 5,
-                    keyboardType: TextInputType.multiline,
-                    autocorrect: true,
-                    enableSuggestions: true,
-                    cursorColor: Colors.black,
-                    decoration: const InputDecoration(
-                      isDense: true,
-                      contentPadding: EdgeInsets.all(12),
-                      hintText: 'Announcement',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(12.0),
-                        ),
-                      ),
-                    ),
-                  ),
+                  _announcementTextField(),
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
@@ -69,7 +53,7 @@ class SendAnnouncementForm extends StatelessWidget {
                           onPressed: () {
                             //TODO: send announcement
                           },
-                          child: const Text('Send'),
+                          child: Text(sendOrEdit),
                         ),
                       ],
                     ),
@@ -80,6 +64,34 @@ class SendAnnouncementForm extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Consumer _announcementTextField() {
+    return Consumer(
+      builder: (context, ref, _) {
+        final _announcement = ref.watch(sendAnnouncementProvider);
+
+        return TextFormField(
+          initialValue: _announcement.announcementText,
+          minLines: 5,
+          maxLines: 5,
+          keyboardType: TextInputType.multiline,
+          autocorrect: true,
+          enableSuggestions: true,
+          cursorColor: Colors.black,
+          decoration: const InputDecoration(
+            isDense: true,
+            contentPadding: EdgeInsets.all(12),
+            hintText: 'Announcement',
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(12.0),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

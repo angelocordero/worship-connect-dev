@@ -6,7 +6,7 @@ class WCAnnouncementsData {
   final String announcementID;
   final String announcementPosterName;
   final String announcementPosterID;
-  final Timestamp timestamp;
+  final Timestamp? timestamp;
 
   late String announcementDateString;
 
@@ -15,8 +15,15 @@ class WCAnnouncementsData {
     required this.announcementID,
     required this.announcementPosterName,
     required this.announcementPosterID,
-    required this.timestamp,
+    this.timestamp,
   }) {
-    announcementDateString = WCUtils().dateTimeToString(timestamp.toDate());
+    announcementDateString = WCUtils().dateTimeToString(timestamp?.toDate() ?? Timestamp.now().toDate());
   }
+
+  WCAnnouncementsData.empty()
+      : announcementID = '',
+        announcementPosterID = '',
+        announcementText = '',
+        announcementPosterName = '',
+        timestamp = null;
 }
