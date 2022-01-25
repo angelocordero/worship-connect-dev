@@ -112,10 +112,11 @@ class _SendAnnouncementFormState extends ConsumerState<SendAnnouncementForm> {
                   announcementText: _announcementTextController.text,
                   announcementID: _announcement.announcementID,
                 );
-              } else {
-                // text not edited
-                Navigator.pop(context);
               }
+
+              await ref.watch(announcementListProvider.notifier).getAnnouncements();
+
+              Navigator.pop(context);
             },
           ),
         ],

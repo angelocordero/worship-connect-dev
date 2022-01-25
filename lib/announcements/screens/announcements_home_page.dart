@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:worship_connect/announcements/data_classes/announcements_data.dart';
 import 'package:worship_connect/announcements/providers/announcement_list_provider.dart';
 import 'package:worship_connect/announcements/providers/send_announcement_provider.dart';
+import 'package:worship_connect/announcements/widgets/announcement_list_tile.dart';
 import 'package:worship_connect/announcements/widgets/send_announcement_form.dart';
 import 'package:worship_connect/sign_in/data_classes/wc_user_info_data.dart';
 import 'package:worship_connect/wc_core/wc_custom_route.dart';
@@ -30,22 +31,9 @@ class AnnouncementsHomePage extends ConsumerStatefulWidget {
 
 class _AnnouncementsHomePageState extends ConsumerState<AnnouncementsHomePage> {
   @override
-  void initState()  {
+  void initState() {
     ref.read(announcementListProvider.notifier).getAnnouncements();
     super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    WCUserInfoData? _wcUserInfoData = ref.watch(wcUserInfoDataStream).asData!.value;
-    List _announcementList = ref.watch(announcementListProvider);
-
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Announcements'),
-      ),
-      floatingActionButton: _newAnnouncementButton(context, _wcUserInfoData!),
-    );
   }
 
   Visibility _newAnnouncementButton(BuildContext context, WCUserInfoData wcUserInfoData) {
@@ -72,6 +60,44 @@ class _AnnouncementsHomePageState extends ConsumerState<AnnouncementsHomePage> {
           );
         },
         label: const Text('New Announcement'),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    WCUserInfoData? _wcUserInfoData = ref.watch(wcUserInfoDataStream).asData!.value;
+    List _announcementList = ref.watch(announcementListProvider);
+    AnnouncementListProvider _announcementNotifier = ref.watch(announcementListProvider.notifier);
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Announcements'),
+      ),
+      floatingActionButton: _newAnnouncementButton(context, _wcUserInfoData!),
+      body: Builder(
+        builder: (context) {
+          if (_announcementList.isEmpty) {
+            return const Center(
+              child: Text("No announcement"),
+            );
+          } else {
+            return RefreshIndicator(
+              onRefresh: () async {
+                return await _announcementNotifier.getAnnouncements();
+              },
+              child: ListView.builder(
+                itemCount: _announcementList.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return AnnouncementListTile(
+                    index: index,
+                    key: UniqueKey(),
+                  );
+                },
+              ),
+            );
+          }
+        },
       ),
     );
   }

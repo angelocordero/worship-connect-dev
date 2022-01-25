@@ -21,11 +21,13 @@ class AnnouncementsFirebaseAPI {
     Timestamp _timestamp = Timestamp.now();
 
     await _teamAnnouncementsData.update({
-      'announcementText': announcementText,
-      'announcementPosterName': announcementPosterName,
-      'announcementPosterID': announcementPosterID,
-      'announcementID': _announcementID,
-      'timestamp': _timestamp,
+      _announcementID: <String, dynamic>{
+        'announcementText': announcementText,
+        'announcementPosterName': announcementPosterName,
+        'announcementPosterID': announcementPosterID,
+        'announcementID': _announcementID,
+        'timestamp': _timestamp,
+      }
     });
 
     EasyLoading.dismiss();

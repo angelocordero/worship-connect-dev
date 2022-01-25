@@ -54,7 +54,6 @@ class WorshipConnectNavigator extends ConsumerWidget {
           context,
           MaterialPageRoute(
             builder: (context) {
-              print('push tol welcome page');
               EasyLoading.dismiss();
               return const WelcomePage();
             },

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:worship_connect/wc_core/wc_home_navigator.dart';
 import 'package:worship_connect/wc_core/worship_connect.dart';
 import 'package:worship_connect/wc_core/worship_connect_constants.dart';
 import 'package:worship_connect/wc_core/worship_connect_navigator.dart';
@@ -31,13 +30,10 @@ class WelcomePage extends ConsumerStatefulWidget {
 class WelcomePageState extends ConsumerState<WelcomePage> {
   Duration? enterNameWidgetDuration;
   double? editNameWidgetOpacityAnimated;
-  double? enterNameWidgetBottom;
+  double? enterNameWidgetBottomInitial;
+  double? enterNameWidgetBottomDisplay;
   double? enterNameWidgetBottomAnimated;
   double? enterNameWidgetBottomFinal;
-  double? enterNameWidgetLeftAnimated;
-  double? enterNameWidgetLeftDisplay;
-  double? enterNameWidgetLeftFinal;
-  double? enterNameWidgetLeftInitial;
   double? formSwitcherBottomAnimated;
   double? formSwitcherBottomFinal;
   double? formSwitcherBottomInitial;
@@ -62,7 +58,7 @@ class WelcomePageState extends ConsumerState<WelcomePage> {
   AnimatedPositioned _enterNameWidget() {
     return AnimatedPositioned(
       bottom: enterNameWidgetBottomAnimated,
-      left: enterNameWidgetLeftAnimated,
+      left: null,
       child: const EnterNameWidget(),
       duration: enterNameWidgetDuration!,
     );
@@ -119,30 +115,27 @@ class WelcomePageState extends ConsumerState<WelcomePage> {
 
     logoWidgetTopInitial = 0;
     logoWidgetTopFinal = -300;
+    enterNameWidgetBottomInitial = -300;
 
     if (wcUserAuthState == null) {
+      enterNameWidgetBottomAnimated = enterNameWidgetBottomInitial;
       signInWidgetLeftAnimated = signInWidgetLeftInitial;
     } else {
       signInWidgetLeftAnimated = signInWidgetLeftFinal;
     }
 
-    enterNameWidgetLeftInitial = WCUtils().screenWidth(context)! + 300;
-    enterNameWidgetBottom = WCUtils().screenHeight(context)! / 3;
-    enterNameWidgetLeftDisplay = 25;
-    enterNameWidgetLeftFinal = 25;
+    enterNameWidgetBottomDisplay = WCUtils().screenHeight(context)! / 3;
     enterNameWidgetBottomFinal = WCUtils().screenHeight(context);
-    enterNameWidgetDuration = const Duration(milliseconds: 500);
+    enterNameWidgetDuration = const Duration(milliseconds: 300);
     formSwitcherBottomInitial = -300;
     formSwitcherBottomFinal = WCUtils().screenHeight(context)! / 5;
     formSwitcherBottomAnimated = formSwitcherBottomInitial;
 
     if (wcUserInfoData == null) {
-      enterNameWidgetBottomAnimated = enterNameWidgetBottom;
-      enterNameWidgetLeftAnimated = enterNameWidgetLeftInitial;
+      enterNameWidgetBottomAnimated = enterNameWidgetBottomInitial;
       editNameWidgetOpacityAnimated = 0;
     } else if (wcUserInfoData.value!.userName.isNotEmpty) {
       enterNameWidgetBottomAnimated = enterNameWidgetBottomFinal;
-      enterNameWidgetLeftAnimated = enterNameWidgetLeftFinal;
       logoWidgetTopAnimated = logoWidgetTopFinal;
       editNameWidgetOpacityAnimated = 1;
 
@@ -150,19 +143,21 @@ class WelcomePageState extends ConsumerState<WelcomePage> {
         enterNameWidgetDuration = const Duration(seconds: 0);
         WidgetsBinding.instance?.addPostFrameCallback(
           (_) {
-                          print('push tol home page');
-
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
-              return const WorshipConnectNavigator();
-            }));
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) {
+                  return const WorshipConnectNavigator();
+                },
+              ),
+            );
           },
         );
       } else {
         formSwitcherBottomAnimated = formSwitcherBottomFinal;
       }
     } else {
-      enterNameWidgetBottomAnimated = enterNameWidgetBottom;
-      enterNameWidgetLeftAnimated = enterNameWidgetLeftDisplay;
+      enterNameWidgetBottomAnimated = enterNameWidgetBottomDisplay;
       logoWidgetTopAnimated = logoWidgetTopInitial;
       editNameWidgetOpacityAnimated = 0;
     }
