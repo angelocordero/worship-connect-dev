@@ -50,10 +50,11 @@ class WorshipConnectNavigator extends ConsumerWidget {
   _pushToWelcomePage(BuildContext context) {
     WidgetsBinding.instance?.addPostFrameCallback(
       (_) {
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) {
+              print('push tol welcome page');
               EasyLoading.dismiss();
               return const WelcomePage();
             },

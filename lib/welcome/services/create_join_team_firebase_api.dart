@@ -57,11 +57,11 @@ class CreateJoinTeamFirebaseAPI {
 
     _writeBatch.set(wcTeamDataCollection.doc(_teamID).collection('data').doc('announcements'), {
       _announcementID: <String, dynamic>{
-        'announcement': 'Welcome to $teamName. Created $createdDay by $creatorName.',
-        'posterID': 'Worship Connect',
+        'announcementText': 'Welcome to $teamName. Created $createdDay by $creatorName.',
+        'announcementPosterID': 'Worship Connect',
         'timestamp': _timestamp,
         'announcementID': _announcementID,
-        'posterName': 'Worship Connect'
+        'announcementPosterName': 'Worship Connect'
       }
     });
 

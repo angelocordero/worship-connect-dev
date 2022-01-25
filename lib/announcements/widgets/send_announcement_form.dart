@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tap_debouncer/tap_debouncer.dart';
 import 'package:worship_connect/announcements/data_classes/announcements_data.dart';
-import 'package:worship_connect/announcements/models/send_announcement_model.dart';
+import 'package:worship_connect/announcements/providers/send_announcement_provider.dart';
 import 'package:worship_connect/announcements/screens/announcements_home_page.dart';
 import 'package:worship_connect/sign_in/data_classes/wc_user_info_data.dart';
 import 'package:worship_connect/wc_core/worship_connect.dart';
@@ -88,9 +89,15 @@ class _SendAnnouncementFormState extends ConsumerState<SendAnnouncementForm> {
             },
             child: const Text('Cancel'),
           ),
-          TextButton(
-            onPressed: () async {
-              SendAnnouncementNotifier notifier = ref.watch(sendAnnouncementProvider.notifier);
+          TapDebouncer(
+            builder: (BuildContext context, TapDebouncerFunc? onTap) {
+              return TextButton(
+                onPressed: onTap,
+                child: Text(widget.sendOrEdit),
+              );
+            },
+            onTap: () async {
+              SendAnnouncementProvider notifier = ref.watch(sendAnnouncementProvider.notifier);
 
               if (_announcement.announcementText.isEmpty) {
                 // sending new announcement
@@ -110,7 +117,6 @@ class _SendAnnouncementFormState extends ConsumerState<SendAnnouncementForm> {
                 Navigator.pop(context);
               }
             },
-            child: Text(widget.sendOrEdit),
           ),
         ],
       ),

@@ -23,6 +23,7 @@ dependencies:
   intl: ^0.17.0
   simple_gradient_text: ^1.2.2
   enum_to_string: ^2.0.1
+  tap_debouncer: ^2.0.2
 
 dev_dependencies:
   flutter_test:

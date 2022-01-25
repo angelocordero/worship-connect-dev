@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:worship_connect/wc_core/wc_home_navigator.dart';
 import 'package:worship_connect/wc_core/worship_connect.dart';
 import 'package:worship_connect/wc_core/worship_connect_constants.dart';
+import 'package:worship_connect/wc_core/worship_connect_navigator.dart';
 import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
 import 'package:worship_connect/sign_in/data_classes/wc_user_auth_data.dart';
 import 'package:worship_connect/sign_in/data_classes/wc_user_info_data.dart';
@@ -144,11 +146,15 @@ class WelcomePageState extends ConsumerState<WelcomePage> {
       logoWidgetTopAnimated = logoWidgetTopFinal;
       editNameWidgetOpacityAnimated = 1;
 
-      if (wcUserInfoData.value!.teamID.isNotEmpty & mounted) {
+      if (wcUserInfoData.value!.teamID.isNotEmpty && mounted) {
         enterNameWidgetDuration = const Duration(seconds: 0);
         WidgetsBinding.instance?.addPostFrameCallback(
           (_) {
-            Navigator.of(context).pop();
+                          print('push tol home page');
+
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+              return const WorshipConnectNavigator();
+            }));
           },
         );
       } else {
