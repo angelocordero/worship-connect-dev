@@ -14,22 +14,29 @@ class SendAnnouncementNotifier extends StateNotifier<WCAnnouncementsData> {
     state = data;
   }
 
-  void sendNewAnnouncement() async {
+  Future<void> sendNewAnnouncement({
+    required String announcementText,
+    required String announcementPosterName,
+    required String announcementPosterID,
+  }) async {
     await AnnouncementsFirebaseAPI(teamID).sendAnnouncement(
-      announcementText: state.announcementText,
-      announcementPosterName: state.announcementPosterName,
-      announcementPosterID: state.announcementPosterID,
+      announcementText: announcementText,
+      announcementPosterName: announcementPosterName,
+      announcementPosterID: announcementPosterID,
     );
   }
 
-  void sendEditedAnnouncement() async {
+  Future<void> sendEditedAnnouncement({
+    required String announcementText,
+    required String announcementID,
+  }) async {
     await AnnouncementsFirebaseAPI(teamID).editAnnouncement(
       announcementText: state.announcementText,
       announcementID: state.announcementID,
     );
   }
 
-  void deleteAnnouncement({
+  Future<void> deleteAnnouncement({
     required String teamID,
     required String announcementID,
   }) async {

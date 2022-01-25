@@ -51,4 +51,17 @@ class WCUtils {
     return '${DateFormat.EEEE().format(_dateTime)} ${DateFormat.yMMMd().format(_dateTime)} ${DateFormat.jm().format(_dateTime)}';
   }
 
+  void wcShowError(String error) {
+    EasyLoading.showError(
+      error,
+      dismissOnTap: true,
+    );
+  }
+
+  void wcShowInfo(String info) {
+    EasyLoading.showInfo(
+      'Sign in failed',
+      dismissOnTap: true,
+    );
+  }
 }
