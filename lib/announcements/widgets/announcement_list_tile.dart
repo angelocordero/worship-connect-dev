@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:worship_connect/announcements/data_classes/announcements_data.dart';
+import 'package:worship_connect/announcements/providers/send_announcement_provider.dart';
 import 'package:worship_connect/announcements/screens/announcements_home_page.dart';
+import 'package:worship_connect/announcements/widgets/send_announcement_form.dart';
 import 'package:worship_connect/sign_in/data_classes/wc_user_info_data.dart';
+import 'package:worship_connect/wc_core/wc_custom_route.dart';
 import 'package:worship_connect/wc_core/worship_connect.dart';
 import 'package:worship_connect/wc_core/worship_connect_constants.dart';
 
-// TODO: finish announcement tile
 
 class AnnouncementListTile extends ConsumerWidget {
   const AnnouncementListTile({Key? key, required this.index}) : super(key: key);
@@ -17,6 +19,7 @@ class AnnouncementListTile extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     WCAnnouncementsData _announcementData = ref.watch(announcementListProvider)[index];
     WCUserInfoData _userInfoData = ref.watch(wcUserInfoDataStream).asData!.value!;
+    SendAnnouncementProvider _announcementNotifier = ref.watch(sendAnnouncementProvider.notifier);
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
@@ -28,10 +31,7 @@ class AnnouncementListTile extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _announcementInfo(
-                context: context,
-                userInfoData: _userInfoData,
-                announcementsData: _announcementData,
-              ),
+                  context: context, userInfoData: _userInfoData, announcementData: _announcementData, announcementNotifier: _announcementNotifier),
               const Divider(),
               _announcementText(_announcementData),
             ],
@@ -56,7 +56,8 @@ class AnnouncementListTile extends ConsumerWidget {
   Widget _announcementInfo({
     required BuildContext context,
     required WCUserInfoData userInfoData,
-    required WCAnnouncementsData announcementsData,
+    required WCAnnouncementsData announcementData,
+    required SendAnnouncementProvider announcementNotifier,
   }) {
     bool _adminOrLeader = userInfoData.userStatus == UserStatus.admin || userInfoData.userStatus == UserStatus.leader;
 
@@ -68,28 +69,45 @@ class AnnouncementListTile extends ConsumerWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                announcementsData.announcementPosterName,
+                announcementData.announcementPosterName,
                 style: const TextStyle(fontSize: 14),
               ),
               const SizedBox(
                 height: 4,
               ),
               Text(
-                announcementsData.announcementDateString,
+                announcementData.announcementDateString,
                 style: const TextStyle(fontSize: 12),
               ),
             ],
           ),
         ),
         if (_adminOrLeader)
-          IconButton(
-            icon: const Icon(
-              Icons.edit,
-              size: 14,
+          Hero(
+            tag: announcementData.announcementID,
+            child: IconButton(
+              icon: const Icon(
+                Icons.edit,
+                size: 14,
+              ),
+              onPressed: () async {
+                Navigator.push(
+                  context,
+                  WCCustomRoute(
+                    builder: (BuildContext context) {
+                      announcementNotifier.setNewAnnouncement(
+                        announcementData,
+                      );
+
+                      return SendAnnouncementForm(
+                        tag: announcementData.announcementID,
+                        sendOrEdit: 'Edit',
+                      );
+                    },
+                  ),
+                );
+              },
             ),
-            onPressed: () {
-              //edit announcement
-            },
           ),
         if (_adminOrLeader)
           IconButton(
@@ -98,7 +116,10 @@ class AnnouncementListTile extends ConsumerWidget {
               size: 14,
             ),
             onPressed: () async {
-              //delete announcement
+              await announcementNotifier.deleteAnnouncement(
+                teamID: userInfoData.teamID,
+                announcementID: announcementData.announcementID,
+              );
             },
           ),
       ],
