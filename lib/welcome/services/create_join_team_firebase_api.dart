@@ -35,7 +35,7 @@ class CreateJoinTeamFirebaseAPI {
       'teamName': teamName,
       'creatorID': creatorID,
       'isOpen': true,
-      'teamiD': _teamID,
+      'teamID': _teamID,
     });
 
     //create member file

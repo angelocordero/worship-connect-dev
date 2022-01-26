@@ -10,4 +10,10 @@ class TeamData {
     required this.teamName,
     required this.isOpen,
   });
+
+  TeamData.empty()
+      : creatorID = '',
+        teamID = '',
+        teamName = '',
+        isOpen = true;
 }

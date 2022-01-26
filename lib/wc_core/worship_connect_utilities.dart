@@ -62,7 +62,14 @@ class WCUtils {
 
   void wcShowInfo(String info) {
     EasyLoading.showInfo(
-      'Sign in failed',
+      info,
+      dismissOnTap: true,
+    );
+  }
+
+  void wcShowSuccess(String success) {
+    EasyLoading.showSuccess(
+      success,
       dismissOnTap: true,
     );
   }
