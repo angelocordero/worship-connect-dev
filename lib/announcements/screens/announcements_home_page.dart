@@ -20,7 +20,7 @@ final announcementListProvider = StateNotifierProvider<AnnouncementListProvider,
   WCUserInfoData? wcUserInfoData = ref.watch(wcUserInfoDataStream).asData!.value;
 
   return AnnouncementListProvider(teamID: wcUserInfoData!.teamID);
-});
+},);
 
 class AnnouncementsHomePage extends ConsumerStatefulWidget {
   const AnnouncementsHomePage({Key? key}) : super(key: key);
@@ -42,6 +42,10 @@ class _AnnouncementsHomePageState extends ConsumerState<AnnouncementsHomePage> {
       child: FloatingActionButton.extended(
         heroTag: 'new',
         onPressed: () {
+          if (ref.read(announcementListProvider).length >= 10) {
+            WCUtils().wcShowError('You can only post up to 10 announcements.');
+            return;
+          }
           Navigator.push(
             context,
             WCCustomRoute(
@@ -50,7 +54,6 @@ class _AnnouncementsHomePageState extends ConsumerState<AnnouncementsHomePage> {
                 _sendAnnouncementProvider.setNewAnnouncement(
                   WCAnnouncementsData.empty(),
                 );
-
                 return const SendAnnouncementForm(
                   tag: 'new',
                   sendOrEdit: 'Send',

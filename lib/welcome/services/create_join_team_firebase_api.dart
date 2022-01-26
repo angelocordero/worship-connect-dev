@@ -34,7 +34,6 @@ class CreateJoinTeamFirebaseAPI {
     _writeBatch.set(wcTeamDataCollection.doc(_teamID), {
       'teamName': teamName,
       'creatorID': creatorID,
-      'creatorName': creatorName,
       'isOpen': true,
       'teamiD': _teamID,
     });
