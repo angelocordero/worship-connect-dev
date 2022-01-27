@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:worship_connect/settings/data_classes/wc_team_data.dart';
+import 'package:worship_connect/settings/screens/member_list_page.dart';
 import 'package:worship_connect/settings/services/team_firebase_api.dart';
 import 'package:worship_connect/settings/widgets/change_team_name_form.dart';
 import 'package:worship_connect/sign_in/data_classes/wc_user_info_data.dart';
@@ -28,12 +29,16 @@ class TeamSettings extends ConsumerWidget {
         child: const Text('Leave Team'));
   }
 
-  ListTile _membersTile() {
+  ListTile _membersTile(BuildContext context) {
     return ListTile(
       title: const Text('Members'),
       trailing: IconButton(
         icon: const Icon(Icons.arrow_forward_ios),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
+            return const MemberListPage();
+          }));
+        },
       ),
       //TODO: members list page
     );
@@ -81,7 +86,7 @@ class TeamSettings extends ConsumerWidget {
     required bool isAdminOrLeader,
     required BuildContext context,
   }) {
-    //TODO: allow name change
+    //TODO: fix name change text field behavior
     return ListTile(
       title: Text(teamName),
       subtitle: const Text('Team Name'),
@@ -139,7 +144,7 @@ class TeamSettings extends ConsumerWidget {
               teamID: _teamData.teamID,
               isAdminOrLeader: _isAdminOrLeader,
             ),
-            _membersTile(),
+            _membersTile(context),
             _leaveTeamButton(_userData)
           ],
         ),
