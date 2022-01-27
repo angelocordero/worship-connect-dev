@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:worship_connect/announcements/data_classes/announcements_data.dart';
+import 'package:worship_connect/settings/data_classes/wc_team_data.dart';
+import 'package:worship_connect/sign_in/data_classes/wc_user_info_data.dart';
 import 'package:worship_connect/wc_core/wc_user_firebase_api.dart';
 import 'package:worship_connect/wc_core/worship_connect_constants.dart';
 import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
@@ -33,10 +35,10 @@ class CreateJoinTeamFirebaseAPI {
 
     //set team info
     _writeBatch.set(wcTeamDataCollection.doc(_teamID), {
-      'teamName': teamName,
-      'creatorID': creatorID,
-      'isOpen': true,
-      'teamID': _teamID,
+      TeamDataEnum.teamName.name: teamName,
+      TeamDataEnum.creatorID.name: creatorID,
+      TeamDataEnum.isOpen.name: true,
+      TeamDataEnum.teamID.name: _teamID,
     });
 
     //create member file
@@ -46,9 +48,9 @@ class CreateJoinTeamFirebaseAPI {
 
     //update creator data
     _writeBatch.update(WCUSerFirebaseAPI().wcUserDataCollection.doc(creatorID), {
-      'userName': creatorName,
-      'teamID': _teamID,
-      'UserStatusEnumString': UserStatusEnum.leader.name,
+      WCUserInfoDataEnum.userName.name: creatorName,
+      WCUserInfoDataEnum.teamID.name: _teamID,
+      WCUserInfoDataEnum.userStatusString.name: UserStatusEnum.leader.name,
     });
 
     //sends new team announcement
@@ -101,7 +103,7 @@ class CreateJoinTeamFirebaseAPI {
     }
 
     // check if team is open
-    if (!(_doc.data() as Map<String, dynamic>)['isOpen']) {
+    if (!(_doc.data() as Map<String, dynamic>)[TeamDataEnum.isOpen.name]) {
       EasyLoading.showError(
         'Team is not open.',
         dismissOnTap: true,
@@ -116,9 +118,9 @@ class CreateJoinTeamFirebaseAPI {
 
     // update user data
     _writeBatch.update(WCUSerFirebaseAPI().wcUserDataCollection.doc(joinerID), {
-      'userName': joinerName,
-      'teamID': teamID,
-      'UserStatusEnumString': UserStatusEnum.member.name,
+      WCUserInfoDataEnum.userName.name: joinerName,
+      WCUserInfoDataEnum.teamID.name: teamID,
+      WCUserInfoDataEnum.userStatusString.name: UserStatusEnum.member.name,
     });
 
     await _writeBatch.commit();

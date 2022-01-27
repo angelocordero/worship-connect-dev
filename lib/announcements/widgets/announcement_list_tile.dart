@@ -30,7 +30,11 @@ class AnnouncementListTile extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _announcementInfo(
-                  context: context, userInfoData: _userInfoData, announcementData: _announcementData, announcementNotifier: _announcementNotifier),
+                context: context,
+                userInfoData: _userInfoData,
+                announcementData: _announcementData,
+                announcementNotifier: _announcementNotifier,
+              ),
               const Divider(),
               _announcementText(_announcementData),
             ],
@@ -53,10 +57,10 @@ class AnnouncementListTile extends ConsumerWidget {
   }
 
   Widget _announcementInfo({
-    required BuildContext context,
-    required WCUserInfoData userInfoData,
-    required WCAnnouncementsData announcementData,
     required SendAnnouncementProvider announcementNotifier,
+    required WCAnnouncementsData announcementData,
+    required WCUserInfoData userInfoData,
+    required BuildContext context,
   }) {
     bool _adminOrLeader = userInfoData.userStatus == UserStatusEnum.admin || userInfoData.userStatus == UserStatusEnum.leader;
 

@@ -21,11 +21,12 @@ class TeamFirebaseAPI {
       (DocumentSnapshot object) {
         Map<String, dynamic>? data = (object as DocumentSnapshot<Map<String, dynamic>>).data();
 
+//TODO: change string to enum
         return TeamData(
-          creatorID: data?['creatorID'] ?? '',
-          teamID: data?['teamID'] ?? '',
-          teamName: data?['teamName'] ?? '',
-          isOpen: data?['isOpen'] ?? '',
+          creatorID: data?[TeamDataEnum.creatorID.name] ?? '',
+          teamID: data?[TeamDataEnum.teamID.name] ?? '',
+          teamName: data?[TeamDataEnum.teamName.name] ?? '',
+          isOpen: data?[TeamDataEnum.isOpen.name] ?? '',
         );
       },
     );
@@ -34,7 +35,7 @@ class TeamFirebaseAPI {
   void toggleIsTeamOpen(bool currentStatus) async {
     EasyLoading.show();
     await teamsDataCollection.doc(teamID).update({
-      'isOpen': !currentStatus,
+      TeamDataEnum.isOpen.name: !currentStatus,
     });
 
     EasyLoading.dismiss();
@@ -56,8 +57,8 @@ class TeamFirebaseAPI {
 
       // update user data
       _writeBatch.update(WCUSerFirebaseAPI().wcUserDataCollection.doc(_userData.userID), {
-        'teamID': '',
-        'UserStatusEnumString': UserStatusEnum.noTeam.name,
+        WCUserInfoDataEnum.teamID.name: '',
+        WCUserInfoDataEnum.userStatusString.name: UserStatusEnum.noTeam.name,
       });
 
       _writeBatch.update(CreateJoinTeamFirebaseAPI().wcTeamDataCollection.doc(teamID).collection('data').doc('members'), {

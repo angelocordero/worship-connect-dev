@@ -1,3 +1,11 @@
+enum TeamDataEnum {
+  creatorID,
+  teamName,
+  teamID,
+  isOpen,
+}
+
+
 class TeamData {
   final String creatorID;
   final String teamName;

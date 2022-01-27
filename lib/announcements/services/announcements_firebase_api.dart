@@ -41,7 +41,7 @@ class AnnouncementsFirebaseAPI {
     EasyLoading.show();
 
     await _teamAnnouncementsData.update({
-      '$announcementID.announcementText': announcementText,
+      '$announcementID.${WCAnnouncementsDataEnum.announcementText.name}': announcementText,
     });
 
     EasyLoading.dismiss();

@@ -8,10 +8,10 @@ class WCUSerFirebaseAPI {
 
   initializeWCUserData(String userID) {
     wcUserDataCollection.doc(userID).set({
-      'userID': userID,
-      'userName': '',
-      'UserStatusEnumString': UserStatusEnum.noTeam.name,
-      'teamID': '',
+      WCUserInfoDataEnum.userID.name: userID,
+      WCUserInfoDataEnum.userName.name: '',
+      WCUserInfoDataEnum.userStatusString: UserStatusEnum.noTeam.name,
+      WCUserInfoDataEnum.teamID.name: '',
     });
   }
 
@@ -21,10 +21,10 @@ class WCUSerFirebaseAPI {
         Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
 
         return WCUserInfoData(
-          userID: data['userID'],
-          userName: data['userName'],
-          userStatusString: data['UserStatusString'],
-          teamID: data['teamID'],
+          userID: data[WCUserInfoDataEnum.userID.name],
+          userName: data[WCUserInfoDataEnum.userName.name],
+          userStatusString: data[WCUserInfoDataEnum.userStatusString.name],
+          teamID: data[WCUserInfoDataEnum.teamID.name],
         );
       },
     );
@@ -39,7 +39,7 @@ class WCUSerFirebaseAPI {
     }
 
     await wcUserDataCollection.doc(userID).update({
-      'userName': userName,
+      WCUserInfoDataEnum.userName.name: userName,
     });
 
     EasyLoading.dismiss();

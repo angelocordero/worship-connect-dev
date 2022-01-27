@@ -1,6 +1,13 @@
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:worship_connect/wc_core/worship_connect_constants.dart';
 
+enum WCUserInfoDataEnum {
+  userID,
+  userName,
+  userStatusString,
+  teamID,
+}
+
 class WCUserInfoData {
   final String userID;
   final String userName;
