@@ -10,17 +10,24 @@ import 'package:worship_connect/wc_core/wc_custom_route.dart';
 import 'package:worship_connect/wc_core/worship_connect.dart';
 import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
 
-final sendAnnouncementProvider = StateNotifierProvider.autoDispose<SendAnnouncementProvider, WCAnnouncementsData>((ref) {
-  AsyncData<WCUserInfoData?>? wcUserInfoData = ref.watch(wcUserInfoDataStream).asData;
+final sendAnnouncementProvider = StateNotifierProvider.autoDispose<SendAnnouncementProvider, WCAnnouncementsData>(
+  (ref) {
+    AsyncData<WCUserInfoData?>? wcUserInfoData = ref.watch(wcUserInfoDataStream).asData;
 
-  return SendAnnouncementProvider(data: WCAnnouncementsData.empty(), teamID: wcUserInfoData!.value!.teamID);
-});
+    return SendAnnouncementProvider(
+      data: WCAnnouncementsData.empty(),
+      teamID: wcUserInfoData?.value?.teamID ?? '',
+    );
+  },
+);
 
-final announcementListProvider = StateNotifierProvider<AnnouncementListProvider, List>((ref) {
-  WCUserInfoData? wcUserInfoData = ref.watch(wcUserInfoDataStream).asData!.value;
+final announcementListProvider = StateNotifierProvider<AnnouncementListProvider, List>(
+  (ref) {
+    WCUserInfoData? wcUserInfoData = ref.watch(wcUserInfoDataStream).asData?.value;
 
-  return AnnouncementListProvider(teamID: wcUserInfoData!.teamID);
-},);
+    return AnnouncementListProvider(teamID: wcUserInfoData!.teamID);
+  },
+);
 
 class AnnouncementsHomePage extends ConsumerStatefulWidget {
   const AnnouncementsHomePage({Key? key}) : super(key: key);

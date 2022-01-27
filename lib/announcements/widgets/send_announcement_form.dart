@@ -102,14 +102,14 @@ class _SendAnnouncementFormState extends ConsumerState<SendAnnouncementForm> {
               if (_announcement.announcementText.isEmpty) {
                 // sending new announcement
                 await notifier.sendNewAnnouncement(
-                  announcementText: _announcementTextController.text,
+                  announcementText: _announcementTextController.text.trim(),
                   announcementPosterID: wcUserInfoData!.value!.userID,
                   announcementPosterName: wcUserInfoData.value!.userName,
                 );
               } else if (_announcement.announcementText != _announcementTextController.text) {
                 // editing announcement
                 await notifier.sendEditedAnnouncement(
-                  announcementText: _announcementTextController.text,
+                  announcementText: _announcementTextController.text.trim(),
                   announcementID: _announcement.announcementID,
                 );
               }

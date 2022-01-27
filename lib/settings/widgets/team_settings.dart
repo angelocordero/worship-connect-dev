@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:worship_connect/settings/data_classes/wc_team_data.dart';
 import 'package:worship_connect/settings/services/team_firebase_api.dart';
+import 'package:worship_connect/settings/widgets/change_team_name_form.dart';
 import 'package:worship_connect/sign_in/data_classes/wc_user_info_data.dart';
+import 'package:worship_connect/wc_core/wc_custom_route.dart';
 import 'package:worship_connect/wc_core/worship_connect.dart';
 import 'package:clipboard/clipboard.dart';
 import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
@@ -18,22 +20,22 @@ class TeamSettings extends ConsumerWidget {
 
   static Icon trailingIcon = const Icon(Icons.arrow_forward_ios);
 
-  ListTile _leaveTeamTile(WCUserInfoData _userData) {
-    return ListTile(
-      title: const Text('Leave Team'),
-      trailing: const Icon(Icons.arrow_forward_ios),
-      onTap: () async {
-        await TeamFirebaseAPI(_userData.teamID).leaveTeam(_userData);
-      },
-    );
+  ElevatedButton _leaveTeamButton(WCUserInfoData _userData) {
+    return ElevatedButton(
+        onPressed: () async {
+          await TeamFirebaseAPI(_userData.teamID).leaveTeam(_userData);
+        },
+        child: const Text('Leave Team'));
   }
 
   ListTile _membersTile() {
     return ListTile(
       title: const Text('Members'),
-      trailing: const Icon(Icons.arrow_forward_ios),
+      trailing: IconButton(
+        icon: const Icon(Icons.arrow_forward_ios),
+        onPressed: () {},
+      ),
       //TODO: members list page
-      onTap: () {},
     );
   }
 
@@ -44,12 +46,14 @@ class TeamSettings extends ConsumerWidget {
   }) {
     return Visibility(
       visible: isAdminOrLeader,
-      child: SwitchListTile(
+      child: ListTile(
         title: const Text('Allow Team Invites'),
-        value: isOpen,
-        onChanged: (value) async {
-          TeamFirebaseAPI(teamID).toggleIsTeamOpen(isOpen);
-        },
+        trailing: Switch(
+          value: isOpen,
+          onChanged: (value) async {
+            TeamFirebaseAPI(teamID).toggleIsTeamOpen(isOpen);
+          },
+        ),
       ),
     );
   }
@@ -58,24 +62,50 @@ class TeamSettings extends ConsumerWidget {
     return ListTile(
       title: Text(_teamID),
       subtitle: const Text('Team ID'),
-      trailing: const Icon(Icons.copy),
-      onTap: () async {
-        if (_teamID.isEmpty) {
-          WCUtils().wcShowError('Unable to copy team ID');
-          return;
-        }
-        await FlutterClipboard.copy(_teamID);
-        WCUtils().wcShowSuccess('Team ID copied to clipboard');
-      },
+      trailing: IconButton(
+        icon: const Icon(Icons.copy),
+        onPressed: () async {
+          if (_teamID.isEmpty) {
+            WCUtils().wcShowError('Unable to copy team ID');
+            return;
+          }
+          await FlutterClipboard.copy(_teamID);
+          WCUtils().wcShowSuccess('Team ID copied to clipboard');
+        },
+      ),
     );
   }
 
-  ListTile _teamNameTile(String _teamName) {
+  ListTile _teamNameTile({
+    required String teamName,
+    required bool isAdminOrLeader,
+    required BuildContext context,
+  }) {
     //TODO: allow name change
     return ListTile(
-      title: Text(_teamName),
+      title: Text(teamName),
       subtitle: const Text('Team Name'),
-      trailing: trailingIcon,
+      trailing: Visibility(
+        visible: isAdminOrLeader,
+        child: Hero(
+          tag: 'changeName',
+          child: IconButton(
+            icon: const Icon(Icons.edit),
+            onPressed: () {
+              Navigator.push(
+                context,
+                WCCustomRoute(
+                  builder: (context) {
+                    return ChangeTeamNameForm(
+                      teamName: teamName,
+                    );
+                  },
+                ),
+              );
+            },
+          ),
+        ),
+      ),
     );
   }
 
@@ -83,26 +113,34 @@ class TeamSettings extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     TeamData _teamData = ref.watch(wcTeamDataStream).asData?.value ?? TeamData.empty();
     WCUserInfoData? _userData = ref.watch(wcUserInfoDataStream).asData?.value;
+    bool _isAdminOrLeader = WCUtils().isAdminOrLeader(_userData!);
 
     return Card(
       margin: const EdgeInsets.all(12),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text('Team Settings'),
+            const Align(
+              child: Text('Team Settings'),
+              alignment: Alignment.centerLeft,
+            ),
             const Divider(),
-            _teamNameTile(_teamData.teamName),
+            _teamNameTile(
+              context: context,
+              teamName: _teamData.teamName,
+              isAdminOrLeader: _isAdminOrLeader,
+            ),
             _teamIDTile(_teamData.teamID),
             _teamInvitesTile(
               isOpen: _teamData.isOpen,
-              isAdminOrLeader: WCUtils().isAdminOrLeader(_userData!),
               teamID: _teamData.teamID,
+              isAdminOrLeader: _isAdminOrLeader,
             ),
             _membersTile(),
-            _leaveTeamTile(_userData)
+            _leaveTeamButton(_userData)
           ],
         ),
       ),

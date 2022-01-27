@@ -13,14 +13,17 @@ class SettingsHomePage extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () async {
-
               await WCUserAuthentication().signOut();
             },
             icon: const Icon(Icons.logout),
           ),
         ],
       ),
-      body: const TeamSettings(),
+      body: ListView(
+        children: const <Widget>[
+          TeamSettings(),
+        ],
+      ),
     );
   }
 }

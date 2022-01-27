@@ -32,7 +32,17 @@ class TeamFirebaseAPI {
     );
   }
 
-  void toggleIsTeamOpen(bool currentStatus) async {
+  Future<void> changeTeamName(String newTeamName) async {
+    EasyLoading.show();
+
+    await teamsDataCollection.doc(teamID).update({
+      TeamDataEnum.teamName.name: newTeamName
+    });
+
+    EasyLoading.dismiss();
+  }
+
+  Future<void> toggleIsTeamOpen(bool currentStatus) async {
     EasyLoading.show();
     await teamsDataCollection.doc(teamID).update({
       TeamDataEnum.isOpen.name: !currentStatus,

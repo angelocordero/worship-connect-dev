@@ -5,7 +5,6 @@ enum TeamDataEnum {
   isOpen,
 }
 
-
 class TeamData {
   final String creatorID;
   final String teamName;
