@@ -5,7 +5,7 @@ enum UserAuthProvider {
   google,
 }
 
-enum UserStatus {
+enum UserStatusEnum {
   noTeam,
   member,
   admin,

@@ -9,7 +9,6 @@ import 'package:worship_connect/wc_core/wc_custom_route.dart';
 import 'package:worship_connect/wc_core/worship_connect.dart';
 import 'package:worship_connect/wc_core/worship_connect_constants.dart';
 
-
 class AnnouncementListTile extends ConsumerWidget {
   const AnnouncementListTile({Key? key, required this.index}) : super(key: key);
 
@@ -59,7 +58,7 @@ class AnnouncementListTile extends ConsumerWidget {
     required WCAnnouncementsData announcementData,
     required SendAnnouncementProvider announcementNotifier,
   }) {
-    bool _adminOrLeader = userInfoData.userStatus == UserStatus.admin || userInfoData.userStatus == UserStatus.leader;
+    bool _adminOrLeader = userInfoData.userStatus == UserStatusEnum.admin || userInfoData.userStatus == UserStatusEnum.leader;
 
     return Row(
       children: [

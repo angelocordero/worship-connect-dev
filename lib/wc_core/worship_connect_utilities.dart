@@ -75,6 +75,6 @@ class WCUtils {
   }
 
   bool isAdminOrLeader(WCUserInfoData data) {
-    return data.userStatus == UserStatus.admin || data.userStatus == UserStatus.leader;
+    return data.userStatus == UserStatusEnum.admin || data.userStatus == UserStatusEnum.leader;
   }
 }

@@ -19,11 +19,11 @@ class AnnouncementListProvider extends StateNotifier<List> {
         (key, value) {
           _announcementList.add(
             WCAnnouncementsData(
-              announcementText: value['announcementText'],
-              announcementID: value['announcementID'],
-              announcementPosterName: value['announcementPosterName'],
-              announcementPosterID: value['announcementPosterID'],
-              timestamp: value['timestamp'],
+              announcementText: value[WCAnnouncementsDataEnum.announcementText.name],
+              announcementID: value[WCAnnouncementsDataEnum.announcementID.name],
+              announcementPosterName: value[WCAnnouncementsDataEnum.announcementPosterName.name],
+              announcementPosterID: value[WCAnnouncementsDataEnum.announcementPosterID.name],
+              timestamp: value[WCAnnouncementsDataEnum.timestamp.name],
             ),
           );
         },

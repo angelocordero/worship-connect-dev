@@ -7,7 +7,7 @@ class WCUserInfoData {
   final String userStatusString;
   final String teamID;
 
-  late UserStatus userStatus;
+  late UserStatusEnum userStatus;
 
   WCUserInfoData({
     required this.userID,
@@ -15,6 +15,6 @@ class WCUserInfoData {
     required this.userStatusString,
     required this.teamID,
   }) {
-    userStatus = EnumToString.fromString(UserStatus.values, userStatusString) ?? UserStatus.noTeam;
+    userStatus = EnumToString.fromString(UserStatusEnum.values, userStatusString) ?? UserStatusEnum.noTeam;
   }
 }

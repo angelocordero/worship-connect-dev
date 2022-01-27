@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:worship_connect/announcements/data_classes/announcements_data.dart';
 import 'package:worship_connect/wc_core/wc_user_firebase_api.dart';
 import 'package:worship_connect/wc_core/worship_connect_constants.dart';
 import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
@@ -40,27 +41,26 @@ class CreateJoinTeamFirebaseAPI {
 
     //create member file
     _writeBatch.set(wcTeamDataCollection.doc(_teamID).collection('data').doc('members'), {
-      'leader': <String, String>{creatorID: creatorName},
+      UserStatusEnum.leader.name: <String, String>{creatorID: creatorName},
     });
 
     //update creator data
     _writeBatch.update(WCUSerFirebaseAPI().wcUserDataCollection.doc(creatorID), {
       'userName': creatorName,
       'teamID': _teamID,
-      'userStatusString': UserStatus.leader.name,
+      'UserStatusEnumString': UserStatusEnum.leader.name,
     });
 
     //sends new team announcement
-    Timestamp _timestamp = Timestamp.now();
     String _announcementID = WCUtils().generateRandomID();
 
     _writeBatch.set(wcTeamDataCollection.doc(_teamID).collection('data').doc('announcements'), {
       _announcementID: <String, dynamic>{
-        'announcementText': 'Welcome to $teamName. Created $createdDay by $creatorName.',
-        'announcementPosterID': 'Worship Connect',
-        'timestamp': _timestamp,
-        'announcementID': _announcementID,
-        'announcementPosterName': 'Worship Connect'
+        WCAnnouncementsDataEnum.announcementText.name: 'Welcome to $teamName. Created $createdDay by $creatorName.',
+        WCAnnouncementsDataEnum.announcementPosterID.name: 'Worship Connect',
+        WCAnnouncementsDataEnum.announcementID.name: _announcementID,
+        WCAnnouncementsDataEnum.announcementPosterName.name: 'Worship Connect',
+        WCAnnouncementsDataEnum.timestamp.name: Timestamp.now(),
       }
     });
 
@@ -118,7 +118,7 @@ class CreateJoinTeamFirebaseAPI {
     _writeBatch.update(WCUSerFirebaseAPI().wcUserDataCollection.doc(joinerID), {
       'userName': joinerName,
       'teamID': teamID,
-      'userStatusString': UserStatus.member.name,
+      'UserStatusEnumString': UserStatusEnum.member.name,
     });
 
     await _writeBatch.commit();

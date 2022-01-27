@@ -18,12 +18,12 @@ class TeamSettings extends ConsumerWidget {
 
   static Icon trailingIcon = const Icon(Icons.arrow_forward_ios);
 
-  ListTile _leaveTeamTile() {
+  ListTile _leaveTeamTile(WCUserInfoData _userData) {
     return ListTile(
       title: const Text('Leave Team'),
       trailing: const Icon(Icons.arrow_forward_ios),
-      onTap: () {
-        //TODO: leave team
+      onTap: () async {
+        await TeamFirebaseAPI(_userData.teamID).leaveTeam(_userData);
       },
     );
   }
@@ -102,7 +102,7 @@ class TeamSettings extends ConsumerWidget {
               teamID: _teamData.teamID,
             ),
             _membersTile(),
-            _leaveTeamTile()
+            _leaveTeamTile(_userData)
           ],
         ),
       ),

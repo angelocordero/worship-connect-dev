@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:worship_connect/announcements/data_classes/announcements_data.dart';
 import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
 
 class AnnouncementsFirebaseAPI {
@@ -22,11 +23,11 @@ class AnnouncementsFirebaseAPI {
 
     await _teamAnnouncementsData.update({
       _announcementID: <String, dynamic>{
-        'announcementText': announcementText,
-        'announcementPosterName': announcementPosterName,
-        'announcementPosterID': announcementPosterID,
-        'announcementID': _announcementID,
-        'timestamp': _timestamp,
+        WCAnnouncementsDataEnum.announcementText.name: announcementText,
+        WCAnnouncementsDataEnum.announcementPosterName.name: announcementPosterName,
+        WCAnnouncementsDataEnum.announcementPosterID.name: announcementPosterID,
+        WCAnnouncementsDataEnum.announcementID.name: _announcementID,
+        WCAnnouncementsDataEnum.timestamp.name: _timestamp,
       }
     });
 

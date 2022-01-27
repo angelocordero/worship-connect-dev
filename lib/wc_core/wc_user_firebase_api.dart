@@ -10,7 +10,7 @@ class WCUSerFirebaseAPI {
     wcUserDataCollection.doc(userID).set({
       'userID': userID,
       'userName': '',
-      'userStatusString': UserStatus.noTeam.name,
+      'UserStatusEnumString': UserStatusEnum.noTeam.name,
       'teamID': '',
     });
   }
@@ -23,7 +23,7 @@ class WCUSerFirebaseAPI {
         return WCUserInfoData(
           userID: data['userID'],
           userName: data['userName'],
-          userStatusString: data['userStatusString'],
+          userStatusString: data['UserStatusString'],
           teamID: data['teamID'],
         );
       },
