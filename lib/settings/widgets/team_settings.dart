@@ -86,7 +86,6 @@ class TeamSettings extends ConsumerWidget {
     required bool isAdminOrLeader,
     required BuildContext context,
   }) {
-    //TODO: fix name change text field behavior
     return ListTile(
       title: Text(teamName),
       subtitle: const Text('Team Name'),

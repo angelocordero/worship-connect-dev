@@ -81,7 +81,6 @@ class _SendAnnouncementFormState extends ConsumerState<SendAnnouncementForm> {
           TextButton(
             onPressed: () async {
               if (_announcementTextController.text.isNotEmpty) {
-                // TODO: check if text is empty
                 await showCancelDialog(context);
               } else {
                 Navigator.pop(context);

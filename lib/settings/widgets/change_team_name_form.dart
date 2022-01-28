@@ -10,16 +10,14 @@ class ChangeTeamNameForm extends ConsumerWidget {
 
   final String teamName;
 
-  static final TextEditingController _changeNameController = TextEditingController();
+  static String newName = '';
 
   TextFormField _nameTextField() {
-    _changeNameController.text = teamName;
-    _changeNameController.selection = TextSelection.fromPosition(
-      TextPosition(offset: teamName.length),
-    );
-
     return TextFormField(
-      controller: _changeNameController,
+      initialValue: teamName,
+      onChanged: (value) {
+        newName = value;
+      },
       minLines: 1,
       maxLines: 1,
       decoration: const InputDecoration(
@@ -50,6 +48,8 @@ class ChangeTeamNameForm extends ConsumerWidget {
           ),
           TextButton(
             onPressed: () async {
+              newName = '';
+
               Navigator.pop(context);
             },
             child: const Text('Cancel'),
@@ -62,16 +62,11 @@ class ChangeTeamNameForm extends ConsumerWidget {
               );
             },
             onTap: () async {
-              if (_changeNameController.text.isEmpty) {
-                WCUtils().wcShowError('Team name cannot be empty');
-                return;
+              if (newName.isNotEmpty && newName.trim() != teamName) {
+                await TeamFirebaseAPI(teamID).changeTeamName(newName.trim());
               }
-              if (_changeNameController.text.trim() == teamName) {
-                Navigator.pop(context);
-                return;
-              }
-
-              await TeamFirebaseAPI(teamID).changeTeamName(_changeNameController.text.trim());
+              newName = '';
+              Navigator.pop(context);
             },
           ),
         ],

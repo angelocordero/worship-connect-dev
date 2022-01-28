@@ -21,7 +21,6 @@ class TeamFirebaseAPI {
       (DocumentSnapshot object) {
         Map<String, dynamic>? data = (object as DocumentSnapshot<Map<String, dynamic>>).data();
 
-//TODO: change string to enum
         return TeamData(
           creatorID: data?[TeamDataEnum.creatorID.name] ?? '',
           teamID: data?[TeamDataEnum.teamID.name] ?? '',
@@ -61,7 +60,6 @@ class TeamFirebaseAPI {
     EasyLoading.show();
 
     try {
-      //TODO: implement leave team
 
       WriteBatch _writeBatch = FirebaseFirestore.instance.batch();
 
@@ -71,6 +69,7 @@ class TeamFirebaseAPI {
         WCUserInfoDataEnum.userStatusString.name: UserStatusEnum.noTeam.name,
       });
 
+      // update team members list
       _writeBatch.update(CreateJoinTeamFirebaseAPI().wcTeamDataCollection.doc(teamID).collection('data').doc('members'), {
         'normalMembers.${_userData.userID}': FieldValue.delete(),
       });
