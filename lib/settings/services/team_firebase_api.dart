@@ -14,7 +14,9 @@ class TeamFirebaseAPI {
 
   String teamID;
 
-  final CollectionReference teamsDataCollection = FirebaseFirestore.instance.collection('WCTeams');
+  final FirebaseFirestore _firebaseInstance = FirebaseFirestore.instance;
+
+  late final CollectionReference teamsDataCollection = _firebaseInstance.collection('WCTeams');
 
   Stream<TeamData> teamData() {
     return teamsDataCollection.doc(teamID).snapshots().map(
@@ -81,5 +83,69 @@ class TeamFirebaseAPI {
 
   Future<DocumentSnapshot> getMembersDocument() async {
     return await teamsDataCollection.doc(teamID).collection('data').doc('members').get();
+  }
+
+  Future<void> promoteToAdmin(WCUserInfoData _memberData) async {
+
+    EasyLoading.show();
+    WriteBatch _writeBatch = _firebaseInstance.batch();
+
+    _writeBatch.update(WCUSerFirebaseAPI().wcUserDataCollection.doc(_memberData.userID), {
+      WCUserInfoDataEnum.userStatusString.name: UserStatusEnum.admin.name,
+    });
+
+    _writeBatch.update(teamsDataCollection.doc(teamID).collection('data').doc('members'), {
+      'normalMembers.${_memberData.userID}': FieldValue.delete(),
+      'admins.${_memberData.userID}': _memberData.userName,
+    });
+
+    await _writeBatch.commit();
+    EasyLoading.dismiss();
+  }
+
+  Future<void> promoteToLeader({required WCUserInfoData userData, required WCUserInfoData memberData}) async {
+    
+    EasyLoading.show();
+    WriteBatch _writeBatch = _firebaseInstance.batch();
+
+    _writeBatch.update(WCUSerFirebaseAPI().wcUserDataCollection.doc(userData.userID), {
+      WCUserInfoDataEnum.userStatusString.name: UserStatusEnum.admin.name,
+    });
+
+    _writeBatch.update(WCUSerFirebaseAPI().wcUserDataCollection.doc(memberData.userID), {
+      WCUserInfoDataEnum.userStatusString.name: UserStatusEnum.leader.name,
+    });
+
+    _writeBatch.update(teamsDataCollection.doc(teamID).collection('data').doc('members'), {
+      'leader.${memberData.userID}': memberData.userName,
+      'leader.${userData.userID}': FieldValue.delete(),
+      'admins.${memberData.userID}': FieldValue.delete(),
+      'admins.${userData.userID}': userData.userName,
+    });
+
+    await _writeBatch.commit();
+    EasyLoading.dismiss();
+  }
+
+  Future<void> demoteToMember(WCUserInfoData _memberData) async {
+
+    EasyLoading.show();
+    WriteBatch _writeBatch = _firebaseInstance.batch();
+
+    _writeBatch.update(WCUSerFirebaseAPI().wcUserDataCollection.doc(_memberData.userID), {
+      WCUserInfoDataEnum.userStatusString.name: UserStatusEnum.member.name,
+    });
+
+    _writeBatch.update(teamsDataCollection.doc(teamID).collection('data').doc('members'), {
+      'admins.${_memberData.userID}': FieldValue.delete(),
+      'normalMembers.${_memberData.userID}': _memberData.userName,
+    });
+
+    await _writeBatch.commit();
+    EasyLoading.dismiss();
+  }
+
+  Future<void> removeFromTeam(WCUserInfoData _memberData) async {
+    await leaveTeam(_memberData);
   }
 }

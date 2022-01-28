@@ -7,7 +7,6 @@ class MembersListPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    //final WCUserInfoData _userData = ref.watch(wcUserInfoDataStream).asData!.value!;
 
     final _membersListNotifier = ref.watch(membersListProvider.notifier);
 

@@ -1,14 +1,84 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:worship_connect/settings/services/team_firebase_api.dart';
 import 'package:worship_connect/settings/widgets/role_icon.dart';
 import 'package:worship_connect/sign_in/data_classes/wc_user_info_data.dart';
 import 'package:worship_connect/wc_core/worship_connect.dart';
+import 'package:worship_connect/wc_core/worship_connect_constants.dart';
 import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
 
 class MemberListTile extends ConsumerWidget {
   const MemberListTile({Key? key, required this.memberData}) : super(key: key);
 
   final WCUserInfoData memberData;
+
+  PopupMenuButton<int> _popupMenuButton(WCUserInfoData _userData) {
+    UserStatusEnum _userStatus = _userData.userStatus;
+    UserStatusEnum _memberStatus = memberData.userStatus;
+
+    bool _canPassLeader = _userStatus == UserStatusEnum.leader && _memberStatus == UserStatusEnum.admin;
+    bool _canPromoteMemberToAdmin = _userStatus == UserStatusEnum.leader && _memberStatus == UserStatusEnum.member;
+    bool _canDemoteAdminToMember = _userStatus == UserStatusEnum.leader && _memberStatus == UserStatusEnum.admin;
+    bool _canRemoveFromTeam = WCUtils().isAdminOrLeader(_userData) && _memberStatus == UserStatusEnum.member;
+    bool _canDemoteSelfToMember = _userStatus == UserStatusEnum.admin;
+
+    return PopupMenuButton<int>(
+      onSelected: (item) async {
+        switch (item) {
+          case 0:
+            await TeamFirebaseAPI(_userData.teamID).promoteToLeader(
+              userData: _userData,
+              memberData: memberData,
+            );
+            break;
+          case 1:
+            await TeamFirebaseAPI(_userData.teamID).leaveTeam(_userData);
+            break;
+          case 2:
+            await TeamFirebaseAPI(_userData.teamID).demoteToMember(memberData);
+            break;
+          case 3:
+            await TeamFirebaseAPI(_userData.teamID).removeFromTeam(memberData);
+            break;
+          case 4:
+            await TeamFirebaseAPI(_userData.teamID).demoteToMember(_userData);
+            break;
+          default:
+            WCUtils().wcShowError('Error');
+            break;
+        }
+      },
+      itemBuilder: (BuildContext context) {
+        return <PopupMenuEntry<int>>[
+          if (_canPassLeader)
+            const PopupMenuItem<int>(
+              value: 0,
+              child: Text('Promote to Leader'),
+            ),
+          if (_canPromoteMemberToAdmin)
+            const PopupMenuItem<int>(
+              value: 1,
+              child: Text('Promote to Admin'),
+            ),
+          if (_canDemoteAdminToMember)
+            const PopupMenuItem<int>(
+              value: 2,
+              child: Text('Demote to Member'),
+            ),
+          if (_canRemoveFromTeam)
+            const PopupMenuItem<int>(
+              value: 3,
+              child: Text('Remove from team'),
+            ),
+          if (_canDemoteSelfToMember)
+            const PopupMenuItem<int>(
+              value: 4,
+              child: Text('Demote to Member'),
+            ),
+        ];
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -28,62 +98,10 @@ class MemberListTile extends ConsumerWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             if (WCUtils().isAdminOrLeader(memberData)) RoleIcon(role: memberData.userStatus), //role icon
-            if (WCUtils().isAdminOrLeader(_userData)) _popupMenuButton(), // popup menu
+            if (WCUtils().isAdminOrLeader(_userData)) _popupMenuButton(_userData), // popup menu
           ],
         ),
       ),
-    );
-  }
-
-// TODO: implement buttons function
-  PopupMenuButton<int> _popupMenuButton() {
-    return PopupMenuButton<int>(
-      onSelected: (item) {
-        switch (item) {
-          case 0:
-            //promote to leader
-            break;
-          case 1:
-            // promote to admin
-            break;
-          case 2:
-            // demote to member
-            break;
-          case 4:
-            // remove from team
-            break;
-          case 5:
-            // become a
-            break;
-        }
-      },
-      itemBuilder: (BuildContext context) {
-        return <PopupMenuEntry<int>>[
-
-//TOOD: change visibility if the function can be done or not
-
-          const PopupMenuItem<int>(
-            value: 0,
-            child: Text('Promote to Leader'),
-          ),
-          const PopupMenuItem<int>(
-            value: 1,
-            child: Text('Promote to Admin'),
-          ),
-          const PopupMenuItem<int>(
-            value: 2,
-            child: Text('Demote to Member'),
-          ),
-          const PopupMenuItem<int>(
-            value: 3,
-            child: Text('Remove from team'),
-          ),
-          const PopupMenuItem<int>(
-            value: 4,
-            child: Text('Demote urself to member'),
-          ),
-        ];
-      },
     );
   }
 }
