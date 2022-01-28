@@ -34,9 +34,7 @@ class TeamFirebaseAPI {
   Future<void> changeTeamName(String newTeamName) async {
     EasyLoading.show();
 
-    await teamsDataCollection.doc(teamID).update({
-      TeamDataEnum.teamName.name: newTeamName
-    });
+    await teamsDataCollection.doc(teamID).update({TeamDataEnum.teamName.name: newTeamName});
 
     EasyLoading.dismiss();
   }
@@ -60,7 +58,6 @@ class TeamFirebaseAPI {
     EasyLoading.show();
 
     try {
-
       WriteBatch _writeBatch = FirebaseFirestore.instance.batch();
 
       // update user data
@@ -80,5 +77,9 @@ class TeamFirebaseAPI {
     } catch (error) {
       WCUtils().wcShowError('Unable to leave team');
     }
+  }
+
+  Future<DocumentSnapshot> getMembersDocument() async {
+    return await teamsDataCollection.doc(teamID).collection('data').doc('members').get();
   }
 }

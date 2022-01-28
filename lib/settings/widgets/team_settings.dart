@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:worship_connect/settings/data_classes/wc_team_data.dart';
+import 'package:worship_connect/settings/providers/members_list_provider.dart';
 import 'package:worship_connect/settings/screens/member_list_page.dart';
 import 'package:worship_connect/settings/services/team_firebase_api.dart';
 import 'package:worship_connect/settings/widgets/change_team_name_form.dart';
@@ -16,6 +17,16 @@ final wcTeamDataStream = StreamProvider<TeamData>((ref) {
   return TeamFirebaseAPI(_wcUserInfoData.teamID).teamData();
 });
 
+final membersListProvider = StateNotifierProvider.autoDispose<MembersListProvider, dynamic>(
+  (ref) {
+    AsyncData<WCUserInfoData?>? wcUserInfoData = ref.watch(wcUserInfoDataStream).asData;
+
+    return MembersListProvider(
+      teamID: wcUserInfoData?.value?.teamID ?? '',
+    );
+  },
+);
+
 class TeamSettings extends ConsumerWidget {
   const TeamSettings({Key? key}) : super(key: key);
 
@@ -29,18 +40,23 @@ class TeamSettings extends ConsumerWidget {
         child: const Text('Leave Team'));
   }
 
-  ListTile _membersTile(BuildContext context) {
+  ListTile _membersTile(BuildContext context, WidgetRef ref) {
     return ListTile(
       title: const Text('Members'),
       trailing: IconButton(
         icon: const Icon(Icons.arrow_forward_ios),
-        onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
-            return const MemberListPage();
-          }));
+        onPressed: () async {
+          await ref.read(membersListProvider.notifier).initMemberList();
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (BuildContext context) {
+                return const MembersListPage();
+              },
+            ),
+          );
         },
       ),
-      //TODO: members list page
     );
   }
 
@@ -143,7 +159,7 @@ class TeamSettings extends ConsumerWidget {
               teamID: _teamData.teamID,
               isAdminOrLeader: _isAdminOrLeader,
             ),
-            _membersTile(context),
+            _membersTile(context, ref),
             _leaveTeamButton(_userData)
           ],
         ),

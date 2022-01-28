@@ -24,4 +24,11 @@ class WCUserInfoData {
   }) {
     userStatus = EnumToString.fromString(UserStatusEnum.values, userStatusString) ?? UserStatusEnum.noTeam;
   }
+  WCUserInfoData.empty()
+      : userID = '',
+        userName = '',
+        userStatusString = UserStatusEnum.noTeam.name,
+        teamID = '' {
+    userStatus = EnumToString.fromString(UserStatusEnum.values, userStatusString) ?? UserStatusEnum.noTeam;
+  }
 }

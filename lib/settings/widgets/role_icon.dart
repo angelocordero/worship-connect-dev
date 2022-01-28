@@ -6,7 +6,7 @@ class RoleIcon extends StatelessWidget {
 
   final UserStatusEnum role;
 
-  static late final String _roleString;
+  static String _roleString = '';
 
   @override
   Widget build(BuildContext context) {
