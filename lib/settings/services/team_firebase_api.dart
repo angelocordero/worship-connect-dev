@@ -51,11 +51,6 @@ class TeamFirebaseAPI {
   }
 
   Future<void> leaveTeam(WCUserInfoData _userData) async {
-    if (WCUtils().isAdminOrLeader(_userData)) {
-      String error = 'Team leader and admins cannot leave team';
-      WCUtils().wcShowError(error);
-      return;
-    }
 
     EasyLoading.show();
 

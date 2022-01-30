@@ -9,6 +9,7 @@ import 'package:worship_connect/sign_in/data_classes/wc_user_info_data.dart';
 import 'package:worship_connect/wc_core/wc_custom_route.dart';
 import 'package:worship_connect/wc_core/worship_connect.dart';
 import 'package:clipboard/clipboard.dart';
+import 'package:worship_connect/wc_core/worship_connect_constants.dart';
 import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
 
 final wcTeamDataStream = StreamProvider<TeamData>((ref) {
@@ -32,12 +33,44 @@ class TeamSettings extends ConsumerWidget {
 
   static Icon trailingIcon = const Icon(Icons.arrow_forward_ios);
 
-  ElevatedButton _leaveTeamButton(WCUserInfoData _userData) {
+  ElevatedButton _leaveTeamButton({
+    required WCUserInfoData userData,
+    required BuildContext context,
+  }) {
     return ElevatedButton(
-        onPressed: () async {
-          await TeamFirebaseAPI(_userData.teamID).leaveTeam(_userData);
-        },
-        child: const Text('Leave Team'));
+      style: ElevatedButton.styleFrom(shape: wcButtonShape),
+      onPressed: () async {
+        if (WCUtils().isAdminOrLeader(userData)) {
+          WCUtils().wcShowError('Team leader and admins cannot leave team');
+          return;
+        }
+
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text('Leave team?'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('No'),
+                ),
+                TextButton(
+                  onPressed: () async {
+                    await TeamFirebaseAPI(userData.teamID).leaveTeam(userData);
+                    Navigator.pop(context);
+                  },
+                  child: const Text('Yes'),
+                ),
+              ],
+            );
+          },
+        );
+      },
+      child: const Text('Leave Team'),
+    );
   }
 
   ListTile _membersTile(BuildContext context, WidgetRef ref) {
@@ -140,7 +173,7 @@ class TeamSettings extends ConsumerWidget {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisSize: MainAxisSize.min,
           children: [
             const Align(
@@ -160,7 +193,7 @@ class TeamSettings extends ConsumerWidget {
               isAdminOrLeader: _isAdminOrLeader,
             ),
             _membersTile(context, ref),
-            _leaveTeamButton(_userData)
+            _leaveTeamButton(userData: _userData, context: context)
           ],
         ),
       ),
