@@ -46,3 +46,6 @@ LinearGradient wcLinearGradient = LinearGradient(
 );
 
 TextStyle wcHintStyle = const TextStyle(color: Colors.grey);
+
+Icon wcTrailingIcon = const Icon(Icons.arrow_forward_ios);
+

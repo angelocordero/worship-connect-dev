@@ -31,45 +31,46 @@ final membersListProvider = StateNotifierProvider.autoDispose<MembersListProvide
 class TeamSettings extends ConsumerWidget {
   const TeamSettings({Key? key}) : super(key: key);
 
-  static Icon trailingIcon = const Icon(Icons.arrow_forward_ios);
-
-  ElevatedButton _leaveTeamButton({
+  Padding _leaveTeamButton({
     required WCUserInfoData userData,
     required BuildContext context,
   }) {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(shape: wcButtonShape),
-      onPressed: () async {
-        if (WCUtils().isAdminOrLeader(userData)) {
-          WCUtils().wcShowError('Team leader and admins cannot leave team');
-          return;
-        }
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(shape: wcButtonShape),
+        onPressed: () async {
+          if (WCUtils().isAdminOrLeader(userData)) {
+            WCUtils().wcShowError('Team leader and admins cannot leave team');
+            return;
+          }
 
-        showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: const Text('Leave team?'),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Text('No'),
-                ),
-                TextButton(
-                  onPressed: () async {
-                    await TeamFirebaseAPI(userData.teamID).leaveTeam(userData);
-                    Navigator.pop(context);
-                  },
-                  child: const Text('Yes'),
-                ),
-              ],
-            );
-          },
-        );
-      },
-      child: const Text('Leave Team'),
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: const Text('Leave team?'),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text('No'),
+                  ),
+                  TextButton(
+                    onPressed: () async {
+                      await TeamFirebaseAPI(userData.teamID).leaveTeam(userData);
+                      Navigator.pop(context);
+                    },
+                    child: const Text('Yes'),
+                  ),
+                ],
+              );
+            },
+          );
+        },
+        child: const Text('Leave Team'),
+      ),
     );
   }
 
@@ -77,7 +78,7 @@ class TeamSettings extends ConsumerWidget {
     return ListTile(
       title: const Text('Members'),
       trailing: IconButton(
-        icon: const Icon(Icons.arrow_forward_ios),
+        icon: wcTrailingIcon,
         onPressed: () async {
           await ref.read(membersListProvider.notifier).initMemberList();
           Navigator.push(

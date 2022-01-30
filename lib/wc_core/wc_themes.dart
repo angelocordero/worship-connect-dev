@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class WCThemeProvider extends StateNotifier<ThemeMode> {
-  WCThemeProvider() : super(ThemeMode.dark);
+  WCThemeProvider() : super(ThemeMode.system);
 
   static SharedPreferences? _prefs;
 
@@ -31,7 +31,7 @@ class WCThemeProvider extends StateNotifier<ThemeMode> {
     await _prefs!.setString(_themeKey, state.name);
   }
 
-  Future<String> getCurrentThemeName() async {
+  String getCurrentThemeName() {
     switch (state) {
       case ThemeMode.light:
         return 'Light';
@@ -39,6 +39,8 @@ class WCThemeProvider extends StateNotifier<ThemeMode> {
         return 'Dark';
       case ThemeMode.system:
         return 'System Default';
+      default:
+        return '';
     }
   }
 }

@@ -1,0 +1,91 @@
+import 'package:clipboard/clipboard.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:worship_connect/sign_in/data_classes/wc_user_info_data.dart';
+import 'package:worship_connect/wc_core/worship_connect.dart';
+import 'package:worship_connect/wc_core/worship_connect_constants.dart';
+import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
+
+class PersonalSettings extends ConsumerWidget {
+  const PersonalSettings({Key? key}) : super(key: key);
+
+  ListTile _userIDListTile(WCUserInfoData? _userData, BuildContext context) {
+    String _userID = _userData?.userID ?? '';
+
+    return ListTile(
+      onTap: () {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text(_userID),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('Exit'),
+                )
+              ],
+            );
+          },
+        );
+      },
+      title: Text(
+        _userID,
+        softWrap: false,
+        overflow: TextOverflow.ellipsis,
+      ),
+      subtitle: const Text('User ID'),
+      trailing: IconButton(
+        icon: const Icon(Icons.copy),
+        onPressed: () async {
+          if (_userID.isEmpty) {
+            WCUtils().wcShowError('Unable to copy User ID');
+            return;
+          }
+          await FlutterClipboard.copy(_userID);
+          WCUtils().wcShowSuccess('User ID copied to clipboard');
+        },
+      ),
+    );
+  }
+
+  ListTile _userNameListTIle(WCUserInfoData? _userData) {
+    return ListTile(
+      title: Text(_userData?.userName ?? ''),
+      subtitle: const Text('User Name'),
+      trailing: IconButton(
+        icon: wcTrailingIcon,
+        onPressed: () {
+          //TODO: change name
+        },
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    WCUserInfoData? _userData = ref.watch(wcUserInfoDataStream).asData?.value;
+
+    return Card(
+      margin: const EdgeInsets.all(12),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Align(
+              child: Text('Personal Settings'),
+              alignment: Alignment.centerLeft,
+            ),
+            const Divider(),
+            _userNameListTIle(_userData),
+            _userIDListTile(_userData, context),
+          ],
+        ),
+      ),
+    );
+  }
+}
