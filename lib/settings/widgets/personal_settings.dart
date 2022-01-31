@@ -1,9 +1,10 @@
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:worship_connect/settings/widgets/change_user_name_card.dart';
 import 'package:worship_connect/sign_in/data_classes/wc_user_info_data.dart';
+import 'package:worship_connect/wc_core/wc_custom_route.dart';
 import 'package:worship_connect/wc_core/worship_connect.dart';
-import 'package:worship_connect/wc_core/worship_connect_constants.dart';
 import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
 
 class PersonalSettings extends ConsumerWidget {
@@ -51,15 +52,27 @@ class PersonalSettings extends ConsumerWidget {
     );
   }
 
-  ListTile _userNameListTIle(WCUserInfoData? _userData) {
+  ListTile _userNameListTIle({required String userName, required BuildContext context}) {
     return ListTile(
-      title: Text(_userData?.userName ?? ''),
+      title: Text(userName),
       subtitle: const Text('User Name'),
-      trailing: IconButton(
-        icon: wcTrailingIcon,
-        onPressed: () {
-          //TODO: change name
-        },
+      trailing: Hero(
+        tag: 'userName',
+        child: IconButton(
+          icon: const Icon(Icons.edit),
+          onPressed: () {
+            Navigator.push(
+              context,
+              WCCustomRoute(
+                builder: (context) {
+                  return ChangeUserNameCard(
+                    userName: userName,
+                  );
+                },
+              ),
+            );
+          },
+        ),
       ),
     );
   }
@@ -81,7 +94,10 @@ class PersonalSettings extends ConsumerWidget {
               alignment: Alignment.centerLeft,
             ),
             const Divider(),
-            _userNameListTIle(_userData),
+            _userNameListTIle(
+              userName: _userData?.userName ?? '',
+              context: context,
+            ),
             _userIDListTile(_userData, context),
           ],
         ),

@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tap_debouncer/tap_debouncer.dart';
-import 'package:worship_connect/settings/services/team_firebase_api.dart';
+import 'package:worship_connect/wc_core/wc_user_firebase_api.dart';
 import 'package:worship_connect/wc_core/worship_connect.dart';
 import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
 
-class ChangeTeamNameCard extends ConsumerWidget {
-  const ChangeTeamNameCard({Key? key, required this.teamName}) : super(key: key);
+class ChangeUserNameCard extends ConsumerWidget {
+  const ChangeUserNameCard({Key? key, required this.userName}) : super(key: key);
 
-  final String teamName;
+  final String userName;
 
   static String newName = '';
 
   TextFormField _nameTextField() {
     return TextFormField(
-      initialValue: teamName,
+      initialValue: userName,
       onChanged: (value) {
         newName = value;
       },
@@ -23,7 +23,7 @@ class ChangeTeamNameCard extends ConsumerWidget {
       decoration: const InputDecoration(
         isDense: true,
         contentPadding: EdgeInsets.all(12),
-        hintText: 'Team name',
+        hintText: 'User name',
         border: OutlineInputBorder(
           borderRadius: BorderRadius.all(
             Radius.circular(12.0),
@@ -35,7 +35,7 @@ class ChangeTeamNameCard extends ConsumerWidget {
 
   SingleChildScrollView _changeNameButtons({
     required BuildContext context,
-    required String teamID,
+    required String userID,
   }) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
@@ -62,8 +62,8 @@ class ChangeTeamNameCard extends ConsumerWidget {
               );
             },
             onTap: () async {
-              if (newName.isNotEmpty && newName.trim() != teamName) {
-                await TeamFirebaseAPI(teamID).changeTeamName(newName.trim());
+              if (newName.isNotEmpty && newName.trim() != userName) {
+                WCUSerFirebaseAPI().updateUserName(userID: userID, userName: newName);
               }
               newName = '';
               Navigator.pop(context);
@@ -76,13 +76,13 @@ class ChangeTeamNameCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    String _teamID = ref.watch(wcUserInfoDataStream).asData!.value!.teamID;
+    String _userID = ref.watch(wcUserInfoDataStream).asData!.value!.userID;
 
     return SafeArea(
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(32),
         child: Hero(
-          tag: 'teamName',
+          tag: 'userName',
           child: Material(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
@@ -102,7 +102,7 @@ class ChangeTeamNameCard extends ConsumerWidget {
                   _nameTextField(),
                   _changeNameButtons(
                     context: context,
-                    teamID: _teamID,
+                    userID: _userID,
                   ),
                 ],
               ),

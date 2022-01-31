@@ -142,7 +142,7 @@ class TeamSettings extends ConsumerWidget {
       trailing: Visibility(
         visible: isAdminOrLeader,
         child: Hero(
-          tag: 'changeName',
+          tag: 'teamName',
           child: IconButton(
             icon: const Icon(Icons.edit),
             onPressed: () {
@@ -150,7 +150,7 @@ class TeamSettings extends ConsumerWidget {
                 context,
                 WCCustomRoute(
                   builder: (context) {
-                    return ChangeTeamNameForm(
+                    return ChangeTeamNameCard(
                       teamName: teamName,
                     );
                   },
