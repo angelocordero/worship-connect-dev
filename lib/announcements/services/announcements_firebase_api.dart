@@ -18,20 +18,24 @@ class AnnouncementsFirebaseAPI {
   }) async {
     EasyLoading.show();
 
-    String _announcementID = WCUtils().generateRandomID();
-    Timestamp _timestamp = Timestamp.now();
+    try {
+      String _announcementID = WCUtils().generateRandomID();
+      Timestamp _timestamp = Timestamp.now();
 
-    await _teamAnnouncementsData.update({
-      _announcementID: <String, dynamic>{
-        WCAnnouncementsDataEnum.announcementText.name: announcementText,
-        WCAnnouncementsDataEnum.announcementPosterName.name: announcementPosterName,
-        WCAnnouncementsDataEnum.announcementPosterID.name: announcementPosterID,
-        WCAnnouncementsDataEnum.announcementID.name: _announcementID,
-        WCAnnouncementsDataEnum.timestamp.name: _timestamp,
-      }
-    });
+      await _teamAnnouncementsData.update({
+        _announcementID: <String, dynamic>{
+          WCAnnouncementsDataEnum.announcementText.name: announcementText,
+          WCAnnouncementsDataEnum.announcementPosterName.name: announcementPosterName,
+          WCAnnouncementsDataEnum.announcementPosterID.name: announcementPosterID,
+          WCAnnouncementsDataEnum.announcementID.name: _announcementID,
+          WCAnnouncementsDataEnum.timestamp.name: _timestamp,
+        }
+      });
 
-    EasyLoading.dismiss();
+      EasyLoading.dismiss();
+    } catch (e) {
+      WCUtils().wcShowError('Failed to send announcement');
+    }
   }
 
   Future<void> editAnnouncement({
@@ -40,21 +44,29 @@ class AnnouncementsFirebaseAPI {
   }) async {
     EasyLoading.show();
 
-    await _teamAnnouncementsData.update({
-      '$announcementID.${WCAnnouncementsDataEnum.announcementText.name}': announcementText,
-    });
+    try {
+      await _teamAnnouncementsData.update({
+        '$announcementID.${WCAnnouncementsDataEnum.announcementText.name}': announcementText,
+      });
 
-    EasyLoading.dismiss();
+      EasyLoading.dismiss();
+    } catch (e) {
+      WCUtils().wcShowError('Failed to edit announcement');
+    }
   }
 
   Future<void> deleteAnnouncement({required String announcementID}) async {
     EasyLoading.show();
 
-    await _teamAnnouncementsData.update({
-      announcementID: FieldValue.delete(),
-    });
+    try {
+      await _teamAnnouncementsData.update({
+        announcementID: FieldValue.delete(),
+      });
 
-    EasyLoading.dismiss();
+      EasyLoading.dismiss();
+    } catch (e) {
+      WCUtils().wcShowError('Failed to delete announcement');
+    }
   }
 
   Future<DocumentSnapshot<Map>?> getAnnouncementsDocument() async {

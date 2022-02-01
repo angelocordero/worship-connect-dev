@@ -106,7 +106,7 @@ class TeamSettings extends ConsumerWidget {
         trailing: Switch(
           value: isOpen,
           onChanged: (value) async {
-            TeamFirebaseAPI(teamID).toggleIsTeamOpen(isOpen);
+            await TeamFirebaseAPI(teamID).toggleIsTeamOpen(isOpen);
           },
         ),
       ),

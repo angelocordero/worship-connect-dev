@@ -1,2 +1,0 @@
-// TODO: error handling using a try and catch block
-// TODO: add tap debouncer

@@ -36,22 +36,28 @@ class TeamFirebaseAPI {
   Future<void> changeTeamName(String newTeamName) async {
     EasyLoading.show();
 
-    await teamsDataCollection.doc(teamID).update({TeamDataEnum.teamName.name: newTeamName});
-
-    EasyLoading.dismiss();
+    try {
+      await teamsDataCollection.doc(teamID).update({TeamDataEnum.teamName.name: newTeamName});
+      EasyLoading.dismiss();
+    } catch (e) {
+      WCUtils().wcShowError('Change name failed');
+    }
   }
 
   Future<void> toggleIsTeamOpen(bool currentStatus) async {
     EasyLoading.show();
-    await teamsDataCollection.doc(teamID).update({
-      TeamDataEnum.isOpen.name: !currentStatus,
-    });
 
-    EasyLoading.dismiss();
+    try {
+      await teamsDataCollection.doc(teamID).update({
+        TeamDataEnum.isOpen.name: !currentStatus,
+      });
+      EasyLoading.dismiss();
+    } catch (e) {
+      WCUtils().wcShowError(e.toString());
+    }
   }
 
   Future<void> leaveTeam(WCUserInfoData _userData) async {
-
     EasyLoading.show();
 
     try {
@@ -81,50 +87,59 @@ class TeamFirebaseAPI {
   }
 
   Future<void> promoteToAdmin(WCUserInfoData _memberData) async {
-
     EasyLoading.show();
-    WriteBatch _writeBatch = _firebaseInstance.batch();
 
-    _writeBatch.update(WCUSerFirebaseAPI().wcUserDataCollection.doc(_memberData.userID), {
-      WCUserInfoDataEnum.userStatusString.name: UserStatusEnum.admin.name,
-    });
+    try {
+      WriteBatch _writeBatch = _firebaseInstance.batch();
 
-    _writeBatch.update(teamsDataCollection.doc(teamID).collection('data').doc('members'), {
-      'normalMembers.${_memberData.userID}': FieldValue.delete(),
-      'admins.${_memberData.userID}': _memberData.userName,
-    });
+      _writeBatch.update(WCUSerFirebaseAPI().wcUserDataCollection.doc(_memberData.userID), {
+        WCUserInfoDataEnum.userStatusString.name: UserStatusEnum.admin.name,
+      });
 
-    await _writeBatch.commit();
-    EasyLoading.dismiss();
+      _writeBatch.update(teamsDataCollection.doc(teamID).collection('data').doc('members'), {
+        'normalMembers.${_memberData.userID}': FieldValue.delete(),
+        'admins.${_memberData.userID}': _memberData.userName,
+      });
+
+      await _writeBatch.commit();
+      EasyLoading.dismiss();
+    } catch (e) {
+      WCUtils().wcShowError('Failed to promote');
+    }
   }
 
   Future<void> promoteToLeader({required WCUserInfoData userData, required WCUserInfoData memberData}) async {
-    
     EasyLoading.show();
-    WriteBatch _writeBatch = _firebaseInstance.batch();
 
-    _writeBatch.update(WCUSerFirebaseAPI().wcUserDataCollection.doc(userData.userID), {
-      WCUserInfoDataEnum.userStatusString.name: UserStatusEnum.admin.name,
-    });
+    try {
+      WriteBatch _writeBatch = _firebaseInstance.batch();
 
-    _writeBatch.update(WCUSerFirebaseAPI().wcUserDataCollection.doc(memberData.userID), {
-      WCUserInfoDataEnum.userStatusString.name: UserStatusEnum.leader.name,
-    });
+      _writeBatch.update(WCUSerFirebaseAPI().wcUserDataCollection.doc(userData.userID), {
+        WCUserInfoDataEnum.userStatusString.name: UserStatusEnum.admin.name,
+      });
 
-    _writeBatch.update(teamsDataCollection.doc(teamID).collection('data').doc('members'), {
-      'leader.${memberData.userID}': memberData.userName,
-      'leader.${userData.userID}': FieldValue.delete(),
-      'admins.${memberData.userID}': FieldValue.delete(),
-      'admins.${userData.userID}': userData.userName,
-    });
+      _writeBatch.update(WCUSerFirebaseAPI().wcUserDataCollection.doc(memberData.userID), {
+        WCUserInfoDataEnum.userStatusString.name: UserStatusEnum.leader.name,
+      });
 
-    await _writeBatch.commit();
-    EasyLoading.dismiss();
+      _writeBatch.update(teamsDataCollection.doc(teamID).collection('data').doc('members'), {
+        'leader.${memberData.userID}': memberData.userName,
+        'leader.${userData.userID}': FieldValue.delete(),
+        'admins.${memberData.userID}': FieldValue.delete(),
+        'admins.${userData.userID}': userData.userName,
+      });
+
+      await _writeBatch.commit();
+      EasyLoading.dismiss();
+    } catch (e) {
+      WCUtils().wcShowError('Failed to promote');
+    }
   }
 
   Future<void> demoteToMember(WCUserInfoData _memberData) async {
-
     EasyLoading.show();
+
+    try {
     WriteBatch _writeBatch = _firebaseInstance.batch();
 
     _writeBatch.update(WCUSerFirebaseAPI().wcUserDataCollection.doc(_memberData.userID), {
@@ -138,6 +153,11 @@ class TeamFirebaseAPI {
 
     await _writeBatch.commit();
     EasyLoading.dismiss();
+      
+    } catch (e) {
+            WCUtils().wcShowError('Failed to demote');
+
+    }
   }
 
   Future<void> removeFromTeam(WCUserInfoData _memberData) async {
