@@ -4,7 +4,7 @@ import 'package:worship_connect/announcements/data_classes/announcements_data.da
 import 'package:worship_connect/announcements/providers/announcement_list_provider.dart';
 import 'package:worship_connect/announcements/providers/send_announcement_provider.dart';
 import 'package:worship_connect/announcements/widgets/announcement_list_tile.dart';
-import 'package:worship_connect/announcements/widgets/send_announcement_form.dart';
+import 'package:worship_connect/announcements/widgets/send_announcement_card.dart';
 import 'package:worship_connect/sign_in/data_classes/wc_user_info_data.dart';
 import 'package:worship_connect/wc_core/wc_custom_route.dart';
 import 'package:worship_connect/wc_core/worship_connect.dart';
@@ -61,7 +61,7 @@ class _AnnouncementsHomePageState extends ConsumerState<AnnouncementsHomePage> {
                 _sendAnnouncementProvider.setNewAnnouncement(
                   WCAnnouncementsData.empty(),
                 );
-                return const SendAnnouncementForm(
+                return const SendAnnouncementCard(
                   tag: 'new',
                   sendOrEdit: 'Send',
                 );

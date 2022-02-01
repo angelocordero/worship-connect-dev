@@ -8,9 +8,36 @@ import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
 class ChangeUserNameCard extends ConsumerWidget {
   const ChangeUserNameCard({Key? key, required this.userName}) : super(key: key);
 
+  static String newName = '';
+
   final String userName;
 
-  static String newName = '';
+  Future<dynamic> showCancelDialog(BuildContext context) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Confirm cancel?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('No'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                FocusScope.of(context).unfocus();
+                Navigator.pop(context);
+              },
+              child: const Text('Yes'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   TextFormField _nameTextField() {
     return TextFormField(
@@ -48,9 +75,12 @@ class ChangeUserNameCard extends ConsumerWidget {
           ),
           TextButton(
             onPressed: () async {
+              if (newName.isNotEmpty) {
+                await showCancelDialog(context);
+              } else {
+                Navigator.pop(context);
+              }
               newName = '';
-
-              Navigator.pop(context);
             },
             child: const Text('Cancel'),
           ),

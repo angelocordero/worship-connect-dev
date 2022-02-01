@@ -8,17 +8,17 @@ import 'package:worship_connect/sign_in/data_classes/wc_user_info_data.dart';
 import 'package:worship_connect/wc_core/worship_connect.dart';
 import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
 
-class SendAnnouncementForm extends ConsumerStatefulWidget {
-  const SendAnnouncementForm({Key? key, required this.sendOrEdit, required this.tag}) : super(key: key);
+class SendAnnouncementCard extends ConsumerStatefulWidget {
+  const SendAnnouncementCard({Key? key, required this.sendOrEdit, required this.tag}) : super(key: key);
 
   final String sendOrEdit;
   final String tag;
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _SendAnnouncementFormState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _SendAnnouncementCardState();
 }
 
-class _SendAnnouncementFormState extends ConsumerState<SendAnnouncementForm> {
+class _SendAnnouncementCardState extends ConsumerState<SendAnnouncementCard> {
   late final WCAnnouncementsData _announcement;
   final TextEditingController _announcementTextController = TextEditingController();
 
@@ -80,7 +80,7 @@ class _SendAnnouncementFormState extends ConsumerState<SendAnnouncementForm> {
           ),
           TextButton(
             onPressed: () async {
-              if (_announcementTextController.text.isNotEmpty) {
+              if (_announcementTextController.text.isNotEmpty && _announcement.announcementText != _announcementTextController.text) {
                 await showCancelDialog(context);
               } else {
                 Navigator.pop(context);

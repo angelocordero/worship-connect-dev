@@ -82,7 +82,7 @@ class AppSettins extends ConsumerWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             const Align(
-              child: Text('App Settings'),
+              child: Text('Application Settings'),
               alignment: Alignment.centerLeft,
             ),
             const Divider(),

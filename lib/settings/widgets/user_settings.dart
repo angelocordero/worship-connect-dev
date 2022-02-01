@@ -7,8 +7,8 @@ import 'package:worship_connect/wc_core/wc_custom_route.dart';
 import 'package:worship_connect/wc_core/worship_connect.dart';
 import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
 
-class PersonalSettings extends ConsumerWidget {
-  const PersonalSettings({Key? key}) : super(key: key);
+class UserSettings extends ConsumerWidget {
+  const UserSettings({Key? key}) : super(key: key);
 
   ListTile _userIDListTile(WCUserInfoData? _userData, BuildContext context) {
     String _userID = _userData?.userID ?? '';
@@ -90,7 +90,7 @@ class PersonalSettings extends ConsumerWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             const Align(
-              child: Text('Personal Settings'),
+              child: Text('User Settings'),
               alignment: Alignment.centerLeft,
             ),
             const Divider(),
