@@ -45,12 +45,33 @@ class WCUtils {
     return customAlphabet(_wcAlphabet, 15);
   }
 
+  String timeToString(DateTime _dateTime) {
+    return DateFormat.jm().format(_dateTime);
+  }
+
   String dateToString(DateTime _dateTime) {
     return '${DateFormat.EEEE().format(_dateTime)} ${DateFormat.yMMMd().format(_dateTime)}';
   }
 
   String dateTimeToString(DateTime _dateTime) {
     return '${DateFormat.EEEE().format(_dateTime)} ${DateFormat.yMMMd().format(_dateTime)} ${DateFormat.jm().format(_dateTime)}';
+  }
+
+  DateTime setDateTimeFromDayAndTime({
+    required DateTime dateTime,
+    required TimeOfDay timeOfDay,
+  }) {
+    return DateTime(
+      dateTime.year,
+      dateTime.month,
+      dateTime.day,
+      timeOfDay.hour,
+      timeOfDay.minute,
+    );
+  }
+
+  String setDateCode(DateTime _date) {
+    return DateFormat('yyyyMMdd').format(_date);
   }
 
   void wcShowError(String error) {

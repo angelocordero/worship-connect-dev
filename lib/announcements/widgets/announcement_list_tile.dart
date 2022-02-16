@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:worship_connect/announcements/data_classes/announcements_data.dart';
+import 'package:worship_connect/announcements/providers/announcement_list_provider.dart';
 import 'package:worship_connect/announcements/providers/send_announcement_provider.dart';
 import 'package:worship_connect/announcements/screens/announcements_home_page.dart';
 import 'package:worship_connect/announcements/widgets/send_announcement_card.dart';
@@ -18,7 +19,8 @@ class AnnouncementListTile extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     WCAnnouncementsData _announcementData = ref.watch(announcementListProvider)[index];
     WCUserInfoData _userInfoData = ref.watch(wcUserInfoDataStream).asData!.value!;
-    SendAnnouncementProvider _announcementNotifier = ref.watch(sendAnnouncementProvider.notifier);
+    SendAnnouncementProvider _sendAnnouncementNotifier = ref.watch(sendAnnouncementProvider.notifier);
+    AnnouncementListProvider _announcementListNotifier = ref.watch(announcementListProvider.notifier);
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
@@ -33,7 +35,8 @@ class AnnouncementListTile extends ConsumerWidget {
                 context: context,
                 userInfoData: _userInfoData,
                 announcementData: _announcementData,
-                announcementNotifier: _announcementNotifier,
+                sendAnnouncementNotifier: _sendAnnouncementNotifier,
+                announcementListNotifier: _announcementListNotifier,
               ),
               const Divider(),
               _announcementText(_announcementData),
@@ -57,7 +60,8 @@ class AnnouncementListTile extends ConsumerWidget {
   }
 
   Widget _announcementInfo({
-    required SendAnnouncementProvider announcementNotifier,
+    required SendAnnouncementProvider sendAnnouncementNotifier,
+    required AnnouncementListProvider announcementListNotifier,
     required WCAnnouncementsData announcementData,
     required WCUserInfoData userInfoData,
     required BuildContext context,
@@ -98,7 +102,7 @@ class AnnouncementListTile extends ConsumerWidget {
                   context,
                   WCCustomRoute(
                     builder: (BuildContext context) {
-                      announcementNotifier.setNewAnnouncement(
+                      sendAnnouncementNotifier.setNewAnnouncement(
                         announcementData,
                       );
 
@@ -119,9 +123,15 @@ class AnnouncementListTile extends ConsumerWidget {
               size: 14,
             ),
             onPressed: () async {
-              await announcementNotifier.deleteAnnouncement(
+              await sendAnnouncementNotifier
+                  .deleteAnnouncement(
                 teamID: userInfoData.teamID,
                 announcementID: announcementData.announcementID,
+              )
+                  .then(
+                (_) async {
+                  await announcementListNotifier.getAnnouncements();
+                },
               );
             },
           ),

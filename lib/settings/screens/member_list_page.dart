@@ -7,7 +7,6 @@ class MembersListPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     final _membersListNotifier = ref.watch(membersListProvider.notifier);
 
     return SafeArea(
@@ -15,12 +14,17 @@ class MembersListPage extends ConsumerWidget {
         appBar: AppBar(
           title: const Text('Members'),
         ),
-        body: ListView(
-          children: [
-            _membersListNotifier.getLeader(),
-            ..._membersListNotifier.getAdmins(),
-            ..._membersListNotifier.getNormalMembers(),
-          ],
+        body: RefreshIndicator(
+          onRefresh: () async {
+            await _membersListNotifier.initMemberList();
+          },
+          child: ListView(
+            children: [
+              _membersListNotifier.getLeader(),
+              ..._membersListNotifier.getAdmins(),
+              ..._membersListNotifier.getNormalMembers(),
+            ],
+          ),
         ),
       ),
     );
