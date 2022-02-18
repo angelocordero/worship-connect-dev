@@ -70,8 +70,13 @@ class SchedulesHomePage extends ConsumerWidget {
                 const ScheduleCalendar(),
                 Expanded(
                   child: Container(
-                    color: Colors.red,
-                    child: const Text('schedule list'),
+                    width: WCUtils().screenWidth(context),
+                    padding: const EdgeInsets.all(12),
+                    child: Builder(
+                      builder: (context) {
+                        return const Text('asd');
+                      },
+                    ),
                   ),
                 ),
               ],

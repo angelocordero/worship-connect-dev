@@ -51,4 +51,18 @@ class SchedulesFirebaseAPI {
       WCUtils().wcShowError('Failed to add schedule');
     }
   }
+
+  Future<DocumentSnapshot<Map<String, dynamic>>?> getScheduleDocument() async {
+    EasyLoading.show();
+
+    try {
+      return _scheduleDoc.get().then((value) {
+        EasyLoading.dismiss();
+        return value;
+      });
+    } catch (error) {
+      WCUtils().wcShowError('Unable to get schedule data');
+      return null;
+    }
+  }
 }

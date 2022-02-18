@@ -43,37 +43,6 @@ class _AnnouncementsHomePageState extends ConsumerState<AnnouncementsHomePage> {
     super.initState();
   }
 
-  Visibility _newAnnouncementButton(BuildContext context, WCUserInfoData wcUserInfoData) {
-    return Visibility(
-      visible: WCUtils().isAdminOrLeader(wcUserInfoData),
-      child: FloatingActionButton.extended(
-        heroTag: 'new',
-        onPressed: () {
-          if (ref.read(announcementListProvider).length >= 10) {
-            WCUtils().wcShowError('You can only post up to 10 announcements.');
-            return;
-          }
-          Navigator.push(
-            context,
-            WCCustomRoute(
-              builder: (BuildContext context) {
-                final SendAnnouncementProvider _sendAnnouncementProvider = ref.watch(sendAnnouncementProvider.notifier);
-                _sendAnnouncementProvider.setNewAnnouncement(
-                  WCAnnouncementsData.empty(),
-                );
-                return const SendAnnouncementCard(
-                  tag: 'new',
-                  sendOrEdit: 'Send',
-                );
-              },
-            ),
-          );
-        },
-        label: const Text('New Announcement'),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     WCUserInfoData? _wcUserInfoData = ref.watch(wcUserInfoDataStream).asData!.value;
@@ -108,6 +77,37 @@ class _AnnouncementsHomePageState extends ConsumerState<AnnouncementsHomePage> {
             );
           }
         },
+      ),
+    );
+  }
+
+  Visibility _newAnnouncementButton(BuildContext context, WCUserInfoData wcUserInfoData) {
+    return Visibility(
+      visible: WCUtils().isAdminOrLeader(wcUserInfoData),
+      child: FloatingActionButton.extended(
+        heroTag: 'new',
+        onPressed: () {
+          if (ref.read(announcementListProvider).length >= 10) {
+            WCUtils().wcShowError('You can only post up to 10 announcements.');
+            return;
+          }
+          Navigator.push(
+            context,
+            WCCustomRoute(
+              builder: (BuildContext context) {
+                final SendAnnouncementProvider _sendAnnouncementProvider = ref.watch(sendAnnouncementProvider.notifier);
+                _sendAnnouncementProvider.setNewAnnouncement(
+                  WCAnnouncementsData.empty(),
+                );
+                return const SendAnnouncementCard(
+                  tag: 'new',
+                  sendOrEdit: 'Send',
+                );
+              },
+            ),
+          );
+        },
+        label: const Text('New Announcement'),
       ),
     );
   }
