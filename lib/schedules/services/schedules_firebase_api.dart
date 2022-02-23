@@ -23,10 +23,10 @@ class SchedulesFirebaseAPI {
             _scheduleData.scheduleDateCode: FieldValue.arrayUnion(
               [
                 <String, dynamic>{
-                  ScheduleDataEnum.timestamp.name: _scheduleData.timestamp,
-                  ScheduleDataEnum.scheduleTitle.name: _scheduleData.scheduleTitle,
-                  ScheduleDataEnum.scheduleID.name: _scheduleData.scheduleID,
-                  ScheduleDataEnum.scheduleDateCode.name: _scheduleData.scheduleDateCode,
+                  WCScheduleDataEnum.timestamp.name: _scheduleData.timestamp,
+                  WCScheduleDataEnum.scheduleTitle.name: _scheduleData.scheduleTitle,
+                  WCScheduleDataEnum.scheduleID.name: _scheduleData.scheduleID,
+                  WCScheduleDataEnum.scheduleDateCode.name: _scheduleData.scheduleDateCode,
                 }
               ],
             ),
@@ -37,10 +37,10 @@ class SchedulesFirebaseAPI {
           {
             _scheduleData.scheduleDateCode: [
               <String, dynamic>{
-                ScheduleDataEnum.timestamp.name: _scheduleData.timestamp,
-                ScheduleDataEnum.scheduleTitle.name: _scheduleData.scheduleTitle,
-                ScheduleDataEnum.scheduleID.name: _scheduleData.scheduleID,
-                ScheduleDataEnum.scheduleDateCode.name: _scheduleData.scheduleDateCode,
+                WCScheduleDataEnum.timestamp.name: _scheduleData.timestamp,
+                WCScheduleDataEnum.scheduleTitle.name: _scheduleData.scheduleTitle,
+                WCScheduleDataEnum.scheduleID.name: _scheduleData.scheduleID,
+                WCScheduleDataEnum.scheduleDateCode.name: _scheduleData.scheduleDateCode,
               }
             ],
           },

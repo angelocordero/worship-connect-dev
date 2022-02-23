@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
 
-enum ScheduleDataEnum {
+enum WCScheduleDataEnum {
   scheduleTitle,
   scheduleID,
   scheduleDateCode,

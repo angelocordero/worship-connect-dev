@@ -11,6 +11,74 @@ import 'package:worship_connect/wc_core/worship_connect_constants.dart';
 class AppSettins extends ConsumerWidget {
   const AppSettins({Key? key}) : super(key: key);
 
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final WCThemeProvider _wcThemeNotifier = ref.watch(wcThemeProvider.notifier);
+
+    return Card(
+      margin: const EdgeInsets.all(12),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Align(
+              child: Text('Application Settings'),
+              alignment: Alignment.centerLeft,
+            ),
+            const Divider(),
+            _themeListTile(_wcThemeNotifier, context),
+            // AboutListTile(
+            //   applicationIcon: const FlutterLogo(),
+            //   applicationName: 'Worship Connect',
+            //   applicationVersion: '1.0.0-release',
+            //     aboutBoxChildren: [
+            //     RichText(
+            //       text: TextSpan(
+            //         text: 'To send issues or to contact me, please visit the ',
+            //         children: [
+            //           TextSpan(
+            //             text: 'Worship Connect Github page.',
+            //             style: const TextStyle(
+            //               color: Colors.blue,
+            //             ),
+            //             recognizer: TapGestureRecognizer()
+            //               ..onTap = () async {
+            //                 await WCUrlLauncher.openWCGithubPage();
+            //               },
+            //           ),
+            //         ],
+            //       ),
+            //     ),
+
+            //     SizedBox(
+            //       height: 20,
+            //     ),
+            //     Text('Special thanks to my baby, Krystelle Sylvia Alvarado, for inspiring me in making  this.')
+            //   ],
+            // ),
+            _wcAboutListTile(context),
+            _signOutButton()
+          ],
+        ),
+      ),
+    );
+  }
+
+  Padding _signOutButton() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: ElevatedButton(
+        child: const Text('Logout'),
+        style: ElevatedButton.styleFrom(shape: wcButtonShape),
+        onPressed: () {
+          WCUserAuthentication().signOut();
+        },
+      ),
+    );
+  }
+
   ListTile _themeListTile(WCThemeProvider _wcThemeNotifier, BuildContext context) {
     return ListTile(
       title: const Text('Theme'),
@@ -53,45 +121,6 @@ class AppSettins extends ConsumerWidget {
           ),
         );
       },
-    );
-  }
-
-  Padding _signOutButton() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: ElevatedButton(
-        child: const Text('Logout'),
-        style: ElevatedButton.styleFrom(shape: wcButtonShape),
-        onPressed: () {
-          WCUserAuthentication().signOut();
-        },
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final WCThemeProvider _wcThemeNotifier = ref.watch(wcThemeProvider.notifier);
-
-    return Card(
-      margin: const EdgeInsets.all(12),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Align(
-              child: Text('Application Settings'),
-              alignment: Alignment.centerLeft,
-            ),
-            const Divider(),
-            _themeListTile(_wcThemeNotifier, context),
-            _wcAboutListTile(context),
-            _signOutButton()
-          ],
-        ),
-      ),
     );
   }
 }

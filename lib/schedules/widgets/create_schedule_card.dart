@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:worship_connect/schedules/data_classes/schedule_data.dart';
 import 'package:worship_connect/schedules/providers/add_schedule_provider.dart';
+import 'package:worship_connect/schedules/providers/calendar_schedule_list_provider.dart';
 import 'package:worship_connect/schedules/screens/schedules_home_page.dart';
 import 'package:worship_connect/sign_in/data_classes/wc_user_info_data.dart';
 import 'package:worship_connect/wc_core/worship_connect.dart';
@@ -12,6 +13,60 @@ class CreateScheduleCard extends ConsumerWidget {
   CreateScheduleCard({Key? key}) : super(key: key);
 
   final TextEditingController _textEditingController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final WCScheduleData _scheduleData = ref.watch(addScheduleProvider);
+    final AddScheduleProvider _scheduleNotifier = ref.watch(addScheduleProvider.notifier);
+    final CalendarScheduleListProvider _calendarScheduleListNotifier = ref.watch(calendarScheduleListProvider.notifier);
+    WCUserInfoData? _wcUserInfoData = ref.watch(wcUserInfoDataStream).asData!.value;
+
+    return SafeArea(
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(32.0),
+          child: Hero(
+            tag: 'schedule',
+            child: Material(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.all(16.0),
+                        child: Text(
+                          'Create a schedule',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      _scheduleTitleTextField(),
+                      _timeListTile(
+                        context: context,
+                        scheduleData: _scheduleData,
+                        scheduleNotifier: _scheduleNotifier,
+                      ),
+                      _scheduleButtons(
+                        context: context,
+                        scheduleNotifier: _scheduleNotifier,
+                        wcUserInfoData: _wcUserInfoData!,
+                        calendarScheduleListNotifier: _calendarScheduleListNotifier,
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
   Future<dynamic> showCancelDialog(BuildContext context) {
     return showCupertinoDialog(
@@ -50,13 +105,12 @@ class CreateScheduleCard extends ConsumerWidget {
     );
   }
 
-  SingleChildScrollView _scheduleButtons(
-    //TODO: code cleanup. make parameters named
-
-    BuildContext context,
-    AddScheduleProvider scheduleNotifier,
-    WCUserInfoData wcUserInfoData,
-  ) {
+  SingleChildScrollView _scheduleButtons({
+    required BuildContext context,
+    required AddScheduleProvider scheduleNotifier,
+    required WCUserInfoData wcUserInfoData,
+    required CalendarScheduleListProvider calendarScheduleListNotifier,
+  }) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
@@ -92,6 +146,9 @@ class CreateScheduleCard extends ConsumerWidget {
             onTap: () async {
               if (_textEditingController.text.isNotEmpty) {
                 await scheduleNotifier.addSchedule(title: _textEditingController.text, teamID: wcUserInfoData.teamID);
+                await calendarScheduleListNotifier.resetScheduleProvider();
+
+                // TODO: if else check when editing
 
                 if (true == true /*editScheduleData == null*/) {
                   // context.read<AddScheduleModel>().setScheduleDay(selectedDay!);
@@ -123,22 +180,6 @@ class CreateScheduleCard extends ConsumerWidget {
     );
   }
 
-  ListTile _timeListTile({
-    required AddScheduleProvider scheduleNotifier,
-    required BuildContext context,
-    required WCScheduleData scheduleData,
-  }) {
-    return ListTile(
-      title: Text(scheduleData.timeString),
-      onTap: () => _timePicker(
-        context: context,
-        scheduleNotifier: scheduleNotifier,
-        scheduleData: scheduleData,
-      ),
-      trailing: const Icon(Icons.timer),
-    );
-  }
-
   TextField _scheduleTitleTextField() {
     return TextField(
       controller: _textEditingController,
@@ -158,6 +199,22 @@ class CreateScheduleCard extends ConsumerWidget {
     );
   }
 
+  ListTile _timeListTile({
+    required AddScheduleProvider scheduleNotifier,
+    required BuildContext context,
+    required WCScheduleData scheduleData,
+  }) {
+    return ListTile(
+      title: Text(scheduleData.timeString),
+      onTap: () => _timePicker(
+        context: context,
+        scheduleNotifier: scheduleNotifier,
+        scheduleData: scheduleData,
+      ),
+      trailing: const Icon(Icons.timer),
+    );
+  }
+
   Future _timePicker({
     required BuildContext context,
     required AddScheduleProvider scheduleNotifier,
@@ -173,57 +230,5 @@ class CreateScheduleCard extends ConsumerWidget {
     } else {
       scheduleNotifier.setScheduleTime(_newTime);
     }
-  }
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final _scheduleData = ref.watch(addScheduleProvider);
-    final _scheduleNotifier = ref.watch(addScheduleProvider.notifier);
-    WCUserInfoData? _wcUserInfoData = ref.watch(wcUserInfoDataStream).asData!.value;
-
-    return SafeArea(
-      child: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(32.0),
-          child: Hero(
-            tag: 'schedule',
-            child: Material(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.all(16.0),
-                        child: Text(
-                          'Create a schedule',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      _scheduleTitleTextField(),
-                      _timeListTile(
-                        context: context,
-                        scheduleData: _scheduleData,
-                        scheduleNotifier: _scheduleNotifier,
-                      ),
-                      _scheduleButtons(
-                        context,
-                        _scheduleNotifier,
-                        _wcUserInfoData!,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
   }
 }
