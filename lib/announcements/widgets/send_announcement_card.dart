@@ -76,7 +76,7 @@ class _SendAnnouncementCardState extends ConsumerState<SendAnnouncementCard> {
         mainAxisSize: MainAxisSize.min,
         children: [
           SizedBox(
-            width: (WCUtils().screenWidth(context)! - 96) / 3,
+            width: (WCUtils().screenWidth(context) - 96) / 3,
           ),
           TextButton(
             onPressed: () async {

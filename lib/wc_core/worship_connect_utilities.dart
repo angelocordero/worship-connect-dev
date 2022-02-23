@@ -13,23 +13,23 @@ class WCUtils {
     return Container();
   }
 
-  double? screenHeight(BuildContext context) {
+  double screenHeight(BuildContext context) {
     return MediaQuery.of(context).size.height;
   }
 
-  double? screenHeightSafeArea(BuildContext context) {
+  double screenHeightSafeArea(BuildContext context) {
     return MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top;
   }
 
-  double? screenHeightSafeAreaAppBar(BuildContext context) {
+  double screenHeightSafeAreaAppBar(BuildContext context) {
     return MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top - kToolbarHeight;
   }
 
-  double? screenHeightSafeAreaAppBarBottomBar(BuildContext context) {
+  double screenHeightSafeAreaAppBarBottomBar(BuildContext context) {
     return MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top - kToolbarHeight - kBottomNavigationBarHeight;
   }
 
-  double? screenWidth(BuildContext context) {
+  double screenWidth(BuildContext context) {
     return MediaQuery.of(context).size.width;
   }
 

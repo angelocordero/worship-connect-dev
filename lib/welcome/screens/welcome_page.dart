@@ -110,7 +110,7 @@ class WelcomePageState extends ConsumerState<WelcomePage> {
     AsyncData<WCUserAuthData?>? wcUserAuthState = ref.watch(wcUserAuthStateStream).asData;
     AsyncData<WCUserInfoData?>? wcUserInfoData = ref.watch(wcUserInfoDataStream).asData;
 
-    signInWidgetLeftInitial = (WCUtils().screenWidth(context)! - wcSignInButtonSize.width) / 2;
+    signInWidgetLeftInitial = (WCUtils().screenWidth(context) - wcSignInButtonSize.width) / 2;
     signInWidgetLeftFinal = -300;
 
     logoWidgetTopInitial = 0;
@@ -124,11 +124,11 @@ class WelcomePageState extends ConsumerState<WelcomePage> {
       signInWidgetLeftAnimated = signInWidgetLeftFinal;
     }
 
-    enterNameWidgetBottomDisplay = WCUtils().screenHeight(context)! / 3;
+    enterNameWidgetBottomDisplay = WCUtils().screenHeight(context) / 3;
     enterNameWidgetBottomFinal = WCUtils().screenHeight(context);
     enterNameWidgetDuration = const Duration(milliseconds: 300);
     formSwitcherBottomInitial = -300;
-    formSwitcherBottomFinal = WCUtils().screenHeight(context)! / 5;
+    formSwitcherBottomFinal = WCUtils().screenHeight(context) / 5;
     formSwitcherBottomAnimated = formSwitcherBottomInitial;
 
     if (wcUserInfoData == null) {

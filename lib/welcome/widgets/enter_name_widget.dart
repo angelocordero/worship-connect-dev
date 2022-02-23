@@ -29,7 +29,7 @@ class _EnterNameWidgetState extends ConsumerState<EnterNameWidget> {
     AsyncData<WCUserAuthData?>? _wcUserAuthState = ref.watch(wcUserAuthStateStream).asData;
 
     return Container(
-      width: WCUtils().screenWidth(context)! - 50,
+      width: WCUtils().screenWidth(context) - 50,
       height: 40,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30),

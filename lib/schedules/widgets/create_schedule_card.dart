@@ -8,6 +8,7 @@ import 'package:worship_connect/schedules/providers/calendar_schedule_list_provi
 import 'package:worship_connect/schedules/screens/schedules_home_page.dart';
 import 'package:worship_connect/sign_in/data_classes/wc_user_info_data.dart';
 import 'package:worship_connect/wc_core/worship_connect.dart';
+import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
 
 class CreateScheduleCard extends ConsumerWidget {
   CreateScheduleCard({Key? key}) : super(key: key);
@@ -117,7 +118,7 @@ class CreateScheduleCard extends ConsumerWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           SizedBox(
-            width: MediaQuery.of(context).size.width / 4 - 16,
+            width: WCUtils().screenWidth(context) / 4 - 16,
           ),
           TapDebouncer(
             onTap: () async {
