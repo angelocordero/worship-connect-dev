@@ -14,7 +14,7 @@ class AnnouncementListProvider extends StateNotifier<List> {
     DocumentSnapshot<Map>? _announcementsDoc = await AnnouncementsFirebaseAPI(teamID).getAnnouncementsDocument();
 
     if (_announcementsDoc != null && mounted) {
-      _announcementsDoc.data()!.forEach(
+      _announcementsDoc.data()?.forEach(
         (key, value) {
           _announcementList.add(
             WCAnnouncementsData(

@@ -17,14 +17,6 @@ class _EnterNameWidgetState extends ConsumerState<EnterNameWidget> {
   static final TextEditingController _userNameTextEditingController = TextEditingController();
 
   @override
-  void dispose() {
-    if (mounted) {
-      _userNameTextEditingController.dispose();
-    }
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     AsyncData<WCUserAuthData?>? _wcUserAuthState = ref.watch(wcUserAuthStateStream).asData;
 
@@ -54,6 +46,7 @@ class _EnterNameWidgetState extends ConsumerState<EnterNameWidget> {
           shape: wcButtonShape,
         ),
         onPressed: () async {
+          FocusManager.instance.primaryFocus?.unfocus();
           await _enterName(_wcUserAuthState);
         },
         child: Ink(

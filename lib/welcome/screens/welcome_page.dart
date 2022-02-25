@@ -14,6 +14,8 @@ import 'package:worship_connect/welcome/widgets/edit_name_widget.dart';
 import 'package:worship_connect/welcome/widgets/enter_name_widget.dart';
 import 'package:worship_connect/welcome/widgets/join_create_team_form_switcher.dart';
 
+
+
 class WelcomePage extends ConsumerStatefulWidget {
   const WelcomePage({Key? key}) : super(key: key);
 
@@ -108,7 +110,7 @@ class WelcomePageState extends ConsumerState<WelcomePage> {
     signInWidgetLeftFinal = -300;
 
     logoWidgetTopInitial = 0;
-    logoWidgetTopFinal = -300;
+    logoWidgetTopFinal = -500;
     enterNameWidgetBottomInitial = -300;
 
     if (wcUserAuthState == null) {
@@ -176,7 +178,7 @@ class WelcomePageState extends ConsumerState<WelcomePage> {
             child: Stack(
               alignment: AlignmentDirectional.topCenter,
               children: [
-                //testingButton(),
+                testingButton(),
                 _logoWidget(),
                 _signInWidget(),
                 _enterNameWidget(),

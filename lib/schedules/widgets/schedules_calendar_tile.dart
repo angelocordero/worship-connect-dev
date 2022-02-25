@@ -23,42 +23,45 @@ class SchedulesCalendarTile extends ConsumerWidget {
       subtitle: Text(scheduleData.timeString),
       trailing: Visibility(
         visible: WCUtils().isAdminOrLeader(_wcUserInfoData!),
-        child: PopupMenuButton<int>(
-          onSelected: (item) async {
-            switch (item) {
-              case 0:
-                Navigator.push(
-                  context,
-                  WCCustomRoute(
-                    builder: (context) {
-                      final _newScheduleProvider = ref.watch(addScheduleProvider.notifier);
-                      _newScheduleProvider.initScheduleProvider(scheduleData);
-                      _newScheduleProvider.setOriginalScheduleData();
-
-                      return const CreateScheduleCard(
-                        tag: 'editSchedule',
-                        addOrEdit: 'Edit',
-                      );
-                    },
-                  ),
-                );
-
-                break;
-              case 1:
-                SchedulesFirebaseAPI(_wcUserInfoData.teamID).deleteSchedule(scheduleData);
-                break;
-            }
-          },
-          itemBuilder: (context) => [
-            const PopupMenuItem<int>(
-              value: 0,
-              child: Text('Edit'),
-            ),
-            const PopupMenuItem<int>(
-              value: 1,
-              child: Text('Delete'),
-            ),
-          ],
+        child: Hero(
+          tag: 'editSchedule',
+          child: PopupMenuButton<int>(
+            onSelected: (item) async {
+              switch (item) {
+                case 0:
+                  Navigator.push(
+                    context,
+                    WCCustomRoute(
+                      builder: (context) {
+                        final _newScheduleProvider = ref.watch(addScheduleProvider.notifier);
+                        _newScheduleProvider.initScheduleProvider(scheduleData);
+                        _newScheduleProvider.setOriginalScheduleData();
+        
+                        return const CreateScheduleCard(
+                          tag: 'editSchedule',
+                          addOrEdit: 'Edit',
+                        );
+                      },
+                    ),
+                  );
+        
+                  break;
+                case 1:
+                  SchedulesFirebaseAPI(_wcUserInfoData.teamID).deleteSchedule(scheduleData);
+                  break;
+              }
+            },
+            itemBuilder: (context) => [
+              const PopupMenuItem<int>(
+                value: 0,
+                child: Text('Edit'),
+              ),
+              const PopupMenuItem<int>(
+                value: 1,
+                child: Text('Delete'),
+              ),
+            ],
+          ),
         ),
       ),
       onTap: () {

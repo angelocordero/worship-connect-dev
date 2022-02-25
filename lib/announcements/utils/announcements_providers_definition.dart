@@ -20,7 +20,7 @@ final announcementListProvider = StateNotifierProvider<AnnouncementListProvider,
   (ref) {
     WCUserInfoData? wcUserInfoData = ref.watch(wcUserInfoDataStream).asData?.value;
 
-    return AnnouncementListProvider(teamID: wcUserInfoData!.teamID);
+    return AnnouncementListProvider(teamID: wcUserInfoData?.teamID ?? '');
   },
 );
 

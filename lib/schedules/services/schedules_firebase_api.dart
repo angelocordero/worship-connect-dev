@@ -61,7 +61,7 @@ class SchedulesFirebaseAPI {
         return value;
       });
     } catch (error) {
-      WCUtils().wcShowError('Unable to get schedule data');
+      WCUtils().wcShowError('Failed to get schedule data');
       return null;
     }
   }

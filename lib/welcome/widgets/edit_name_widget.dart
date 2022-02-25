@@ -17,15 +17,6 @@ class _EditNameWidgetState extends State<EditNameWidget> {
   static final TextEditingController _textEditingController = TextEditingController();
 
   @override
-  void dispose() {
-    if (mounted) {
-      _textEditingController.dispose();
-    }
-
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(

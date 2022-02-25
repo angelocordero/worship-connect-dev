@@ -31,7 +31,7 @@ class _SchedulesHomePageState extends ConsumerState<SchedulesHomePage> {
     return Scaffold(
       floatingActionButton: Visibility(
         child: FloatingActionButton.extended(
-          heroTag: 'schedule',
+          heroTag: 'newSchedule',
           onPressed: () {
             Navigator.push(
               context,

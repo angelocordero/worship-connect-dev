@@ -184,7 +184,7 @@ class _CreateScheduleCardState extends ConsumerState<CreateScheduleCard> {
               return TextButton(
                 onPressed: onTap,
                 child: Text(
-                  '${widget.addOrEdit} Schedule',
+                  widget.addOrEdit,
                   style: const TextStyle(
                     fontSize: 12.0,
                   ),
