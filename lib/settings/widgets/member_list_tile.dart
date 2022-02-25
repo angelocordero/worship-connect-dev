@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:worship_connect/settings/services/team_firebase_api.dart';
 import 'package:worship_connect/settings/widgets/role_icon.dart';
-import 'package:worship_connect/sign_in/data_classes/wc_user_info_data.dart';
+import 'package:worship_connect/sign_in/utils/wc_user_info_data.dart';
 import 'package:worship_connect/wc_core/worship_connect.dart';
 import 'package:worship_connect/wc_core/worship_connect_constants.dart';
 import 'package:worship_connect/wc_core/worship_connect_utilities.dart';

@@ -1,32 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:worship_connect/settings/data_classes/wc_team_data.dart';
-import 'package:worship_connect/settings/providers/members_list_provider.dart';
+import 'package:worship_connect/settings/utils/settings_providers_definition.dart';
+import 'package:worship_connect/settings/utils/wc_team_data.dart';
 import 'package:worship_connect/settings/screens/member_list_page.dart';
 import 'package:worship_connect/settings/services/team_firebase_api.dart';
 import 'package:worship_connect/settings/widgets/change_team_name_card.dart';
-import 'package:worship_connect/sign_in/data_classes/wc_user_info_data.dart';
+import 'package:worship_connect/sign_in/utils/wc_user_info_data.dart';
 import 'package:worship_connect/wc_core/wc_custom_route.dart';
 import 'package:worship_connect/wc_core/worship_connect.dart';
 import 'package:clipboard/clipboard.dart';
 import 'package:worship_connect/wc_core/worship_connect_constants.dart';
 import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
-
-final wcTeamDataStream = StreamProvider<TeamData>((ref) {
-  final WCUserInfoData _wcUserInfoData = ref.watch(wcUserInfoDataStream).asData!.value!;
-
-  return TeamFirebaseAPI(_wcUserInfoData.teamID).teamData();
-});
-
-final membersListProvider = StateNotifierProvider.autoDispose<MembersListProvider, dynamic>(
-  (ref) {
-    AsyncData<WCUserInfoData?>? wcUserInfoData = ref.watch(wcUserInfoDataStream).asData;
-
-    return MembersListProvider(
-      teamID: wcUserInfoData?.value?.teamID ?? '',
-    );
-  },
-);
 
 class TeamSettings extends ConsumerWidget {
   const TeamSettings({Key? key}) : super(key: key);

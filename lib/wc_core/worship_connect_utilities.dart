@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:nanoid/nanoid.dart';
 import 'package:intl/intl.dart';
-import 'package:worship_connect/sign_in/data_classes/wc_user_info_data.dart';
+import 'package:worship_connect/sign_in/utils/wc_user_info_data.dart';
 import 'package:worship_connect/wc_core/worship_connect_constants.dart';
 
 class WCUtils {

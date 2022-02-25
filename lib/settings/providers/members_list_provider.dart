@@ -3,7 +3,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:worship_connect/settings/services/team_firebase_api.dart';
 import 'package:worship_connect/settings/widgets/member_list_tile.dart';
-import 'package:worship_connect/sign_in/data_classes/wc_user_info_data.dart';
+import 'package:worship_connect/sign_in/utils/wc_user_info_data.dart';
 import 'package:worship_connect/wc_core/worship_connect_constants.dart';
 
 class MembersListProvider extends StateNotifier {

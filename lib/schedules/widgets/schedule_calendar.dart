@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:worship_connect/schedules/screens/schedules_home_page.dart';
+import 'package:worship_connect/schedules/utils/schedules_providers_definition.dart';
 
 class ScheduleCalendar extends ConsumerStatefulWidget {
   const ScheduleCalendar({Key? key}) : super(key: key);

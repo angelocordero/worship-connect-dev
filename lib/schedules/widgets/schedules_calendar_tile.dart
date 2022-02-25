@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:worship_connect/schedules/data_classes/schedule_data.dart';
-import 'package:worship_connect/schedules/screens/schedules_home_page.dart';
+import 'package:worship_connect/schedules/utils/schedule_data.dart';
 import 'package:worship_connect/schedules/services/schedules_firebase_api.dart';
 import 'package:worship_connect/schedules/widgets/create_schedule_card.dart';
-import 'package:worship_connect/sign_in/data_classes/wc_user_info_data.dart';
+import 'package:worship_connect/sign_in/utils/wc_user_info_data.dart';
+import 'package:worship_connect/schedules/utils/schedules_providers_definition.dart';
 import 'package:worship_connect/wc_core/wc_custom_route.dart';
 import 'package:worship_connect/wc_core/worship_connect.dart';
 import 'package:worship_connect/wc_core/worship_connect_utilities.dart';

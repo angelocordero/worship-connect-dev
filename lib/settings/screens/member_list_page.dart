@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:worship_connect/settings/widgets/team_settings.dart';
+import 'package:worship_connect/settings/utils/settings_providers_definition.dart';
 
 class MembersListPage extends ConsumerWidget {
   const MembersListPage({Key? key}) : super(key: key);

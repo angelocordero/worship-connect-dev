@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:worship_connect/announcements/data_classes/announcements_data.dart';
-import 'package:worship_connect/settings/data_classes/wc_team_data.dart';
-import 'package:worship_connect/sign_in/data_classes/wc_user_info_data.dart';
+import 'package:worship_connect/announcements/utils/announcements_data.dart';
+import 'package:worship_connect/settings/utils/wc_team_data.dart';
+import 'package:worship_connect/sign_in/utils/wc_user_info_data.dart';
 import 'package:worship_connect/wc_core/wc_user_firebase_api.dart';
 import 'package:worship_connect/wc_core/worship_connect_constants.dart';
 import 'package:worship_connect/wc_core/worship_connect_utilities.dart';

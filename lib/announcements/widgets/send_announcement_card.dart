@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tap_debouncer/tap_debouncer.dart';
-import 'package:worship_connect/announcements/data_classes/announcements_data.dart';
+import 'package:worship_connect/announcements/utils/announcements_data.dart';
 import 'package:worship_connect/announcements/providers/send_announcement_provider.dart';
-import 'package:worship_connect/announcements/screens/announcements_home_page.dart';
-import 'package:worship_connect/sign_in/data_classes/wc_user_info_data.dart';
+import 'package:worship_connect/announcements/utils/announcements_providers_definition.dart';
+import 'package:worship_connect/sign_in/utils/wc_user_info_data.dart';
 import 'package:worship_connect/wc_core/worship_connect.dart';
 import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
 

@@ -4,8 +4,8 @@ import 'package:worship_connect/wc_core/worship_connect.dart';
 import 'package:worship_connect/wc_core/worship_connect_constants.dart';
 import 'package:worship_connect/wc_core/worship_connect_navigator.dart';
 import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
-import 'package:worship_connect/sign_in/data_classes/wc_user_auth_data.dart';
-import 'package:worship_connect/sign_in/data_classes/wc_user_info_data.dart';
+import 'package:worship_connect/sign_in/utils/wc_user_auth_data.dart';
+import 'package:worship_connect/sign_in/utils/wc_user_info_data.dart';
 import 'package:worship_connect/sign_in/services/wc_user_authentication_service.dart';
 import 'package:worship_connect/sign_in/widgets/facebook_signin_button.dart';
 import 'package:worship_connect/sign_in/widgets/google_signin_button.dart';
@@ -13,12 +13,6 @@ import 'package:worship_connect/sign_in/widgets/wc_login_screen_logo.dart';
 import 'package:worship_connect/welcome/widgets/edit_name_widget.dart';
 import 'package:worship_connect/welcome/widgets/enter_name_widget.dart';
 import 'package:worship_connect/welcome/widgets/join_create_team_form_switcher.dart';
-
-final userNameProvider = StateProvider.autoDispose<String>((ref) {
-  AsyncData<WCUserInfoData?>? wcUserInfoData = ref.watch(wcUserInfoDataStream).asData;
-
-  return wcUserInfoData?.value?.userName ?? '';
-});
 
 class WelcomePage extends ConsumerStatefulWidget {
   const WelcomePage({Key? key}) : super(key: key);
@@ -182,7 +176,7 @@ class WelcomePageState extends ConsumerState<WelcomePage> {
             child: Stack(
               alignment: AlignmentDirectional.topCenter,
               children: [
-                testingButton(),
+                //testingButton(),
                 _logoWidget(),
                 _signInWidget(),
                 _enterNameWidget(),

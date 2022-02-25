@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:worship_connect/announcements/data_classes/announcements_data.dart';
+import 'package:worship_connect/announcements/utils/announcements_data.dart';
 import 'package:worship_connect/announcements/services/announcements_firebase_api.dart';
 
 class SendAnnouncementProvider extends StateNotifier<WCAnnouncementsData> {

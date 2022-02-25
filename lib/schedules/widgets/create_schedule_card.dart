@@ -2,10 +2,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tap_debouncer/tap_debouncer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:worship_connect/schedules/data_classes/schedule_data.dart';
+import 'package:worship_connect/schedules/utils/schedule_data.dart';
 import 'package:worship_connect/schedules/providers/add_schedule_provider.dart';
 import 'package:worship_connect/schedules/providers/calendar_schedule_list_provider.dart';
-import 'package:worship_connect/schedules/screens/schedules_home_page.dart';
+import 'package:worship_connect/schedules/utils/schedules_providers_definition.dart';
 import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
 
 class CreateScheduleCard extends ConsumerStatefulWidget {
@@ -171,7 +171,8 @@ class _CreateScheduleCardState extends ConsumerState<CreateScheduleCard> {
               if (_scheduleData.scheduleTitle.isEmpty) {
                 //new schedule
                 await scheduleNotifier.addSchedule(title: _scheduleEditingController.text.trim());
-              } else if (_scheduleData.scheduleTitle != _scheduleEditingController.text.trim() || scheduleNotifier.temp!.timestamp != ref.read(addScheduleProvider).timestamp) {
+              } else if (_scheduleData.scheduleTitle != _scheduleEditingController.text.trim() ||
+                  scheduleNotifier.temp!.timestamp != ref.read(addScheduleProvider).timestamp) {
                 // edit schedule
                 await scheduleNotifier.editSchedule(_scheduleEditingController.text.trim());
               }

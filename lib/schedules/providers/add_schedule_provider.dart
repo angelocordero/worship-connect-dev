@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:worship_connect/schedules/data_classes/schedule_data.dart';
+import 'package:worship_connect/schedules/utils/schedule_data.dart';
 import 'package:worship_connect/schedules/services/schedules_firebase_api.dart';
 import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
 

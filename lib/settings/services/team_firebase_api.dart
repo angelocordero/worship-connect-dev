@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:worship_connect/settings/data_classes/wc_team_data.dart';
-import 'package:worship_connect/sign_in/data_classes/wc_user_info_data.dart';
+import 'package:worship_connect/settings/utils/wc_team_data.dart';
+import 'package:worship_connect/sign_in/utils/wc_user_info_data.dart';
 import 'package:worship_connect/wc_core/wc_user_firebase_api.dart';
 import 'package:worship_connect/wc_core/worship_connect_constants.dart';
 import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
@@ -138,23 +138,21 @@ class TeamFirebaseAPI {
     EasyLoading.show();
 
     try {
-    WriteBatch _writeBatch = _firebaseInstance.batch();
+      WriteBatch _writeBatch = _firebaseInstance.batch();
 
-    _writeBatch.update(WCUSerFirebaseAPI().wcUserDataCollection.doc(_memberData.userID), {
-      WCUserInfoDataEnum.userStatusString.name: UserStatusEnum.member.name,
-    });
+      _writeBatch.update(WCUSerFirebaseAPI().wcUserDataCollection.doc(_memberData.userID), {
+        WCUserInfoDataEnum.userStatusString.name: UserStatusEnum.member.name,
+      });
 
-    _writeBatch.update(teamsDataCollection.doc(teamID).collection('data').doc('members'), {
-      'admins.${_memberData.userID}': FieldValue.delete(),
-      'normalMembers.${_memberData.userID}': _memberData.userName,
-    });
+      _writeBatch.update(teamsDataCollection.doc(teamID).collection('data').doc('members'), {
+        'admins.${_memberData.userID}': FieldValue.delete(),
+        'normalMembers.${_memberData.userID}': _memberData.userName,
+      });
 
-    await _writeBatch.commit();
-    EasyLoading.dismiss();
-      
+      await _writeBatch.commit();
+      EasyLoading.dismiss();
     } catch (e) {
-            WCUtils().wcShowError('Failed to demote');
-
+      WCUtils().wcShowError('Failed to demote');
     }
   }
 
