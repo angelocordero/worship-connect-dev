@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:worship_connect/schedules/screens/schedules_home_page.dart';
 
@@ -49,10 +50,8 @@ class _ScheduleCalendarState extends ConsumerState<ScheduleCalendar> {
   }
 
   List schedulesForDay(DateTime day) {
-    //TODO: get schedules for day
-    //  Map<String, dynamic> _schedules = context.watch<ScheduleProvider>().getScheduleList();
-    //String dateString = DateFormat('yyyyMMdd').format(day);
-    //  return _schedules[dateString] ?? [];
-    return [];
+    String dateString = DateFormat('yyyyMMdd').format(day);
+
+    return ref.watch(calendarScheduleListProvider)[dateString] ?? [];
   }
 }

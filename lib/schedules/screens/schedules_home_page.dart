@@ -18,8 +18,11 @@ final calendarSelectedDayProvider = StateProvider<DateTime>((ref) {
 });
 
 final addScheduleProvider = StateNotifierProvider.autoDispose<AddScheduleProvider, WCScheduleData>((ref) {
+  WCUserInfoData? _wcUserInfoData = ref.watch(wcUserInfoDataStream).asData!.value;
+
   return AddScheduleProvider(
     data: WCScheduleData.empty(Timestamp.now()),
+    teamID: _wcUserInfoData!.teamID,
   );
 });
 
@@ -66,7 +69,10 @@ class _SchedulesHomePageState extends ConsumerState<SchedulesHomePage> {
                   final _newScheduleProvider = ref.watch(addScheduleProvider.notifier);
                   _newScheduleProvider.initScheduleProvider(WCScheduleData.empty(_timestamp));
 
-                  return CreateScheduleCard();
+                  return const CreateScheduleCard(
+                    tag: 'newSchedule',
+                    addOrEdit: 'Add',
+                  );
                 },
               ),
             );
@@ -78,8 +84,8 @@ class _SchedulesHomePageState extends ConsumerState<SchedulesHomePage> {
         title: const Text('Schedules'),
       ),
       body: RefreshIndicator(
-        onRefresh: () {
-          return Future.delayed(const Duration(seconds: 1));
+        onRefresh: () async {
+          await ref.read(calendarScheduleListProvider.notifier).resetScheduleProvider();
         },
         child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),

@@ -96,6 +96,11 @@ class _SendAnnouncementCardState extends ConsumerState<SendAnnouncementCard> {
               );
             },
             onTap: () async {
+              if (_announcementTextController.text.isEmpty) {
+                WCUtils().wcShowError('Announcement cannot be empty');
+                return;
+              }
+
               SendAnnouncementProvider notifier = ref.watch(sendAnnouncementProvider.notifier);
 
               if (_announcement.announcementText.isEmpty) {

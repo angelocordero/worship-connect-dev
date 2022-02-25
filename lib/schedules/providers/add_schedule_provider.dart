@@ -8,9 +8,11 @@ import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
 class AddScheduleProvider extends StateNotifier<WCScheduleData> {
   AddScheduleProvider({
     required WCScheduleData data,
+    required this.teamID,
   }) : super(data);
 
-  //TODO: add team id as an constructor argument
+  String teamID;
+  WCScheduleData? temp;
 
   void initScheduleProvider(WCScheduleData _data) {
     state = _data;
@@ -23,7 +25,6 @@ class AddScheduleProvider extends StateNotifier<WCScheduleData> {
 
   Future addSchedule({
     required String title,
-    required String teamID,
   }) async {
     state = state.copyWith(
       scheduleTitle: title,
@@ -34,5 +35,17 @@ class AddScheduleProvider extends StateNotifier<WCScheduleData> {
     return SchedulesFirebaseAPI(teamID).addSchedule(state);
   }
 
-  editSchedule(String _title) {}
+  setOriginalScheduleData() {
+    temp = state;
+  }
+
+  editSchedule(
+    String scheduleTitle,
+  ) async {
+    state = state.copyWith(
+      scheduleTitle: scheduleTitle,
+    );
+
+    return SchedulesFirebaseAPI(teamID).editSchedule(oldSchedule: temp!, newSchedule: state);
+  }
 }

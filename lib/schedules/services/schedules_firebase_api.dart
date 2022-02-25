@@ -11,7 +11,7 @@ class SchedulesFirebaseAPI {
   final String teamID;
   late DocumentReference<Map<String, dynamic>> _scheduleDoc;
 
-  addSchedule(WCScheduleData _scheduleData) async {
+  Future<void> addSchedule(WCScheduleData _scheduleData) async {
     EasyLoading.show();
 
     try {
@@ -63,6 +63,70 @@ class SchedulesFirebaseAPI {
     } catch (error) {
       WCUtils().wcShowError('Unable to get schedule data');
       return null;
+    }
+  }
+
+  Future<void> deleteSchedule(WCScheduleData _scheduleData) async {
+    EasyLoading.show();
+
+    try {
+      await _scheduleDoc.update({
+        _scheduleData.scheduleDateCode: FieldValue.arrayRemove([
+          <String, dynamic>{
+            WCScheduleDataEnum.timestamp.name: _scheduleData.timestamp,
+            WCScheduleDataEnum.scheduleTitle.name: _scheduleData.scheduleTitle,
+            WCScheduleDataEnum.scheduleDateCode.name: _scheduleData.scheduleDateCode,
+            WCScheduleDataEnum.scheduleID.name: _scheduleData.scheduleID,
+          }
+        ]),
+      });
+
+      EasyLoading.dismiss();
+    } catch (e) {
+      WCUtils().wcShowError('Failed to delete schedule');
+    }
+  }
+
+  Future<void> editSchedule({
+    required WCScheduleData oldSchedule,
+    required WCScheduleData newSchedule,
+  }) async {
+    EasyLoading.show();
+
+    try {
+      WriteBatch _writeBatch = FirebaseFirestore.instance.batch();
+
+      _writeBatch.update(_scheduleDoc, {
+        oldSchedule.scheduleDateCode: FieldValue.arrayRemove([
+          <String, dynamic>{
+            WCScheduleDataEnum.timestamp.name: oldSchedule.timestamp,
+            WCScheduleDataEnum.scheduleTitle.name: oldSchedule.scheduleTitle,
+            WCScheduleDataEnum.scheduleDateCode.name: oldSchedule.scheduleDateCode,
+            WCScheduleDataEnum.scheduleID.name: oldSchedule.scheduleID,
+          }
+        ]),
+      });
+
+      _writeBatch.update(
+        _scheduleDoc,
+        {
+          newSchedule.scheduleDateCode: FieldValue.arrayUnion(
+            [
+              <String, dynamic>{
+                WCScheduleDataEnum.timestamp.name: newSchedule.timestamp,
+                WCScheduleDataEnum.scheduleTitle.name: newSchedule.scheduleTitle,
+                WCScheduleDataEnum.scheduleID.name: newSchedule.scheduleID,
+                WCScheduleDataEnum.scheduleDateCode.name: newSchedule.scheduleDateCode,
+              }
+            ],
+          ),
+        },
+      );
+
+      await _writeBatch.commit();
+      EasyLoading.dismiss();
+    } catch (e) {
+      WCUtils().wcShowError('Failed to edit schedule');
     }
   }
 }

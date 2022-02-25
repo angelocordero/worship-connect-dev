@@ -6,28 +6,48 @@ import 'package:worship_connect/schedules/data_classes/schedule_data.dart';
 import 'package:worship_connect/schedules/providers/add_schedule_provider.dart';
 import 'package:worship_connect/schedules/providers/calendar_schedule_list_provider.dart';
 import 'package:worship_connect/schedules/screens/schedules_home_page.dart';
-import 'package:worship_connect/sign_in/data_classes/wc_user_info_data.dart';
-import 'package:worship_connect/wc_core/worship_connect.dart';
 import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
 
-class CreateScheduleCard extends ConsumerWidget {
-  CreateScheduleCard({Key? key}) : super(key: key);
-
-  final TextEditingController _textEditingController = TextEditingController();
+class CreateScheduleCard extends ConsumerStatefulWidget {
+  const CreateScheduleCard({
+    Key? key,
+    required this.addOrEdit,
+    required this.tag,
+  }) : super(key: key);
+  final String tag;
+  final String addOrEdit;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() => _CreateScheduleCardState();
+}
+
+class _CreateScheduleCardState extends ConsumerState<CreateScheduleCard> {
+  final TextEditingController _scheduleEditingController = TextEditingController();
+  late final WCScheduleData _scheduleData;
+
+  @override
+  void initState() {
+    _scheduleData = ref.read(addScheduleProvider);
+    _scheduleEditingController.text = _scheduleData.scheduleTitle;
+    _scheduleEditingController.selection = TextSelection.fromPosition(
+      TextPosition(offset: _scheduleData.scheduleTitle.length),
+    );
+
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final WCScheduleData _scheduleData = ref.watch(addScheduleProvider);
     final AddScheduleProvider _scheduleNotifier = ref.watch(addScheduleProvider.notifier);
     final CalendarScheduleListProvider _calendarScheduleListNotifier = ref.watch(calendarScheduleListProvider.notifier);
-    WCUserInfoData? _wcUserInfoData = ref.watch(wcUserInfoDataStream).asData!.value;
 
     return SafeArea(
       child: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(32.0),
           child: Hero(
-            tag: 'schedule',
+            tag: widget.tag,
             child: Material(
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
               child: SingleChildScrollView(
@@ -36,11 +56,11 @@ class CreateScheduleCard extends ConsumerWidget {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Padding(
-                        padding: EdgeInsets.all(16.0),
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
                         child: Text(
-                          'Create a schedule',
-                          style: TextStyle(
+                          '${widget.addOrEdit} schedule',
+                          style: const TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
                           ),
@@ -55,7 +75,6 @@ class CreateScheduleCard extends ConsumerWidget {
                       _scheduleButtons(
                         context: context,
                         scheduleNotifier: _scheduleNotifier,
-                        wcUserInfoData: _wcUserInfoData!,
                         calendarScheduleListNotifier: _calendarScheduleListNotifier,
                       )
                     ],
@@ -109,7 +128,6 @@ class CreateScheduleCard extends ConsumerWidget {
   SingleChildScrollView _scheduleButtons({
     required BuildContext context,
     required AddScheduleProvider scheduleNotifier,
-    required WCUserInfoData wcUserInfoData,
     required CalendarScheduleListProvider calendarScheduleListNotifier,
   }) {
     return SingleChildScrollView(
@@ -122,7 +140,7 @@ class CreateScheduleCard extends ConsumerWidget {
           ),
           TapDebouncer(
             onTap: () async {
-              if (_textEditingController.text.isNotEmpty) {
+              if (_scheduleEditingController.text.isNotEmpty) {
                 showCancelDialog(context);
               } else {
                 Navigator.pop(context);
@@ -145,31 +163,28 @@ class CreateScheduleCard extends ConsumerWidget {
           ),
           TapDebouncer(
             onTap: () async {
-              if (_textEditingController.text.isNotEmpty) {
-                await scheduleNotifier.addSchedule(title: _textEditingController.text, teamID: wcUserInfoData.teamID);
-                await calendarScheduleListNotifier.resetScheduleProvider();
-
-                // TODO: if else check when editing
-
-                if (true == true /*editScheduleData == null*/) {
-                  // context.read<AddScheduleModel>().setScheduleDay(selectedDay!);
-                  // context.read<AddScheduleModel>().setScheduleTitle(_textEditingController.text.trim());
-                  // await context.read<AddScheduleModel>().addSchedule();
-                } else {
-                  // context.read<AddScheduleModel>().setScheduleDay(editScheduleData!.timeStamp.toDate());
-                  // context.read<AddScheduleModel>().setScheduleTitle(_textEditingController.text.trim());
-                  // await context.read<AddScheduleModel>().editSchedule(editScheduleData!);
-                }
-                //await reset!();
-                Navigator.pop(context);
+              if (_scheduleEditingController.text.isEmpty) {
+                WCUtils().wcShowError('Schedule title cannot be empty');
+                return;
               }
+
+              if (_scheduleData.scheduleTitle.isEmpty) {
+                //new schedule
+                await scheduleNotifier.addSchedule(title: _scheduleEditingController.text.trim());
+              } else if (_scheduleData.scheduleTitle != _scheduleEditingController.text.trim() || scheduleNotifier.temp!.timestamp != ref.read(addScheduleProvider).timestamp) {
+                // edit schedule
+                await scheduleNotifier.editSchedule(_scheduleEditingController.text.trim());
+              }
+
+              await calendarScheduleListNotifier.resetScheduleProvider();
+              Navigator.pop(context);
             },
             builder: (BuildContext context, TapDebouncerFunc? onTap) {
               return TextButton(
                 onPressed: onTap,
-                child: const Text(
-                  'Create Schedule',
-                  style: TextStyle(
+                child: Text(
+                  '${widget.addOrEdit} Schedule',
+                  style: const TextStyle(
                     fontSize: 12.0,
                   ),
                 ),
@@ -183,7 +198,7 @@ class CreateScheduleCard extends ConsumerWidget {
 
   TextField _scheduleTitleTextField() {
     return TextField(
-      controller: _textEditingController,
+      controller: _scheduleEditingController,
       minLines: 2,
       maxLines: 2,
       autocorrect: true,
