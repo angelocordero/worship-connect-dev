@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:worship_connect/schedules/utils/schedule_data.dart';
 import 'package:worship_connect/schedules/services/schedules_firebase_api.dart';
 import 'package:worship_connect/schedules/widgets/create_schedule_card.dart';
+import 'package:worship_connect/schedules/widgets/schedule_info_navigator.dart';
 import 'package:worship_connect/sign_in/utils/wc_user_info_data.dart';
 import 'package:worship_connect/schedules/utils/schedules_providers_definition.dart';
 import 'package:worship_connect/wc_core/wc_custom_route.dart';
@@ -36,7 +37,7 @@ class SchedulesCalendarTile extends ConsumerWidget {
                         final _newScheduleProvider = ref.watch(addScheduleProvider.notifier);
                         _newScheduleProvider.initScheduleProvider(scheduleData);
                         _newScheduleProvider.setOriginalScheduleData();
-        
+
                         return const CreateScheduleCard(
                           tag: 'editSchedule',
                           addOrEdit: 'Edit',
@@ -44,10 +45,12 @@ class SchedulesCalendarTile extends ConsumerWidget {
                       },
                     ),
                   );
-        
+
                   break;
                 case 1:
-                  SchedulesFirebaseAPI(_wcUserInfoData.teamID).deleteSchedule(scheduleData);
+                  await SchedulesFirebaseAPI(_wcUserInfoData.teamID).deleteSchedule(scheduleData);
+                  await ref.watch(calendarScheduleListProvider.notifier).resetScheduleProvider();
+
                   break;
               }
             },
@@ -64,13 +67,16 @@ class SchedulesCalendarTile extends ConsumerWidget {
           ),
         ),
       ),
-      onTap: () {
+      onTap: () async {
+        ref.read(scheduleInfoProvider.state).state = scheduleData;
+        await ref.read(schedulesSongsProvider.notifier).init();
+
+
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) {
-              //display schedule info
-              return Container();
+              return const ScheduleInfoNavigator();
             },
           ),
         );

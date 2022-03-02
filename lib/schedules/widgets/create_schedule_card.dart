@@ -228,7 +228,11 @@ class _CreateScheduleCardState extends ConsumerState<CreateScheduleCard> {
         scheduleNotifier: scheduleNotifier,
         scheduleData: scheduleData,
       ),
-      trailing: const Icon(Icons.timer),
+      trailing: const SizedBox(
+        height: 0,
+        width: 0,
+        child: Icon(Icons.timer),
+      ),
     );
   }
 

@@ -70,7 +70,9 @@ class SchedulesFirebaseAPI {
     EasyLoading.show();
 
     try {
-      await _scheduleDoc.update({
+      WriteBatch _writeBatch = FirebaseFirestore.instance.batch();
+
+      _writeBatch.update(_scheduleDoc, {
         _scheduleData.scheduleDateCode: FieldValue.arrayRemove([
           <String, dynamic>{
             WCScheduleDataEnum.timestamp.name: _scheduleData.timestamp,
@@ -80,6 +82,10 @@ class SchedulesFirebaseAPI {
           }
         ]),
       });
+
+      _writeBatch.delete(_scheduleDoc.collection('scheduleData').doc(_scheduleData.scheduleID));
+
+      await _writeBatch.commit();
 
       EasyLoading.dismiss();
     } catch (e) {
@@ -127,6 +133,34 @@ class SchedulesFirebaseAPI {
       EasyLoading.dismiss();
     } catch (e) {
       WCUtils().wcShowError('Failed to edit schedule');
+    }
+  }
+
+  Future<DocumentSnapshot<Map<String, dynamic>>?> getScheduleInfo(String scheduleID) async {
+    EasyLoading.show();
+
+    try {
+      return await _scheduleDoc.collection('scheduleData').doc(scheduleID).get().then((value) {
+        EasyLoading.dismiss();
+
+        return value;
+      });
+    } catch (e) {
+      EasyLoading.dismiss();
+      return null;
+    }
+  }
+
+  Future saveScheduleData(List<dynamic> scheduleData, String scheduleID) async {
+    EasyLoading.show();
+
+    try {
+      await _scheduleDoc.collection('scheduleData').doc(scheduleID).set({
+        'songs': scheduleData,
+      });
+      EasyLoading.dismiss();
+    } catch (e) {
+      WCUtils().wcShowError('Failed to save schedule data');
     }
   }
 }

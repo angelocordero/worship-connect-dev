@@ -21,11 +21,13 @@ class _SchedulesHomePageState extends ConsumerState<SchedulesHomePage> {
   @override
   void initState() {
     ref.read(calendarScheduleListProvider.notifier).initScheduleProvider();
+    ref.read(scheduleInfoProvider.state);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+
     final calendarSelectedDay = ref.watch(calendarSelectedDayProvider);
 
     return Scaffold(

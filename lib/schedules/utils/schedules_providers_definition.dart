@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:worship_connect/schedules/providers/schedule_songs_provider.dart';
 import 'package:worship_connect/schedules/utils/schedule_data.dart';
 import 'package:worship_connect/schedules/providers/add_schedule_provider.dart';
 import 'package:worship_connect/schedules/providers/calendar_schedule_list_provider.dart';
@@ -23,4 +24,19 @@ final calendarScheduleListProvider = StateNotifierProvider<CalendarScheduleListP
   WCUserInfoData? _wcUserInfoData = ref.watch(wcUserInfoDataStream).asData?.value;
 
   return CalendarScheduleListProvider(teamID: _wcUserInfoData?.teamID ?? '');
+});
+
+final scheduleInfoProvider = StateProvider<WCScheduleData>((ref) {
+  return WCScheduleData.empty(Timestamp.now());
+});
+
+final schedulesSongsProvider = StateNotifierProvider<ScheduleSongsProvider, List>((ref) {
+  WCUserInfoData? _wcUserInfoData = ref.watch(wcUserInfoDataStream).asData?.value;
+  String _scheduleID = ref.watch(scheduleInfoProvider).scheduleID;
+
+
+  return ScheduleSongsProvider(
+    teamID: _wcUserInfoData!.teamID,
+    scheduleID: _scheduleID,
+  );
 });
