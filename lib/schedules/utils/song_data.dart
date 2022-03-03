@@ -1,20 +1,20 @@
-enum SongDataEnum {
+enum WCSongDataEnum {
   songTitle,
   songURL,
   songKey,
   songID,
 }
 
-class SongData {
+class WCSongData {
   final String songTitle;
-  final String songURL;
+  final String? songURL;
   final String songKey;
   final String songID;
 
-  SongData({
+  WCSongData({
     required this.songTitle,
     required this.songKey,
-    required this.songURL,
     required this.songID,
+    this.songURL,
   });
 }

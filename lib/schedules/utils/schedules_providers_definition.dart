@@ -34,9 +34,12 @@ final schedulesSongsProvider = StateNotifierProvider<ScheduleSongsProvider, List
   WCUserInfoData? _wcUserInfoData = ref.watch(wcUserInfoDataStream).asData?.value;
   String _scheduleID = ref.watch(scheduleInfoProvider).scheduleID;
 
-
   return ScheduleSongsProvider(
     teamID: _wcUserInfoData!.teamID,
     scheduleID: _scheduleID,
   );
+});
+
+final songKeyProvider = StateProvider<String>((ref) {
+  return 'A';
 });

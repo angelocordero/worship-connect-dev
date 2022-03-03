@@ -3,19 +3,39 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tap_debouncer/tap_debouncer.dart';
 import 'package:worship_connect/schedules/utils/schedules_providers_definition.dart';
+import 'package:worship_connect/schedules/utils/song_data.dart';
 import 'package:worship_connect/schedules/widgets/keys_dropdown.dart';
 import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
 
-class AddSongCard extends ConsumerStatefulWidget {
-  const AddSongCard({Key? key}) : super(key: key);
+class EditSongCard extends ConsumerStatefulWidget {
+  const EditSongCard({
+    Key? key,
+    required this.songData,
+    required this.index,
+  }) : super(key: key);
+
+  final WCSongData songData;
+  final int index;
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _AddSongCardState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _EditSongCardState();
 }
 
-class _AddSongCardState extends ConsumerState<AddSongCard> {
+class _EditSongCardState extends ConsumerState<EditSongCard> {
   final TextEditingController _titleEditingController = TextEditingController();
   final TextEditingController _linkEditingController = TextEditingController();
+
+  @override
+  void initState() {
+    _titleEditingController.text = widget.songData.songTitle;
+    _titleEditingController.selection = TextSelection.fromPosition(TextPosition(offset: widget.songData.songTitle.length));
+    _linkEditingController.text = widget.songData.songURL ?? '';
+    _linkEditingController.selection = TextSelection.fromPosition(TextPosition(offset: widget.songData.songURL?.length ?? 0));
+
+    super.initState();
+  }
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +59,7 @@ class _AddSongCardState extends ConsumerState<AddSongCard> {
                       const Padding(
                         padding: EdgeInsets.all(16.0),
                         child: Text(
-                          'Add song',
+                          'Edit song',
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -122,18 +142,21 @@ class _AddSongCardState extends ConsumerState<AddSongCard> {
                                   return;
                                 }
 
-                                await ref.read(schedulesSongsProvider.notifier).addSong(
+                                await ref.read(schedulesSongsProvider.notifier).editSong(
                                       title: _titleEditingController.text.trim(),
                                       key: _songKey,
                                       url: _linkEditingController.text.trim(),
+                                      songID: widget.songData.songID,
+                                      index: widget.index,
                                     );
+
                                 Navigator.pop(context);
                               },
                               builder: (BuildContext context, TapDebouncerFunc? onTap) {
                                 return TextButton(
                                   onPressed: onTap,
                                   child: const Text(
-                                    'Add Song',
+                                    'Edit Song',
                                     style: TextStyle(
                                       fontSize: 12.0,
                                     ),

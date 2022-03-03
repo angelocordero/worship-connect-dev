@@ -25,24 +25,31 @@ class ScheduleInfoSongsPage extends ConsumerWidget {
       child: Column(
         children: [
           Expanded(
-            child: ReorderableListView.builder(
-              itemBuilder: (context, index) {
-                SongData _songData = SongData(
-                  songTitle: _songList[index][SongDataEnum.songTitle.name],
-                  songKey: _songList[index][SongDataEnum.songKey.name],
-                  songURL: _songList[index][SongDataEnum.songURL.name],
-                  songID: _songList[index][SongDataEnum.songID.name],
-                );
-                return SongTile(
-                  songData: _songData,
-                  key: ValueKey(_songList[index]),
-                );
-              },
-              itemCount: _songList.length,
-              buildDefaultDragHandles: true,
-              onReorder: (oldIndex, newIndex) {
-                _songsNotifier.reorderSongs(oldIndex, newIndex);
-              },
+            child: Visibility(
+              visible: _songList.isNotEmpty,
+              child: ReorderableListView.builder(
+                itemBuilder: (context, index) {
+                  WCSongData _songData = WCSongData(
+                    songTitle: _songList[index][WCSongDataEnum.songTitle.name],
+                    songKey: _songList[index][WCSongDataEnum.songKey.name],
+                    songURL: _songList[index][WCSongDataEnum.songURL.name],
+                    songID: _songList[index][WCSongDataEnum.songID.name],
+                  );
+                  return SongTile(
+                    songData: _songData,
+                    key: ValueKey(_songList[index]),
+                    index: index,
+                  );
+                },
+                itemCount: _songList.length,
+                buildDefaultDragHandles: true,
+                onReorder: (oldIndex, newIndex) {
+                  _songsNotifier.reorderSongs(oldIndex, newIndex);
+                },
+              ),
+              replacement: const Center(
+                child: Text('No songs for this schedule'),
+              ),
             ),
           ),
           if (WCUtils().isAdminOrLeader(_wcUserInfoData!))
@@ -54,6 +61,7 @@ class ScheduleInfoSongsPage extends ConsumerWidget {
                     tag: 'song',
                     child: ElevatedButton(
                       onPressed: () {
+                        ref.read(songKeyProvider.state).state = 'A';
                         Navigator.push(
                           context,
                           WCCustomRoute(

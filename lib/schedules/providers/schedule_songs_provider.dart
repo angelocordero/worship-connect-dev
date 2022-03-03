@@ -39,10 +39,10 @@ class ScheduleSongsProvider extends StateNotifier<List<Map<String, dynamic>>> {
     List<Map<String, dynamic>> temp = state;
 
     temp.add({
-      SongDataEnum.songTitle.name: title,
-      SongDataEnum.songKey.name: key,
-      SongDataEnum.songURL.name: url,
-      SongDataEnum.songID.name: WCUtils().generateRandomID(),
+      WCSongDataEnum.songTitle.name: title,
+      WCSongDataEnum.songKey.name: key,
+      WCSongDataEnum.songURL.name: url,
+      WCSongDataEnum.songID.name: WCUtils().generateRandomID(),
     });
 
     state = temp.toList();
@@ -64,6 +64,35 @@ class ScheduleSongsProvider extends StateNotifier<List<Map<String, dynamic>>> {
 
     final Map<String, dynamic> song = temp.removeAt(oldIndex);
     temp.insert(index, song);
+    state = temp.toList();
+  }
+
+  deleteSong(int index) {
+    List<Map<String, dynamic>> temp = state;
+
+    temp.removeAt(index);
+
+    state = temp.toList();
+  }
+
+  editSong({
+    required String title,
+    required String key,
+    required String url,
+    required String songID,
+    required int index,
+  }) {
+    List<Map<String, dynamic>> temp = state;
+
+    temp.removeAt(index);
+
+    temp.insert(index, {
+      WCSongDataEnum.songTitle.name: title,
+      WCSongDataEnum.songKey.name: key,
+      WCSongDataEnum.songURL.name: url,
+      WCSongDataEnum.songID.name: songID,
+    });
+
     state = temp.toList();
   }
 }

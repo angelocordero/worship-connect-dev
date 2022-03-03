@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:worship_connect/schedules/utils/schedules_providers_definition.dart';
 
-class SongKeyDropdown extends StatelessWidget {
+class SongKeyDropdown extends ConsumerWidget {
   const SongKeyDropdown({Key? key}) : super(key: key);
 
   static final List<String> songKeyList = [
@@ -19,7 +21,9 @@ class SongKeyDropdown extends StatelessWidget {
   ];
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    String key = ref.watch(songKeyProvider);
+
     return ButtonTheme(
       alignedDropdown: true,
       child: DropdownButtonFormField<String>(
@@ -33,7 +37,7 @@ class SongKeyDropdown extends StatelessWidget {
         ),
         isDense: true,
         menuMaxHeight: 300,
-        value: songKeyList.first,
+        value: key,
         style: const TextStyle(
           fontSize: 12,
         ),
@@ -46,7 +50,9 @@ class SongKeyDropdown extends StatelessWidget {
             );
           },
         ).toList(),
-        onChanged: (String? newValue) {},
+        onChanged: (String? newValue) {
+          ref.watch(songKeyProvider.state).state = newValue!;
+        },
       ),
     );
   }
