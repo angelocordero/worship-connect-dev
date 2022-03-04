@@ -20,7 +20,7 @@ class WCSignIn {
       await WCUserAuthentication().authenticate(googleCredential);
       EasyLoading.dismiss();
     } catch (error) {
-      WCUtils().wcShowError('Sign in failed');
+      WCUtils.wcShowError('Sign in failed');
     }
   }
 

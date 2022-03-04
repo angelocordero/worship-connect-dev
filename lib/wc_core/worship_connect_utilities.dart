@@ -6,34 +6,34 @@ import 'package:worship_connect/sign_in/utils/wc_user_info_data.dart';
 import 'package:worship_connect/wc_core/worship_connect_constants.dart';
 
 class WCUtils {
-  final String _wcAlphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+  static const String _wcAlphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 
-  Widget authLoadingWidget() {
+  static Widget authLoadingWidget() {
     EasyLoading.show();
     return Container();
   }
 
-  double screenHeight(BuildContext context) {
+  static double screenHeight(BuildContext context) {
     return MediaQuery.of(context).size.height;
   }
 
-  double screenHeightSafeArea(BuildContext context) {
+  static double screenHeightSafeArea(BuildContext context) {
     return MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top;
   }
 
-  double screenHeightSafeAreaAppBar(BuildContext context) {
+  static double screenHeightSafeAreaAppBar(BuildContext context) {
     return MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top - kToolbarHeight;
   }
 
-  double screenHeightSafeAreaAppBarBottomBar(BuildContext context) {
+  static double screenHeightSafeAreaAppBarBottomBar(BuildContext context) {
     return MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top - kToolbarHeight - kBottomNavigationBarHeight;
   }
 
-  double screenWidth(BuildContext context) {
+  static double screenWidth(BuildContext context) {
     return MediaQuery.of(context).size.width;
   }
 
-  String generateTeamID() {
+  static String generateTeamID() {
     String _randomID1 = customAlphabet(_wcAlphabet, 5);
     String _randomID2 = customAlphabet(_wcAlphabet, 5);
     String _randomID3 = customAlphabet(_wcAlphabet, 5);
@@ -41,23 +41,23 @@ class WCUtils {
     return '$_randomID1-$_randomID2-$_randomID3';
   }
 
-  String generateRandomID() {
+  static String generateRandomID() {
     return customAlphabet(_wcAlphabet, 15);
   }
 
-  String timeToString(DateTime _dateTime) {
+  static String timeToString(DateTime _dateTime) {
     return DateFormat.jm().format(_dateTime);
   }
 
-  String dateToString(DateTime _dateTime) {
+  static String dateToString(DateTime _dateTime) {
     return '${DateFormat.EEEE().format(_dateTime)} ${DateFormat.yMMMd().format(_dateTime)}';
   }
 
-  String dateTimeToString(DateTime _dateTime) {
+  static String dateTimeToString(DateTime _dateTime) {
     return '${DateFormat.EEEE().format(_dateTime)} ${DateFormat.yMMMd().format(_dateTime)} ${DateFormat.jm().format(_dateTime)}';
   }
 
-  DateTime setDateTimeFromDayAndTime({
+  static DateTime setDateTimeFromDayAndTime({
     required DateTime dateTime,
     required TimeOfDay timeOfDay,
   }) {
@@ -70,32 +70,32 @@ class WCUtils {
     );
   }
 
-  String setDateCode(DateTime _date) {
+  static String setDateCode(DateTime _date) {
     return DateFormat('yyyyMMdd').format(_date);
   }
 
-  void wcShowError(String error) {
+  static void wcShowError(String error) {
     EasyLoading.showError(
       error,
       dismissOnTap: true,
     );
   }
 
-  void wcShowInfo(String info) {
+  static void wcShowInfo(String info) {
     EasyLoading.showInfo(
       info,
       dismissOnTap: true,
     );
   }
 
-  void wcShowSuccess(String success) {
+  static void wcShowSuccess(String success) {
     EasyLoading.showSuccess(
       success,
       dismissOnTap: true,
     );
   }
 
-  bool isAdminOrLeader(WCUserInfoData data) {
+  static bool isAdminOrLeader(WCUserInfoData data) {
     return data.userStatus == UserStatusEnum.admin || data.userStatus == UserStatusEnum.leader;
   }
 }

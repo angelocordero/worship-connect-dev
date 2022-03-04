@@ -3,6 +3,7 @@ enum WCSongDataEnum {
   songURL,
   songKey,
   songID,
+  songURLTitle,
 }
 
 class WCSongData {
@@ -10,11 +11,13 @@ class WCSongData {
   final String? songURL;
   final String songKey;
   final String songID;
+  final String? songURLTitle;
 
   WCSongData({
     required this.songTitle,
     required this.songKey,
     required this.songID,
     this.songURL,
+    this.songURLTitle,
   });
 }

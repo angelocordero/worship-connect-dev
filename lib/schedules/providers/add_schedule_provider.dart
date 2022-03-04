@@ -19,7 +19,7 @@ class AddScheduleProvider extends StateNotifier<WCScheduleData> {
   }
 
   setScheduleTime(TimeOfDay _scheduleTime) {
-    DateTime _tempDate = WCUtils().setDateTimeFromDayAndTime(dateTime: state.timestamp.toDate(), timeOfDay: _scheduleTime);
+    DateTime _tempDate = WCUtils.setDateTimeFromDayAndTime(dateTime: state.timestamp.toDate(), timeOfDay: _scheduleTime);
     state = state.copyWith(timestamp: Timestamp.fromDate(_tempDate));
   }
 
@@ -28,8 +28,8 @@ class AddScheduleProvider extends StateNotifier<WCScheduleData> {
   }) async {
     state = state.copyWith(
       scheduleTitle: title,
-      scheduleDateCode: WCUtils().setDateCode(state.timestamp.toDate()),
-      scheduleID: WCUtils().generateRandomID(),
+      scheduleDateCode: WCUtils.setDateCode(state.timestamp.toDate()),
+      scheduleID: WCUtils.generateRandomID(),
     );
 
     return SchedulesFirebaseAPI(teamID).addSchedule(state);

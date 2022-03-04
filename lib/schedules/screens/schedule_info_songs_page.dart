@@ -27,32 +27,37 @@ class ScheduleInfoSongsPage extends ConsumerWidget {
           Expanded(
             child: Visibility(
               visible: _songList.isNotEmpty,
-              child: ReorderableListView.builder(
-                itemBuilder: (context, index) {
-                  WCSongData _songData = WCSongData(
-                    songTitle: _songList[index][WCSongDataEnum.songTitle.name],
-                    songKey: _songList[index][WCSongDataEnum.songKey.name],
-                    songURL: _songList[index][WCSongDataEnum.songURL.name],
-                    songID: _songList[index][WCSongDataEnum.songID.name],
-                  );
-                  return SongTile(
-                    songData: _songData,
-                    key: ValueKey(_songList[index]),
-                    index: index,
-                  );
-                },
-                itemCount: _songList.length,
-                buildDefaultDragHandles: true,
-                onReorder: (oldIndex, newIndex) {
-                  _songsNotifier.reorderSongs(oldIndex, newIndex);
-                },
-              ),
               replacement: const Center(
                 child: Text('No songs for this schedule'),
               ),
+              child: RefreshIndicator(
+                onRefresh: () {
+                  return _songsNotifier.reset();
+                },
+                child: ReorderableListView.builder(
+                  itemBuilder: (context, index) {
+                    WCSongData _songData = WCSongData(
+                        songTitle: _songList[index][WCSongDataEnum.songTitle.name],
+                        songKey: _songList[index][WCSongDataEnum.songKey.name],
+                        songURL: _songList[index][WCSongDataEnum.songURL.name],
+                        songID: _songList[index][WCSongDataEnum.songID.name],
+                        songURLTitle: _songList[index][WCSongDataEnum.songURLTitle.name]);
+                    return SongTile(
+                      songData: _songData,
+                      key: ValueKey(_songList[index]),
+                      index: index,
+                    );
+                  },
+                  itemCount: _songList.length,
+                  buildDefaultDragHandles: true,
+                  onReorder: (oldIndex, newIndex) {
+                    _songsNotifier.reorderSongs(oldIndex, newIndex);
+                  },
+                ),
+              ),
             ),
           ),
-          if (WCUtils().isAdminOrLeader(_wcUserInfoData!))
+          if (WCUtils.isAdminOrLeader(_wcUserInfoData!))
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

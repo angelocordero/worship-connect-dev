@@ -65,12 +65,12 @@ class _AnnouncementsHomePageState extends ConsumerState<AnnouncementsHomePage> {
 
   Visibility _newAnnouncementButton(BuildContext context, WCUserInfoData wcUserInfoData) {
     return Visibility(
-      visible: WCUtils().isAdminOrLeader(wcUserInfoData),
+      visible: WCUtils.isAdminOrLeader(wcUserInfoData),
       child: FloatingActionButton.extended(
         heroTag: 'new',
         onPressed: () {
           if (ref.read(announcementListProvider).length >= 10) {
-            WCUtils().wcShowError('You can only post up to 10 announcements.');
+            WCUtils.wcShowError('You can only post up to 10 announcements.');
             return;
           }
           Navigator.push(

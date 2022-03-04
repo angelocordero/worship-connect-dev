@@ -30,10 +30,10 @@ class WorshipConnectNavigator extends ConsumerWidget {
             }
           },
           error: (err, stack) {
-            return WCUtils().authLoadingWidget();
+            return WCUtils.authLoadingWidget();
           },
           loading: () {
-            return WCUtils().authLoadingWidget();
+            return WCUtils.authLoadingWidget();
           },
         );
       },
@@ -42,7 +42,7 @@ class WorshipConnectNavigator extends ConsumerWidget {
         return Container();
       },
       loading: () {
-        return WCUtils().authLoadingWidget();
+        return WCUtils.authLoadingWidget();
       },
     );
   }

@@ -38,7 +38,7 @@ class TeamFirebaseAPI {
       await teamsDataCollection.doc(teamID).update({TeamDataEnum.teamName.name: newTeamName});
       EasyLoading.dismiss();
     } catch (e) {
-      WCUtils().wcShowError('Change name failed');
+      WCUtils.wcShowError('Change name failed');
     }
   }
 
@@ -51,7 +51,7 @@ class TeamFirebaseAPI {
       });
       EasyLoading.dismiss();
     } catch (e) {
-      WCUtils().wcShowError(e.toString());
+      WCUtils.wcShowError(e.toString());
     }
   }
 
@@ -76,7 +76,7 @@ class TeamFirebaseAPI {
 
       EasyLoading.dismiss();
     } catch (error) {
-      WCUtils().wcShowError('Unable to leave team');
+      WCUtils.wcShowError('Unable to leave team');
     }
   }
 
@@ -102,7 +102,7 @@ class TeamFirebaseAPI {
       await _writeBatch.commit();
       EasyLoading.dismiss();
     } catch (e) {
-      WCUtils().wcShowError('Failed to promote');
+      WCUtils.wcShowError('Failed to promote');
     }
   }
 
@@ -130,7 +130,7 @@ class TeamFirebaseAPI {
       await _writeBatch.commit();
       EasyLoading.dismiss();
     } catch (e) {
-      WCUtils().wcShowError('Failed to promote');
+      WCUtils.wcShowError('Failed to promote');
     }
   }
 
@@ -152,7 +152,7 @@ class TeamFirebaseAPI {
       await _writeBatch.commit();
       EasyLoading.dismiss();
     } catch (e) {
-      WCUtils().wcShowError('Failed to demote');
+      WCUtils.wcShowError('Failed to demote');
     }
   }
 

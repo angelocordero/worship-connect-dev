@@ -23,7 +23,7 @@ class SchedulesCalendarTile extends ConsumerWidget {
       title: Text(scheduleData.scheduleTitle),
       subtitle: Text(scheduleData.timeString),
       trailing: Visibility(
-        visible: WCUtils().isAdminOrLeader(_wcUserInfoData!),
+        visible: WCUtils.isAdminOrLeader(_wcUserInfoData!),
         child: Hero(
           tag: 'editSchedule',
           child: PopupMenuButton<int>(
@@ -70,7 +70,6 @@ class SchedulesCalendarTile extends ConsumerWidget {
       onTap: () async {
         ref.read(scheduleInfoProvider.state).state = scheduleData;
         await ref.read(schedulesSongsProvider.notifier).init();
-
 
         Navigator.push(
           context,

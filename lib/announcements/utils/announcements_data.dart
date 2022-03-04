@@ -25,7 +25,7 @@ class WCAnnouncementsData {
     required this.announcementPosterID,
     this.timestamp,
   }) {
-    announcementDateString = WCUtils().dateTimeToString(timestamp?.toDate() ?? Timestamp.now().toDate());
+    announcementDateString = WCUtils.dateTimeToString(timestamp?.toDate() ?? Timestamp.now().toDate());
   }
 
   WCAnnouncementsData.empty()

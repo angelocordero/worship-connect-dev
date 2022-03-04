@@ -24,8 +24,8 @@ class TeamSettings extends ConsumerWidget {
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(shape: wcButtonShape),
         onPressed: () async {
-          if (WCUtils().isAdminOrLeader(userData)) {
-            WCUtils().wcShowError('Team leader and admins cannot leave team');
+          if (WCUtils.isAdminOrLeader(userData)) {
+            WCUtils.wcShowError('Team leader and admins cannot leave team');
             return;
           }
 
@@ -105,11 +105,11 @@ class TeamSettings extends ConsumerWidget {
         icon: const Icon(Icons.copy),
         onPressed: () async {
           if (_teamID.isEmpty) {
-            WCUtils().wcShowError('Unable to copy team ID');
+            WCUtils.wcShowError('Unable to copy team ID');
             return;
           }
           await FlutterClipboard.copy(_teamID);
-          WCUtils().wcShowSuccess('Team ID copied to clipboard');
+          WCUtils.wcShowSuccess('Team ID copied to clipboard');
         },
       ),
     );
@@ -151,7 +151,7 @@ class TeamSettings extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     TeamData _teamData = ref.watch(wcTeamDataStream).asData?.value ?? TeamData.empty();
     WCUserInfoData? _userData = ref.watch(wcUserInfoDataStream).asData?.value;
-    bool _isAdminOrLeader = WCUtils().isAdminOrLeader(_userData!);
+    bool _isAdminOrLeader = WCUtils.isAdminOrLeader(_userData!);
 
     return Card(
       margin: const EdgeInsets.all(12),

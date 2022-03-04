@@ -27,7 +27,6 @@ class _SchedulesHomePageState extends ConsumerState<SchedulesHomePage> {
 
   @override
   Widget build(BuildContext context) {
-
     final calendarSelectedDay = ref.watch(calendarSelectedDayProvider);
 
     return Scaffold(
@@ -40,7 +39,7 @@ class _SchedulesHomePageState extends ConsumerState<SchedulesHomePage> {
               WCCustomRoute(
                 builder: (context) {
                   Timestamp _timestamp = Timestamp.fromDate(
-                    WCUtils().setDateTimeFromDayAndTime(
+                    WCUtils.setDateTimeFromDayAndTime(
                       dateTime: calendarSelectedDay,
                       timeOfDay: TimeOfDay.now(),
                     ),
@@ -64,7 +63,7 @@ class _SchedulesHomePageState extends ConsumerState<SchedulesHomePage> {
         title: const Text('Schedules'),
       ),
       body: SizedBox(
-        height: WCUtils().screenHeightSafeAreaAppBarBottomBar(context),
+        height: WCUtils.screenHeightSafeAreaAppBarBottomBar(context),
         child: RefreshIndicator(
           onRefresh: () async {
             await ref.read(calendarScheduleListProvider.notifier).resetScheduleProvider();
@@ -72,13 +71,13 @@ class _SchedulesHomePageState extends ConsumerState<SchedulesHomePage> {
           child: SingleChildScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
             child: SizedBox(
-              height: WCUtils().screenHeightSafeAreaAppBarBottomBar(context),
+              height: WCUtils.screenHeightSafeAreaAppBarBottomBar(context),
               child: Column(
                 children: [
                   const ScheduleCalendar(),
                   Expanded(
                     child: Container(
-                      width: WCUtils().screenWidth(context),
+                      width: WCUtils.screenWidth(context),
                       padding: const EdgeInsets.all(12),
                       child: Builder(
                         builder: (context) {
@@ -87,7 +86,7 @@ class _SchedulesHomePageState extends ConsumerState<SchedulesHomePage> {
                           if (scheduleList.isEmpty) {
                             return Center(
                               child: Text(
-                                'No schedules for\n${WCUtils().dateToString(calendarSelectedDay)}',
+                                'No schedules for\n${WCUtils.dateToString(calendarSelectedDay)}',
                                 textAlign: TextAlign.center,
                               ),
                             );

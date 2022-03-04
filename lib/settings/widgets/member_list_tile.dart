@@ -19,7 +19,7 @@ class MemberListTile extends ConsumerWidget {
     bool _canPassLeader = _userStatus == UserStatusEnum.leader && _memberStatus == UserStatusEnum.admin;
     bool _canPromoteMemberToAdmin = _userStatus == UserStatusEnum.leader && _memberStatus == UserStatusEnum.member;
     bool _canDemoteAdminToMember = _userStatus == UserStatusEnum.leader && _memberStatus == UserStatusEnum.admin;
-    bool _canRemoveFromTeam = WCUtils().isAdminOrLeader(_userData) && _memberStatus == UserStatusEnum.member;
+    bool _canRemoveFromTeam = WCUtils.isAdminOrLeader(_userData) && _memberStatus == UserStatusEnum.member;
     bool _canDemoteSelfToMember = _userStatus == UserStatusEnum.admin;
 
     return PopupMenuButton<int>(
@@ -44,7 +44,7 @@ class MemberListTile extends ConsumerWidget {
             await TeamFirebaseAPI(_userData.teamID).demoteToMember(_userData);
             break;
           default:
-            WCUtils().wcShowError('Error');
+            WCUtils.wcShowError('Error');
             break;
         }
       },
@@ -97,8 +97,8 @@ class MemberListTile extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (WCUtils().isAdminOrLeader(memberData)) RoleIcon(role: memberData.userStatus), //role icon
-            if (WCUtils().isAdminOrLeader(_userData)) _popupMenuButton(_userData), // popup menu
+            if (WCUtils.isAdminOrLeader(memberData)) RoleIcon(role: memberData.userStatus), //role icon
+            if (WCUtils.isAdminOrLeader(_userData)) _popupMenuButton(_userData), // popup menu
           ],
         ),
       ),

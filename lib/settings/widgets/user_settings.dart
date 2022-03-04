@@ -42,11 +42,11 @@ class UserSettings extends ConsumerWidget {
         icon: const Icon(Icons.copy),
         onPressed: () async {
           if (_userID.isEmpty) {
-            WCUtils().wcShowError('Unable to copy User ID');
+            WCUtils.wcShowError('Unable to copy User ID');
             return;
           }
           await FlutterClipboard.copy(_userID);
-          WCUtils().wcShowSuccess('User ID copied to clipboard');
+          WCUtils.wcShowSuccess('User ID copied to clipboard');
         },
       ),
     );

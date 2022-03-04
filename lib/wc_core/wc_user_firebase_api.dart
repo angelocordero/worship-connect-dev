@@ -16,7 +16,7 @@ class WCUSerFirebaseAPI {
         WCUserInfoDataEnum.teamID.name: '',
       });
     } catch (e) {
-      WCUtils().wcShowError('Failed to initialize user data');
+      WCUtils.wcShowError('Failed to initialize user data');
     }
   }
 
@@ -54,7 +54,7 @@ class WCUSerFirebaseAPI {
       // TODO: also change user name in announcements data
 
     } catch (e) {
-      WCUtils().wcShowError('Failed to update user name');
+      WCUtils.wcShowError('Failed to update user name');
     }
   }
 }

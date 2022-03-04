@@ -136,7 +136,7 @@ class _CreateScheduleCardState extends ConsumerState<CreateScheduleCard> {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           SizedBox(
-            width: WCUtils().screenWidth(context) / 4 - 16,
+            width: WCUtils.screenWidth(context) / 4 - 16,
           ),
           TapDebouncer(
             onTap: () async {
@@ -164,7 +164,7 @@ class _CreateScheduleCardState extends ConsumerState<CreateScheduleCard> {
           TapDebouncer(
             onTap: () async {
               if (_scheduleEditingController.text.isEmpty) {
-                WCUtils().wcShowError('Schedule title cannot be empty');
+                WCUtils.wcShowError('Schedule title cannot be empty');
                 return;
               }
 

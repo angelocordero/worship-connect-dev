@@ -19,7 +19,7 @@ class AnnouncementsFirebaseAPI {
     EasyLoading.show();
 
     try {
-      String _announcementID = WCUtils().generateRandomID();
+      String _announcementID = WCUtils.generateRandomID();
       Timestamp _timestamp = Timestamp.now();
 
       await _teamAnnouncementsData.update({
@@ -34,7 +34,7 @@ class AnnouncementsFirebaseAPI {
 
       EasyLoading.dismiss();
     } catch (e) {
-      WCUtils().wcShowError('Failed to send announcement');
+      WCUtils.wcShowError('Failed to send announcement');
     }
   }
 
@@ -51,7 +51,7 @@ class AnnouncementsFirebaseAPI {
 
       EasyLoading.dismiss();
     } catch (e) {
-      WCUtils().wcShowError('Failed to edit announcement');
+      WCUtils.wcShowError('Failed to edit announcement');
     }
   }
 
@@ -65,7 +65,7 @@ class AnnouncementsFirebaseAPI {
 
       EasyLoading.dismiss();
     } catch (e) {
-      WCUtils().wcShowError('Failed to delete announcement');
+      WCUtils.wcShowError('Failed to delete announcement');
     }
   }
 
@@ -80,7 +80,7 @@ class AnnouncementsFirebaseAPI {
         },
       );
     } catch (error) {
-      WCUtils().wcShowError('Failed to get announcements');
+      WCUtils.wcShowError('Failed to get announcements');
       return null;
     }
   }

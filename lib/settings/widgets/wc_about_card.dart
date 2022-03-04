@@ -1,6 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:worship_connect/wc_core/wc_url_launcher.dart';
+import 'package:worship_connect/wc_core/wc_url_utilities.dart';
 
 class WCAboutCard extends StatelessWidget {
   const WCAboutCard({Key? key}) : super(key: key);
@@ -27,7 +27,7 @@ class WCAboutCard extends StatelessWidget {
                       ),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () async {
-                          await WCUrlLauncher.openWCGithubPage();
+                          await WCUrlUtils.openWCGithubPage();
                         },
                     ),
                   ],

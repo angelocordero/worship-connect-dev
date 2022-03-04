@@ -48,7 +48,7 @@ class SchedulesFirebaseAPI {
       }
       EasyLoading.dismiss();
     } catch (e) {
-      WCUtils().wcShowError('Failed to add schedule');
+      WCUtils.wcShowError('Failed to add schedule');
     }
   }
 
@@ -61,7 +61,7 @@ class SchedulesFirebaseAPI {
         return value;
       });
     } catch (error) {
-      WCUtils().wcShowError('Failed to get schedule data');
+      WCUtils.wcShowError('Failed to get schedule data');
       return null;
     }
   }
@@ -89,7 +89,7 @@ class SchedulesFirebaseAPI {
 
       EasyLoading.dismiss();
     } catch (e) {
-      WCUtils().wcShowError('Failed to delete schedule');
+      WCUtils.wcShowError('Failed to delete schedule');
     }
   }
 
@@ -132,7 +132,7 @@ class SchedulesFirebaseAPI {
       await _writeBatch.commit();
       EasyLoading.dismiss();
     } catch (e) {
-      WCUtils().wcShowError('Failed to edit schedule');
+      WCUtils.wcShowError('Failed to edit schedule');
     }
   }
 
@@ -160,7 +160,7 @@ class SchedulesFirebaseAPI {
       });
       EasyLoading.dismiss();
     } catch (e) {
-      WCUtils().wcShowError('Failed to save schedule data');
+      WCUtils.wcShowError('Failed to save schedule data');
     }
   }
 }

@@ -28,8 +28,8 @@ class CreateJoinTeamFirebaseAPI {
 
     EasyLoading.show();
 
-    String _teamID = WCUtils().generateTeamID();
-    String createdDay = WCUtils().dateToString(DateTime.now());
+    String _teamID = WCUtils.generateTeamID();
+    String createdDay = WCUtils.dateToString(DateTime.now());
 
     WriteBatch _writeBatch = _firebaseInstance.batch();
 
@@ -54,7 +54,7 @@ class CreateJoinTeamFirebaseAPI {
     });
 
     //sends new team announcement
-    String _announcementID = WCUtils().generateRandomID();
+    String _announcementID = WCUtils.generateRandomID();
 
     _writeBatch.set(wcTeamDataCollection.doc(_teamID).collection('data').doc('announcements'), {
       _announcementID: <String, dynamic>{

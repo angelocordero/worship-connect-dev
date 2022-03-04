@@ -24,8 +24,8 @@ class WCScheduleData {
     required this.timestamp,
     required this.scheduleDateCode,
   }) {
-    dateString = WCUtils().dateTimeToString(timestamp.toDate());
-    timeString = WCUtils().timeToString(timestamp.toDate());
+    dateString = WCUtils.dateTimeToString(timestamp.toDate());
+    timeString = WCUtils.timeToString(timestamp.toDate());
   }
 
   WCScheduleData.empty(Timestamp _timestamp)
@@ -33,8 +33,8 @@ class WCScheduleData {
         scheduleID = '',
         scheduleDateCode = '',
         timestamp = _timestamp {
-    dateString = WCUtils().dateTimeToString(timestamp.toDate());
-    timeString = WCUtils().timeToString(timestamp.toDate());
+    dateString = WCUtils.dateTimeToString(timestamp.toDate());
+    timeString = WCUtils.timeToString(timestamp.toDate());
   }
 
   WCScheduleData copyWith({

@@ -35,8 +35,6 @@ class _EditSongCardState extends ConsumerState<EditSongCard> {
     super.initState();
   }
 
-  
-
   @override
   Widget build(BuildContext context) {
     final String _songKey = ref.watch(songKeyProvider);
@@ -138,7 +136,7 @@ class _EditSongCardState extends ConsumerState<EditSongCard> {
                             TapDebouncer(
                               onTap: () async {
                                 if (_titleEditingController.text.isEmpty) {
-                                  WCUtils().wcShowError('Song title can not be empty');
+                                  WCUtils.wcShowError('Song title can not be empty');
                                   return;
                                 }
 

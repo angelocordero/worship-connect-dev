@@ -20,64 +20,147 @@ class SongTile extends ConsumerWidget {
     return Card(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
-        child: Column(
+        child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Text(
-              songData.songTitle,
-              style: const TextStyle(
-                fontSize: 16,
-              ),
+            Expanded(
+              flex: 6,
+              child: _songInfoWidget(ref, context),
             ),
-            const SizedBox(
-              height: 4,
+            Expanded(
+              flex: 2,
+              child: Container(),
             ),
-            Text(
-              'Key of ${songData.songKey}',
-              style: const TextStyle(
-                fontSize: 16,
-              ),
-            ),
-            const SizedBox(
-              height: 4,
-            ),
-            Visibility(
-              visible: songData.songURL != null,
-              child: TextButton(
-                child: Text(songData.songURL ?? ''),
-                onPressed: () {
-                  //LinksService.openSongLink(WCSongData.url);
-                },
-              ),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                ref.read(schedulesSongsProvider.notifier).deleteSong(index);
-              },
-              child: const Text('delete'),
-            ),
-            ElevatedButton(
-              child: const Text('edit'),
-              onPressed: () {
-                ref.read(songKeyProvider.state).state = songData.songKey;
-
-                Navigator.push(
-                  context,
-                  WCCustomRoute(
-                    builder: (context) {
-                      return EditSongCard(
-                        songData: songData,
-                        index: index,
-                      );
-                    },
+            Expanded(
+              flex: 1,
+              child: ReorderableDelayedDragStartListener(
+                index: index,
+                child: const Tooltip(
+                  message: 'Long press and drag to reorder songs',
+                  triggerMode: TooltipTriggerMode.tap,
+                  child: IconButton(
+                    icon: Icon(Icons.drag_handle_rounded),
+                    onPressed: null,
                   ),
-                );
-              },
-            )
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: PopupMenuButton<int>(
+                onSelected: (item) async {
+                  switch (item) {
+                    case 0:
+                      ref.read(songKeyProvider.state).state = songData.songKey;
+
+                      Navigator.push(
+                        context,
+                        WCCustomRoute(
+                          builder: (context) {
+                            return EditSongCard(
+                              songData: songData,
+                              index: index,
+                            );
+                          },
+                        ),
+                      );
+                      break;
+                    case 1:
+                      ref.read(schedulesSongsProvider.notifier).deleteSong(index);
+                      break;
+                  }
+                },
+                itemBuilder: (context) => [
+                  const PopupMenuItem<int>(
+                    value: 0,
+                    child: Text('Edit'),
+                  ),
+                  const PopupMenuItem<int>(
+                    value: 1,
+                    child: Text('Delete'),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
+    );
+  }
+
+  Column _songInfoWidget(WidgetRef ref, BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const SizedBox(
+          height: 10,
+        ),
+        const SizedBox(
+          width: 10,
+        ),
+        Text(
+          songData.songURLTitle ?? '',
+          softWrap: true,
+          overflow: TextOverflow.ellipsis,
+          style: const TextStyle(
+            fontSize: 18,
+          ),
+        ),
+        Row(
+          children: [
+            const Text(
+              'Title: ',
+              style: TextStyle(fontSize: 16),
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            Text(
+              songData.songTitle,
+              style: const TextStyle(
+                fontSize: 18,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Text(
+          'Key of ${songData.songKey}',
+          style: const TextStyle(
+            fontSize: 16,
+          ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Visibility(
+          visible: songData.songURL != null,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                'Link: ',
+                style: TextStyle(fontSize: 16),
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              Text(
+                songData.songURL ?? '',
+                softWrap: true,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontSize: 18,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

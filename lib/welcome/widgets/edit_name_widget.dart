@@ -20,13 +20,13 @@ class _EditNameWidgetState extends State<EditNameWidget> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
-        height: WCUtils().screenHeightSafeArea(context) / 4,
+        height: WCUtils.screenHeightSafeArea(context) / 4,
         decoration: BoxDecoration(
           color: Colors.black38,
           border: Border.all(color: wcPrimaryColor),
           borderRadius: BorderRadius.vertical(
             bottom: Radius.elliptical(
-              WCUtils().screenWidth(context),
+              WCUtils.screenWidth(context),
               75,
             ),
           ),

@@ -118,7 +118,7 @@ class _AddSongCardState extends ConsumerState<AddSongCard> {
                             TapDebouncer(
                               onTap: () async {
                                 if (_titleEditingController.text.isEmpty) {
-                                  WCUtils().wcShowError('Song title can not be empty');
+                                  WCUtils.wcShowError('Song title can not be empty');
                                   return;
                                 }
 

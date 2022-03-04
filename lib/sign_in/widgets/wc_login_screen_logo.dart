@@ -14,7 +14,7 @@ class WCLoginScreenLogo extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
       children: [
-        SizedBox(height: WCUtils().screenHeightSafeArea(context) / 4),
+        SizedBox(height: WCUtils.screenHeightSafeArea(context) / 4),
         GradientText(
           'WORSHIP',
           style: GoogleFonts.exo2(
