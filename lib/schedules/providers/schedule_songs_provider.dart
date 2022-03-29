@@ -35,7 +35,7 @@ class ScheduleSongsProvider extends StateNotifier<List<Map<String, dynamic>>> {
   Future addSong({
     required String title,
     required String key,
-    required String url,
+    required String? url,
   }) async {
     List<Map<String, dynamic>> temp = state;
 
@@ -44,7 +44,7 @@ class ScheduleSongsProvider extends StateNotifier<List<Map<String, dynamic>>> {
       WCSongDataEnum.songKey.name: key,
       WCSongDataEnum.songURL.name: url,
       WCSongDataEnum.songID.name: WCUtils.generateRandomID(),
-        WCSongDataEnum.songURLTitle.name: await _getUrlTitle(url),
+      WCSongDataEnum.songURLTitle.name: await _getUrlTitle(url),
     });
 
     state = temp.toList();

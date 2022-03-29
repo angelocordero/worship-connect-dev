@@ -29,35 +29,6 @@ class AppSettins extends ConsumerWidget {
             ),
             const Divider(),
             _themeListTile(_wcThemeNotifier, context),
-            // AboutListTile(
-            //   applicationIcon: const FlutterLogo(),
-            //   applicationName: 'Worship Connect',
-            //   applicationVersion: '1.0.0-release',
-            //     aboutBoxChildren: [
-            //     RichText(
-            //       text: TextSpan(
-            //         text: 'To send issues or to contact me, please visit the ',
-            //         children: [
-            //           TextSpan(
-            //             text: 'Worship Connect Github page.',
-            //             style: const TextStyle(
-            //               color: Colors.blue,
-            //             ),
-            //             recognizer: TapGestureRecognizer()
-            //               ..onTap = () async {
-            //                 await WCUrlLauncher.openWCGithubPage();
-            //               },
-            //           ),
-            //         ],
-            //       ),
-            //     ),
-
-            //     SizedBox(
-            //       height: 20,
-            //     ),
-            //     Text('Special thanks to my baby, Krystelle Sylvia Alvarado, for inspiring me in making  this.')
-            //   ],
-            // ),
             _wcAboutListTile(context),
             _signOutButton()
           ],

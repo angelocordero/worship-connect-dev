@@ -2,23 +2,40 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tap_debouncer/tap_debouncer.dart';
 import 'package:worship_connect/announcements/services/announcements_firebase_api.dart';
+import 'package:worship_connect/announcements/utils/announcements_data.dart';
 import 'package:worship_connect/announcements/utils/announcements_providers_definition.dart';
 import 'package:worship_connect/sign_in/utils/wc_user_info_data.dart';
 import 'package:worship_connect/wc_core/worship_connect.dart';
 import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
 
-class SendAnnouncementCard extends ConsumerWidget {
-  const SendAnnouncementCard({Key? key}) : super(key: key);
-
-  static final TextEditingController _announcementTextController = TextEditingController();
+class EditAnnouncementCard extends ConsumerStatefulWidget {
+  const EditAnnouncementCard({Key? key, required this.announcement}) : super(key: key);
+  final WCAnnouncementsData announcement;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() => _EditAnnouncementCardState();
+}
+
+class _EditAnnouncementCardState extends ConsumerState<EditAnnouncementCard> {
+  static final TextEditingController _announcementTextController = TextEditingController();
+
+
+  @override
+  void initState() {
+    _announcementTextController.text = widget.announcement.announcementText;
+    _announcementTextController.selection = TextSelection.fromPosition(TextPosition(offset: widget.announcement.announcementText.length));
+
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
     return SafeArea(
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(32),
         child: Hero(
-          tag: 'newAnnouncement',
+          tag: widget.announcement.announcementID,
           child: Material(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
@@ -29,7 +46,7 @@ class SendAnnouncementCard extends ConsumerWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   const Text(
-                    'Send Announcement',
+                    'Edit Announcement',
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(
@@ -64,7 +81,6 @@ class SendAnnouncementCard extends ConsumerWidget {
                 Navigator.pop(context);
                 FocusScope.of(context).unfocus();
                 Navigator.pop(context);
-                _announcementTextController.clear();
               },
               child: const Text('Yes'),
             ),
@@ -88,7 +104,7 @@ class SendAnnouncementCard extends ConsumerWidget {
           ),
           TextButton(
             onPressed: () async {
-              if (_announcementTextController.text.isNotEmpty) {
+              if (widget.announcement.announcementText != _announcementTextController.text.trim()) {
                 await showCancelDialog(context);
               } else {
                 Navigator.pop(context);
@@ -100,7 +116,7 @@ class SendAnnouncementCard extends ConsumerWidget {
             builder: (BuildContext context, TapDebouncerFunc? onTap) {
               return TextButton(
                 onPressed: onTap,
-                child: const Text('Send'),
+                child: const Text('Edit'),
               );
             },
             onTap: () async {
@@ -109,16 +125,17 @@ class SendAnnouncementCard extends ConsumerWidget {
                 return;
               }
 
-              await AnnouncementsFirebaseAPI(wcUserInfoData!.value!.teamID).sendAnnouncement(
+              if (_announcementTextController.text.trim() == widget.announcement.announcementText) {
+                Navigator.pop(context);
+                return;
+              }
+
+              await AnnouncementsFirebaseAPI(wcUserInfoData!.value!.teamID).editAnnouncement(
                 announcementText: _announcementTextController.text.trim(),
-                announcementPosterID: wcUserInfoData.value!.userID,
-                announcementPosterName: wcUserInfoData.value!.userName,
+                announcementID: widget.announcement.announcementID,
               );
-
               await ref.watch(announcementListProvider.notifier).getAnnouncements();
-
               Navigator.pop(context);
-              _announcementTextController.clear();
             },
           ),
         ],

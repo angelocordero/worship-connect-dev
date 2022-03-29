@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:worship_connect/schedules/utils/schedule_data.dart';
 import 'package:worship_connect/schedules/services/schedules_firebase_api.dart';
-import 'package:worship_connect/schedules/widgets/create_schedule_card.dart';
+import 'package:worship_connect/schedules/widgets/edit_schedule_card.dart';
 import 'package:worship_connect/schedules/widgets/schedule_info_navigator.dart';
 import 'package:worship_connect/sign_in/utils/wc_user_info_data.dart';
 import 'package:worship_connect/schedules/utils/schedules_providers_definition.dart';
@@ -25,7 +25,7 @@ class SchedulesCalendarTile extends ConsumerWidget {
       trailing: Visibility(
         visible: WCUtils.isAdminOrLeader(_wcUserInfoData!),
         child: Hero(
-          tag: 'editSchedule',
+          tag: scheduleData.scheduleID,
           child: PopupMenuButton<int>(
             onSelected: (item) async {
               switch (item) {
@@ -34,13 +34,8 @@ class SchedulesCalendarTile extends ConsumerWidget {
                     context,
                     WCCustomRoute(
                       builder: (context) {
-                        final _newScheduleProvider = ref.watch(addScheduleProvider.notifier);
-                        _newScheduleProvider.initScheduleProvider(scheduleData);
-                        _newScheduleProvider.setOriginalScheduleData();
-
-                        return const CreateScheduleCard(
-                          tag: 'editSchedule',
-                          addOrEdit: 'Edit',
+                        return EditScheduleCard(
+                          scheduleData: scheduleData,
                         );
                       },
                     ),

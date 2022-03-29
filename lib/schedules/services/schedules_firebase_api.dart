@@ -11,7 +11,13 @@ class SchedulesFirebaseAPI {
   final String teamID;
   late DocumentReference<Map<String, dynamic>> _scheduleDoc;
 
-  Future<void> addSchedule(WCScheduleData _scheduleData) async {
+  Future<void> addSchedule({
+    required Timestamp timestamp,
+    required String scheduleTitle,
+  }) async {
+    String scheduleID = WCUtils.generateRandomID();
+    String scheduleDateCode = WCUtils.setDateCode(timestamp.toDate());
+
     EasyLoading.show();
 
     try {
@@ -20,13 +26,13 @@ class SchedulesFirebaseAPI {
       if (_doc.exists) {
         _scheduleDoc.update(
           {
-            _scheduleData.scheduleDateCode: FieldValue.arrayUnion(
+            scheduleDateCode: FieldValue.arrayUnion(
               [
                 <String, dynamic>{
-                  WCScheduleDataEnum.timestamp.name: _scheduleData.timestamp,
-                  WCScheduleDataEnum.scheduleTitle.name: _scheduleData.scheduleTitle,
-                  WCScheduleDataEnum.scheduleID.name: _scheduleData.scheduleID,
-                  WCScheduleDataEnum.scheduleDateCode.name: _scheduleData.scheduleDateCode,
+                  WCScheduleDataEnum.timestamp.name: timestamp,
+                  WCScheduleDataEnum.scheduleTitle.name: scheduleTitle,
+                  WCScheduleDataEnum.scheduleID.name: scheduleID,
+                  WCScheduleDataEnum.scheduleDateCode.name: scheduleDateCode,
                 }
               ],
             ),
@@ -35,12 +41,12 @@ class SchedulesFirebaseAPI {
       } else {
         _scheduleDoc.set(
           {
-            _scheduleData.scheduleDateCode: [
+            scheduleDateCode: [
               <String, dynamic>{
-                WCScheduleDataEnum.timestamp.name: _scheduleData.timestamp,
-                WCScheduleDataEnum.scheduleTitle.name: _scheduleData.scheduleTitle,
-                WCScheduleDataEnum.scheduleID.name: _scheduleData.scheduleID,
-                WCScheduleDataEnum.scheduleDateCode.name: _scheduleData.scheduleDateCode,
+                WCScheduleDataEnum.timestamp.name: timestamp,
+                WCScheduleDataEnum.scheduleTitle.name: scheduleTitle,
+                WCScheduleDataEnum.scheduleID.name: scheduleID,
+                WCScheduleDataEnum.scheduleDateCode.name: scheduleDateCode,
               }
             ],
           },

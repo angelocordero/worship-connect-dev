@@ -6,7 +6,7 @@ class ScheduleInfoMusiciansPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Center(
-      child: Text('Too be implemented.'),
+      child: Text('To be implemented.'),
     );
   }
 }

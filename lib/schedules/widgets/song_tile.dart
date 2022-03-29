@@ -18,68 +18,60 @@ class SongTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Card(
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              flex: 6,
-              child: _songInfoWidget(ref, context),
-            ),
-            Expanded(
-              flex: 2,
-              child: Container(),
-            ),
-            Expanded(
-              flex: 1,
-              child: ReorderableDelayedDragStartListener(
-                index: index,
-                child: const Tooltip(
-                  message: 'Long press and drag to reorder songs',
-                  triggerMode: TooltipTriggerMode.tap,
-                  child: IconButton(
-                    icon: Icon(Icons.drag_handle_rounded),
-                    onPressed: null,
-                  ),
-                ),
-              ),
-            ),
-            Expanded(
-              flex: 1,
-              child: PopupMenuButton<int>(
-                onSelected: (item) async {
-                  switch (item) {
-                    case 0:
-                      ref.read(songKeyProvider.state).state = songData.songKey;
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _songInfo(),
+          _dragHandle(ref),
+          _popupMenu(context, ref),
+        ],
+      ),
+    );
+  }
 
-                      Navigator.push(
-                        context,
-                        WCCustomRoute(
-                          builder: (context) {
-                            return EditSongCard(
-                              songData: songData,
-                              index: index,
-                            );
-                          },
-                        ),
-                      );
-                      break;
-                    case 1:
-                      ref.read(schedulesSongsProvider.notifier).deleteSong(index);
-                      break;
-                  }
-                },
-                itemBuilder: (context) => [
-                  const PopupMenuItem<int>(
-                    value: 0,
-                    child: Text('Edit'),
+  Expanded _songInfo() {
+    return Expanded(
+      flex: 8,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16, 0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              songData.songTitle,
+              style: const TextStyle(fontSize: 20),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            Text(
+              'Key of ${songData.songKey}',
+              style: const TextStyle(fontSize: 14),
+            ),
+            Visibility(
+              replacement: const SizedBox(
+                height: 16,
+              ),
+              visible: songData.songURL != null,
+              child: ListTile(
+                contentPadding: const EdgeInsets.all(0),
+                horizontalTitleGap: 5,
+                dense: true,
+                leading: _leadingIcon(),
+                title: TextButton(
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      songData.songURLTitle ?? songData.songURL ?? '',
+                      style: const TextStyle(
+                        fontSize: 14,
+                      ),
+                      textAlign: TextAlign.start,
+                    ),
                   ),
-                  const PopupMenuItem<int>(
-                    value: 1,
-                    child: Text('Delete'),
-                  ),
-                ],
+                  onPressed: () {},
+                ),
               ),
             ),
           ],
@@ -88,79 +80,83 @@ class SongTile extends ConsumerWidget {
     );
   }
 
-  Column _songInfoWidget(WidgetRef ref, BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        const SizedBox(
-          height: 10,
-        ),
-        const SizedBox(
-          width: 10,
-        ),
-        Text(
-          songData.songURLTitle ?? '',
-          softWrap: true,
-          overflow: TextOverflow.ellipsis,
-          style: const TextStyle(
-            fontSize: 18,
+  Widget _leadingIcon() {
+    if (songData.songURL == null) {
+      return Container();
+    } else if (songData.songURL!.contains('facebook')) {
+      return Image.asset(
+        'assets/facebook_logo.png',
+        width: 30,
+        height: 30,
+      );
+    } else if (songData.songURL!.contains('youtube')) {
+      return Image.asset(
+        'assets/youtube_logo.png',
+        height: 30,
+        width: 30,
+      );
+    } else {
+      return const Icon(Icons.my_library_music);
+    }
+  }
+
+  Expanded _dragHandle(WidgetRef ref) {
+    return Expanded(
+      flex: 1,
+      child: Visibility(
+        visible: ref.watch(schedulesSongsProvider).length > 1,
+        child: ReorderableDelayedDragStartListener(
+          index: index,
+          child: const Tooltip(
+            message: 'Long press and drag to reorder songs',
+            triggerMode: TooltipTriggerMode.tap,
+            child: IconButton(
+              icon: Icon(Icons.drag_handle_rounded),
+              onPressed: null,
+            ),
           ),
         ),
-        Row(
-          children: [
-            const Text(
-              'Title: ',
-              style: TextStyle(fontSize: 16),
-            ),
-            const SizedBox(
-              width: 10,
-            ),
-            Text(
-              songData.songTitle,
-              style: const TextStyle(
-                fontSize: 18,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        Text(
-          'Key of ${songData.songKey}',
-          style: const TextStyle(
-            fontSize: 16,
-          ),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        Visibility(
-          visible: songData.songURL != null,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text(
-                'Link: ',
-                style: TextStyle(fontSize: 16),
-              ),
-              const SizedBox(
-                width: 10,
-              ),
-              Text(
-                songData.songURL ?? '',
-                softWrap: true,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  fontSize: 18,
+      ),
+    );
+  }
+
+  Expanded _popupMenu(BuildContext context, WidgetRef ref) {
+    return Expanded(
+      flex: 1,
+      child: PopupMenuButton<int>(
+        onSelected: (item) async {
+          switch (item) {
+            case 0:
+              ref.read(songKeyProvider.state).state = songData.songKey;
+
+              Navigator.push(
+                context,
+                WCCustomRoute(
+                  builder: (context) {
+                    return EditSongCard(
+                      songData: songData,
+                      index: index,
+                    );
+                  },
                 ),
-              ),
-            ],
+              );
+              break;
+            case 1:
+              ref.read(schedulesSongsProvider.notifier).deleteSong(index);
+              break;
+          }
+        },
+        itemBuilder: (context) => [
+          const PopupMenuItem<int>(
+            value: 0,
+            child: Text('Edit'),
           ),
-        ),
-      ],
+          const PopupMenuItem<int>(
+            value: 1,
+            child: Text('Delete'),
+          ),
+        ],
+      ),
     );
   }
 }

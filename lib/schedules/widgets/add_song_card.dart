@@ -125,7 +125,7 @@ class _AddSongCardState extends ConsumerState<AddSongCard> {
                                 await ref.read(schedulesSongsProvider.notifier).addSong(
                                       title: _titleEditingController.text.trim(),
                                       key: _songKey,
-                                      url: _linkEditingController.text.trim(),
+                                      url: _linkEditingController.text.trim().isNotEmpty ? _linkEditingController.text.trim() : null,
                                     );
                                 Navigator.pop(context);
                               },

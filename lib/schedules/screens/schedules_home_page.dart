@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -38,20 +37,7 @@ class _SchedulesHomePageState extends ConsumerState<SchedulesHomePage> {
               context,
               WCCustomRoute(
                 builder: (context) {
-                  Timestamp _timestamp = Timestamp.fromDate(
-                    WCUtils.setDateTimeFromDayAndTime(
-                      dateTime: calendarSelectedDay,
-                      timeOfDay: TimeOfDay.now(),
-                    ),
-                  );
-
-                  final _newScheduleProvider = ref.watch(addScheduleProvider.notifier);
-                  _newScheduleProvider.initScheduleProvider(WCScheduleData.empty(_timestamp));
-
-                  return const CreateScheduleCard(
-                    tag: 'newSchedule',
-                    addOrEdit: 'Add',
-                  );
+                  return const CreateScheduleCard();
                 },
               ),
             );
@@ -94,17 +80,7 @@ class _SchedulesHomePageState extends ConsumerState<SchedulesHomePage> {
                             return ListView.builder(
                               itemCount: scheduleList.length,
                               itemBuilder: (BuildContext context, int index) {
-                                Map<String, dynamic> _scheduleDataFromList = scheduleList[index];
-                                WCScheduleData _scheduleData = WCScheduleData(
-                                  scheduleTitle: _scheduleDataFromList[WCScheduleDataEnum.scheduleTitle.name],
-                                  scheduleID: _scheduleDataFromList[WCScheduleDataEnum.scheduleID.name],
-                                  timestamp: _scheduleDataFromList[WCScheduleDataEnum.timestamp.name],
-                                  scheduleDateCode: _scheduleDataFromList[WCScheduleDataEnum.scheduleDateCode.name],
-                                );
-
-                                return SchedulesCalendarTile(
-                                  scheduleData: _scheduleData,
-                                );
+                                return _buildScheduleCalendarTiles(scheduleList, index);
                               },
                             );
                           }
@@ -118,6 +94,20 @@ class _SchedulesHomePageState extends ConsumerState<SchedulesHomePage> {
           ),
         ),
       ),
+    );
+  }
+
+  SchedulesCalendarTile _buildScheduleCalendarTiles(List<dynamic> scheduleList, int index) {
+    Map<String, dynamic> _scheduleDataFromList = scheduleList[index];
+    WCScheduleData _scheduleData = WCScheduleData(
+      scheduleTitle: _scheduleDataFromList[WCScheduleDataEnum.scheduleTitle.name],
+      scheduleID: _scheduleDataFromList[WCScheduleDataEnum.scheduleID.name],
+      timestamp: _scheduleDataFromList[WCScheduleDataEnum.timestamp.name],
+      scheduleDateCode: _scheduleDataFromList[WCScheduleDataEnum.scheduleDateCode.name],
+    );
+
+    return SchedulesCalendarTile(
+      scheduleData: _scheduleData,
     );
   }
 }
