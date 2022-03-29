@@ -15,8 +15,15 @@ class ScheduleCalendar extends ConsumerStatefulWidget {
 class _ScheduleCalendarState extends ConsumerState<ScheduleCalendar> {
   static final DateTime _currentDate = DateTime.now();
 
-  DateTime _focusedDay = _currentDate;
-  DateTime _selectedDay = _currentDate;
+  late DateTime _focusedDay;
+  late DateTime _selectedDay;
+
+  @override
+  void initState() {
+    _focusedDay = _currentDate;
+    _selectedDay = _currentDate;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +98,17 @@ class _ScheduleCalendarState extends ConsumerState<ScheduleCalendar> {
   }
 
   Widget _scheduledDayMarker(BuildContext context, DateTime day, List events) {
-    if (events.isNotEmpty && day != _selectedDay) {
+    if (events.isNotEmpty && day.day == _selectedDay.day && day.month == _selectedDay.month && day.year == _selectedDay.year) {
+      return Container(
+        width: 25,
+        height: 3,
+        margin: const EdgeInsets.only(bottom: 13),
+        decoration: BoxDecoration(
+          color: Theme.of(context).scaffoldBackgroundColor,
+          borderRadius: BorderRadius.circular(8),
+        ),
+      );
+    } else if (events.isNotEmpty) {
       return Container(
         width: 25,
         height: 3,

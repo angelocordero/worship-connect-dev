@@ -34,7 +34,7 @@ class _CreateScheduleCardState extends ConsumerState<CreateScheduleCard> {
         child: Padding(
           padding: const EdgeInsets.all(32.0),
           child: Hero(
-            tag: 'newSchedule',
+            tag: 'addSchedule',
             child: Material(
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
               child: SingleChildScrollView(

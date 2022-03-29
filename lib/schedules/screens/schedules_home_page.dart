@@ -29,22 +29,7 @@ class _SchedulesHomePageState extends ConsumerState<SchedulesHomePage> {
     final calendarSelectedDay = ref.watch(calendarSelectedDayProvider);
 
     return Scaffold(
-      floatingActionButton: Visibility(
-        child: FloatingActionButton.extended(
-          heroTag: 'newSchedule',
-          onPressed: () {
-            Navigator.push(
-              context,
-              WCCustomRoute(
-                builder: (context) {
-                  return const CreateScheduleCard();
-                },
-              ),
-            );
-          },
-          label: const Text('Add Schedule'),
-        ),
-      ),
+      floatingActionButton: _addScheduleButton(context),
       appBar: AppBar(
         title: const Text('Schedules'),
       ),
@@ -81,9 +66,28 @@ class _SchedulesHomePageState extends ConsumerState<SchedulesHomePage> {
     );
   }
 
+  Visibility _addScheduleButton(BuildContext context) {
+    return Visibility(
+      child: WCUtils.wcExtendedFloatingActionButton(
+        heroTag: 'addSchedule',
+        labelText: 'Add Schedule',
+        onPressed: () {
+          Navigator.push(
+            context,
+            WCCustomRoute(
+              builder: (context) {
+                return const CreateScheduleCard();
+              },
+            ),
+          );
+        },
+      ),
+    );
+  }
+
   Widget _buildScheduleList(DateTime calendarSelectedDay) {
     List scheduleList = ref.watch(calendarScheduleListProvider)[DateFormat('yyyyMMdd').format(calendarSelectedDay)] ?? [];
-    
+
     if (scheduleList.isEmpty) {
       return Center(
         child: Text(

@@ -98,4 +98,31 @@ class WCUtils {
   static bool isAdminOrLeader(WCUserInfoData data) {
     return data.userStatus == UserStatusEnum.admin || data.userStatus == UserStatusEnum.leader;
   }
+
+  static Hero wcExtendedFloatingActionButton({required Function() onPressed, required String heroTag, required String labelText, Icon? icon}) {
+    return Hero(
+      tag: heroTag,
+      child: Container(
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              offset: const Offset(0, 8),
+              blurRadius: 6,
+            ),
+          ],
+          borderRadius: BorderRadius.circular(90),
+          gradient: wcLinearGradient,
+        ),
+        child: FloatingActionButton.extended(
+          heroTag: null,
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          onPressed: onPressed,
+          label: Text(labelText),
+          icon: icon,
+        ),
+      ),
+    );
+  }
 }
