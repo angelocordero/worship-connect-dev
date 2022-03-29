@@ -67,23 +67,7 @@ class _SchedulesHomePageState extends ConsumerState<SchedulesHomePage> {
                       padding: const EdgeInsets.all(12),
                       child: Builder(
                         builder: (context) {
-                          List scheduleList = ref.watch(calendarScheduleListProvider)[DateFormat('yyyyMMdd').format(calendarSelectedDay)] ?? [];
-
-                          if (scheduleList.isEmpty) {
-                            return Center(
-                              child: Text(
-                                'No schedules for\n${WCUtils.dateToString(calendarSelectedDay)}',
-                                textAlign: TextAlign.center,
-                              ),
-                            );
-                          } else {
-                            return ListView.builder(
-                              itemCount: scheduleList.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                return _buildScheduleCalendarTiles(scheduleList, index);
-                              },
-                            );
-                          }
+                          return _buildScheduleList(calendarSelectedDay);
                         },
                       ),
                     ),
@@ -95,6 +79,26 @@ class _SchedulesHomePageState extends ConsumerState<SchedulesHomePage> {
         ),
       ),
     );
+  }
+
+  Widget _buildScheduleList(DateTime calendarSelectedDay) {
+    List scheduleList = ref.watch(calendarScheduleListProvider)[DateFormat('yyyyMMdd').format(calendarSelectedDay)] ?? [];
+    
+    if (scheduleList.isEmpty) {
+      return Center(
+        child: Text(
+          'No schedules for\n${WCUtils.dateToString(calendarSelectedDay)}',
+          textAlign: TextAlign.center,
+        ),
+      );
+    } else {
+      return ListView.builder(
+        itemCount: scheduleList.length,
+        itemBuilder: (BuildContext context, int index) {
+          return _buildScheduleCalendarTiles(scheduleList, index);
+        },
+      );
+    }
   }
 
   SchedulesCalendarTile _buildScheduleCalendarTiles(List<dynamic> scheduleList, int index) {
