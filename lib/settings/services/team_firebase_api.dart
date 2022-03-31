@@ -26,6 +26,8 @@ class TeamFirebaseAPI {
           teamID: data?[TeamDataEnum.teamID.name] ?? '',
           teamName: data?[TeamDataEnum.teamName.name] ?? '',
           isOpen: data?[TeamDataEnum.isOpen.name] ?? '',
+          coreInstruments: data?[TeamDataEnum.coreInstruments.name] ?? [],
+          customInstruments: data?[TeamDataEnum.customInstruments.name] ?? [],
         );
       },
     );

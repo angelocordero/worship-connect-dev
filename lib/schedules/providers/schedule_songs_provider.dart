@@ -6,10 +6,10 @@ import 'package:worship_connect/wc_core/wc_url_utilities.dart';
 import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
 
 class ScheduleSongsProvider extends StateNotifier<List<Map<String, dynamic>>> {
+  ScheduleSongsProvider({required this.teamID, required this.scheduleID}) : super([]);
+  
   String teamID;
   String scheduleID;
-
-  ScheduleSongsProvider({required this.teamID, required this.scheduleID}) : super([]);
 
   init() async {
     DocumentSnapshot<Map<String, dynamic>>? doc = await SchedulesFirebaseAPI(teamID).getScheduleInfo(scheduleID);

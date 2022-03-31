@@ -3,6 +3,8 @@ enum TeamDataEnum {
   teamName,
   teamID,
   isOpen,
+  coreInstruments,
+  customInstruments,
 }
 
 class TeamData {
@@ -10,17 +12,23 @@ class TeamData {
   final String teamName;
   final String teamID;
   final bool isOpen;
+  final List<String> coreInstruments;
+  final List<String> customInstruments;
 
   TeamData({
     required this.creatorID,
     required this.teamID,
     required this.teamName,
     required this.isOpen,
+    required this.coreInstruments,
+    required this.customInstruments,
   });
 
   TeamData.empty()
       : creatorID = '',
         teamID = '',
         teamName = '',
-        isOpen = true;
+        isOpen = true,
+        coreInstruments = [],
+        customInstruments = [];
 }

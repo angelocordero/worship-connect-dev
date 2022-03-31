@@ -36,17 +36,7 @@ class ScheduleInfoSongsPage extends ConsumerWidget {
                 },
                 child: ReorderableListView.builder(
                   itemBuilder: (context, index) {
-                    WCSongData _songData = WCSongData(
-                        songTitle: _songList[index][WCSongDataEnum.songTitle.name],
-                        songKey: _songList[index][WCSongDataEnum.songKey.name],
-                        songURL: _songList[index][WCSongDataEnum.songURL.name],
-                        songID: _songList[index][WCSongDataEnum.songID.name],
-                        songURLTitle: _songList[index][WCSongDataEnum.songURLTitle.name]);
-                    return SongTile(
-                      songData: _songData,
-                      key: ValueKey(_songList[index]),
-                      index: index,
-                    );
+                    return _buildSongTile(_songList, index);
                   },
                   itemCount: _songList.length,
                   buildDefaultDragHandles: true,
@@ -57,44 +47,61 @@ class ScheduleInfoSongsPage extends ConsumerWidget {
               ),
             ),
           ),
-          if (WCUtils.isAdminOrLeader(_wcUserInfoData!))
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Hero(
-                    tag: 'song',
-                    child: ElevatedButton(
-                      onPressed: () {
-                        ref.read(songKeyProvider.state).state = 'A';
-                        Navigator.push(
-                          context,
-                          WCCustomRoute(
-                            builder: (context) {
-                              return const AddSongCard();
-                            },
-                          ),
-                        );
-                      },
-                      child: const Text('Add Song'),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  width: 8,
-                ),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      await _songsNotifier.saveSchedule();
-                    },
-                    child: const Text('Save'),
-                  ),
-                ),
-              ],
-            )
+          if (WCUtils.isAdminOrLeader(_wcUserInfoData!)) _buildButtons(context, ref, _songsNotifier),
         ],
       ),
+    );
+  }
+
+  Row _buildButtons(BuildContext context, WidgetRef ref , ScheduleSongsProvider _songsNotifier) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Expanded(
+          child: Hero(
+            tag: 'song',
+            child: ElevatedButton(
+              onPressed: () {
+                ref.read(songKeyProvider.state).state = 'A';
+                Navigator.push(
+                  context,
+                  WCCustomRoute(
+                    builder: (context) {
+                      return const AddSongCard();
+                    },
+                  ),
+                );
+              },
+              child: const Text('Add Song'),
+            ),
+          ),
+        ),
+        const SizedBox(
+          width: 8,
+        ),
+        Expanded(
+          child: ElevatedButton(
+            onPressed: () async {
+              await _songsNotifier.saveSchedule();
+            },
+            child: const Text('Save'),
+          ),
+        ),
+      ],
+    );
+  }
+
+  SongTile _buildSongTile(List<dynamic> _songList, int index) {
+    WCSongData _songData = WCSongData(
+        songTitle: _songList[index][WCSongDataEnum.songTitle.name],
+        songKey: _songList[index][WCSongDataEnum.songKey.name],
+        songURL: _songList[index][WCSongDataEnum.songURL.name],
+        songID: _songList[index][WCSongDataEnum.songID.name],
+        songURLTitle: _songList[index][WCSongDataEnum.songURLTitle.name]);
+    return SongTile(
+      songData: _songData,
+      key: ValueKey(_songList[index]),
+      index: index,
     );
   }
 }

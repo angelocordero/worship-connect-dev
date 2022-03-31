@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:worship_connect/settings/providers/instruments_list_provider.dart';
 import 'package:worship_connect/settings/providers/members_list_provider.dart';
 import 'package:worship_connect/settings/services/team_firebase_api.dart';
 import 'package:worship_connect/settings/utils/wc_team_data.dart';
@@ -20,3 +21,7 @@ final membersListProvider = StateNotifierProvider.autoDispose<MembersListProvide
     );
   },
 );
+
+final instrumentsListProvider = StateNotifierProvider<InstrumentsListProvider, Map<String, List<String>>>((ref) {
+  return InstrumentsListProvider();
+});

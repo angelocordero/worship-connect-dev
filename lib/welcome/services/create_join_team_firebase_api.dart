@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:worship_connect/announcements/utils/announcements_data.dart';
 import 'package:worship_connect/settings/utils/wc_team_data.dart';
@@ -16,59 +17,73 @@ class CreateJoinTeamFirebaseAPI {
     required String creatorID,
     required String creatorName,
   }) async {
-    if (creatorName.isEmpty) {
-      EasyLoading.showError('User name cannot be empty');
-      return;
-    }
-
-    if (teamName.isEmpty) {
-      EasyLoading.showError('Team name cannot be empty');
-      return;
-    }
-
-    EasyLoading.show();
-
-    String _teamID = WCUtils.generateTeamID();
-    String createdDay = WCUtils.dateToString(DateTime.now());
-
-    WriteBatch _writeBatch = _firebaseInstance.batch();
-
-    //set team info
-    _writeBatch.set(wcTeamDataCollection.doc(_teamID), {
-      TeamDataEnum.teamName.name: teamName,
-      TeamDataEnum.creatorID.name: creatorID,
-      TeamDataEnum.isOpen.name: true,
-      TeamDataEnum.teamID.name: _teamID,
-    });
-
-    //create member file
-    _writeBatch.set(wcTeamDataCollection.doc(_teamID).collection('data').doc('members'), {
-      UserStatusEnum.leader.name: <String, String>{creatorID: creatorName},
-    });
-
-    //update creator data
-    _writeBatch.update(WCUSerFirebaseAPI().wcUserDataCollection.doc(creatorID), {
-      WCUserInfoDataEnum.userName.name: creatorName,
-      WCUserInfoDataEnum.teamID.name: _teamID,
-      WCUserInfoDataEnum.userStatusString.name: UserStatusEnum.leader.name,
-    });
-
-    //sends new team announcement
-    String _announcementID = WCUtils.generateRandomID();
-
-    _writeBatch.set(wcTeamDataCollection.doc(_teamID).collection('data').doc('announcements'), {
-      _announcementID: <String, dynamic>{
-        WCAnnouncementsDataEnum.announcementText.name: 'Welcome to $teamName. Created $createdDay by $creatorName.',
-        WCAnnouncementsDataEnum.announcementPosterID.name: 'Worship Connect',
-        WCAnnouncementsDataEnum.announcementID.name: _announcementID,
-        WCAnnouncementsDataEnum.announcementPosterName.name: 'Worship Connect',
-        WCAnnouncementsDataEnum.timestamp.name: Timestamp.now(),
+    try {
+      if (creatorName.isEmpty) {
+        EasyLoading.showError('User name cannot be empty');
+        return;
       }
-    });
 
-    await _writeBatch.commit();
+      if (teamName.isEmpty) {
+        EasyLoading.showError('Team name cannot be empty');
+        return;
+      }
 
-    EasyLoading.dismiss();
+      EasyLoading.show();
+
+      String _teamID = WCUtils.generateTeamID();
+      String createdDay = WCUtils.dateToString(DateTime.now());
+
+      WriteBatch _writeBatch = _firebaseInstance.batch();
+
+      //set team info
+      _writeBatch.set(wcTeamDataCollection.doc(_teamID), {
+        TeamDataEnum.teamName.name: teamName,
+        TeamDataEnum.creatorID.name: creatorID,
+        TeamDataEnum.isOpen.name: true,
+        TeamDataEnum.teamID.name: _teamID,
+        TeamDataEnum.coreInstruments.name: [
+          'Worship Leader',
+          'Electric Guitar',
+          'Acoustic Guitar',
+          'Bass',
+          'Keyboards',
+          'Drums',
+        ],
+        TeamDataEnum.customInstruments.name: [],
+      });
+
+      //create member file
+      _writeBatch.set(wcTeamDataCollection.doc(_teamID).collection('data').doc('members'), {
+        UserStatusEnum.leader.name: <String, String>{creatorID: creatorName},
+      });
+
+      //update creator data
+      _writeBatch.update(WCUSerFirebaseAPI().wcUserDataCollection.doc(creatorID), {
+        WCUserInfoDataEnum.userName.name: creatorName,
+        WCUserInfoDataEnum.teamID.name: _teamID,
+        WCUserInfoDataEnum.userStatusString.name: UserStatusEnum.leader.name,
+      });
+
+      //sends new team announcement
+      String _announcementID = WCUtils.generateRandomID();
+
+      _writeBatch.set(wcTeamDataCollection.doc(_teamID).collection('data').doc('announcements'), {
+        _announcementID: <String, dynamic>{
+          WCAnnouncementsDataEnum.announcementText.name: 'Welcome to $teamName. Created $createdDay by $creatorName.',
+          WCAnnouncementsDataEnum.announcementPosterID.name: 'Worship Connect',
+          WCAnnouncementsDataEnum.announcementID.name: _announcementID,
+          WCAnnouncementsDataEnum.announcementPosterName.name: 'Worship Connect',
+          WCAnnouncementsDataEnum.timestamp.name: Timestamp.now(),
+        }
+      });
+
+      await _writeBatch.commit();
+
+      EasyLoading.dismiss();
+    } catch (e) {
+      WCUtils.wcShowError(e.toString());
+      debugPrint(e.toString());
+    }
   }
 
   Future joinTeam({
