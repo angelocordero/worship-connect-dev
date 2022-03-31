@@ -41,20 +41,26 @@ class CreateJoinTeamFirebaseAPI {
         TeamDataEnum.creatorID.name: creatorID,
         TeamDataEnum.isOpen.name: true,
         TeamDataEnum.teamID.name: _teamID,
-        TeamDataEnum.coreInstruments.name: [
-          'Worship Leader',
-          'Electric Guitar',
-          'Acoustic Guitar',
-          'Bass',
-          'Keyboards',
-          'Drums',
-        ],
-        TeamDataEnum.customInstruments.name: [],
       });
 
       //create member file
       _writeBatch.set(wcTeamDataCollection.doc(_teamID).collection('data').doc('members'), {
         UserStatusEnum.leader.name: <String, String>{creatorID: creatorName},
+      });
+
+
+      //create team instruments list
+      _writeBatch.set(wcTeamDataCollection.doc(_teamID).collection('data').doc('instruments'), {
+        'coreInstruments': [
+          'Worship Leader',
+          'Backup Singers',
+          'Acoustic Guitar',
+          'Electric Guitar',
+          'Bass',
+          'Keyboards',
+          'Drums',
+        ],
+        'customInstruments': [],
       });
 
       //update creator data

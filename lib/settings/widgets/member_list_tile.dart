@@ -12,6 +12,31 @@ class MemberListTile extends ConsumerWidget {
 
   final WCUserInfoData memberData;
 
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final WCUserInfoData _userData = ref.watch(wcUserInfoDataStream).asData!.value!;
+
+    return Container(
+      decoration: const BoxDecoration(
+        border: Border(
+          bottom: BorderSide(),
+        ),
+      ),
+      child: ListTile(
+        title: Text(memberData.userName),
+        trailing: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (WCUtils.isAdminOrLeader(memberData)) RoleIcon(role: memberData.userStatus), //role icon
+            if (WCUtils.isAdminOrLeader(_userData)) _popupMenuButton(_userData), // popup menu
+          ],
+        ),
+      ),
+    );
+  }
+
   PopupMenuButton<int> _popupMenuButton(WCUserInfoData _userData) {
     UserStatusEnum _userStatus = _userData.userStatus;
     UserStatusEnum _memberStatus = memberData.userStatus;
@@ -77,31 +102,6 @@ class MemberListTile extends ConsumerWidget {
             ),
         ];
       },
-    );
-  }
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final WCUserInfoData _userData = ref.watch(wcUserInfoDataStream).asData!.value!;
-
-    return Container(
-      decoration: const BoxDecoration(
-        border: Border(
-          bottom: BorderSide(),
-        ),
-      ),
-      child: ListTile(
-        title: Text(memberData.userName),
-        trailing: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (WCUtils.isAdminOrLeader(memberData)) RoleIcon(role: memberData.userStatus), //role icon
-            if (WCUtils.isAdminOrLeader(_userData)) _popupMenuButton(_userData), // popup menu
-          ],
-        ),
-      ),
     );
   }
 }

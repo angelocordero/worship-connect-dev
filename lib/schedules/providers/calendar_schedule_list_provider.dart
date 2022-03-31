@@ -9,7 +9,9 @@ class CalendarScheduleListProvider extends StateNotifier<Map<String, dynamic>> {
 
   _fetchScheduleList() async {
     DocumentSnapshot<Map<String, dynamic>>? doc = await SchedulesFirebaseAPI(teamID).getScheduleDocument();
-    state = doc?.data() ?? {};
+    if (mounted) {
+      state = doc?.data() ?? {};
+    }
   }
 
   resetScheduleProvider() async {

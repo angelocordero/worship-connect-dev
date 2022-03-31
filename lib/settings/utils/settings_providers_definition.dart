@@ -22,6 +22,8 @@ final membersListProvider = StateNotifierProvider.autoDispose<MembersListProvide
   },
 );
 
-final instrumentsListProvider = StateNotifierProvider<InstrumentsListProvider, Map<String, List<String>>>((ref) {
-  return InstrumentsListProvider();
+final instrumentsListProvider = StateNotifierProvider<InstrumentsListProvider, Map>((ref) {
+  final WCUserInfoData _wcUserInfoData = ref.watch(wcUserInfoDataStream).asData!.value!;
+
+  return InstrumentsListProvider(teamID: _wcUserInfoData.teamID);
 });

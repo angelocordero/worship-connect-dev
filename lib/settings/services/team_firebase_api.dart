@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:worship_connect/settings/utils/wc_team_data.dart';
 import 'package:worship_connect/sign_in/utils/wc_user_info_data.dart';
@@ -17,20 +18,23 @@ class TeamFirebaseAPI {
   late final CollectionReference teamsDataCollection = _firebaseInstance.collection('WCTeams');
 
   Stream<TeamData> teamData() {
-    return teamsDataCollection.doc(teamID).snapshots().map(
-      (DocumentSnapshot object) {
-        Map<String, dynamic>? data = (object as DocumentSnapshot<Map<String, dynamic>>).data();
+    try {
+      return teamsDataCollection.doc(teamID).snapshots().map(
+        (DocumentSnapshot object) {
+          Map<String, dynamic>? data = (object as DocumentSnapshot<Map<String, dynamic>>).data();
 
-        return TeamData(
-          creatorID: data?[TeamDataEnum.creatorID.name] ?? '',
-          teamID: data?[TeamDataEnum.teamID.name] ?? '',
-          teamName: data?[TeamDataEnum.teamName.name] ?? '',
-          isOpen: data?[TeamDataEnum.isOpen.name] ?? '',
-          coreInstruments: data?[TeamDataEnum.coreInstruments.name] ?? [],
-          customInstruments: data?[TeamDataEnum.customInstruments.name] ?? [],
-        );
-      },
-    );
+          return TeamData(
+            creatorID: data?[TeamDataEnum.creatorID.name] ?? '',
+            teamID: data?[TeamDataEnum.teamID.name] ?? '',
+            teamName: data?[TeamDataEnum.teamName.name] ?? '',
+            isOpen: data?[TeamDataEnum.isOpen.name] ?? '',
+          );
+        },
+      );
+    } catch (e) {
+      debugPrint(e.toString());
+      return const Stream.empty();
+    }
   }
 
   Future<void> changeTeamName(String newTeamName) async {
@@ -83,7 +87,23 @@ class TeamFirebaseAPI {
   }
 
   Future<DocumentSnapshot> getMembersDocument() async {
-    return await teamsDataCollection.doc(teamID).collection('data').doc('members').get();
+    try {
+      return await teamsDataCollection.doc(teamID).collection('data').doc('members').get();
+    } catch (e) {
+      debugPrint(e.toString());
+      WCUtils.wcShowError('Failed to get members list');
+      return Future.error(e.toString());
+    }
+  }
+
+  Future<DocumentSnapshot> getInstrumentsDocument() async {
+    try {
+      return await teamsDataCollection.doc(teamID).collection('data').doc('instruments').get();
+    } catch (e) {
+      debugPrint(e.toString());
+      WCUtils.wcShowError('Failed to get instruments list');
+      return Future.error(e.toString());
+    }
   }
 
   Future<void> promoteToAdmin(WCUserInfoData _memberData) async {
