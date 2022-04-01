@@ -35,7 +35,7 @@ final songKeyProvider = StateProvider<String>((ref) {
   return 'A';
 });
 
-final scheduleMusiciansProvider = StateNotifierProvider<ScheduleMusiciansProvider, List<Map<String, dynamic>>>((ref) {
+final scheduleMusiciansProvider = StateNotifierProvider<ScheduleMusiciansProvider, Map<String, dynamic>>((ref) {
   WCUserInfoData? _wcUserInfoData = ref.watch(wcUserInfoDataStream).asData?.value;
   String _scheduleID = ref.watch(scheduleInfoProvider).scheduleID;
 

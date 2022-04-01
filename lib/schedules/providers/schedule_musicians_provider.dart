@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:worship_connect/schedules/services/schedules_firebase_api.dart';
 
-class ScheduleMusiciansProvider extends StateNotifier<List<Map<String, dynamic>>> {
-  ScheduleMusiciansProvider({required this.teamID, required this.scheduleID}) : super([]);
+class ScheduleMusiciansProvider extends StateNotifier<Map<String, dynamic>> {
+  ScheduleMusiciansProvider({required this.teamID, required this.scheduleID}) : super({});
 
   String teamID;
   String scheduleID;
@@ -20,9 +20,13 @@ class ScheduleMusiciansProvider extends StateNotifier<List<Map<String, dynamic>>
       return;
     }
 
-    List temp = doc['musicians'] ?? <Map<String, dynamic>>[];
+    Map<String, dynamic> temp = doc['musicians'];
 
-    state = List<Map<String, dynamic>>.from(temp);
+    state = Map<String, dynamic>.from(temp);
+
+    state.forEach((key, value) {
+      _alreadyAssignedMembers.addAll(List<String>.from(value));
+    });
   }
 
   reset() async {
@@ -31,55 +35,52 @@ class ScheduleMusiciansProvider extends StateNotifier<List<Map<String, dynamic>>
     await init();
   }
 
+  saveMusicians() async {
+    await SchedulesFirebaseAPI(teamID).saveMusiciansData(state, scheduleID);
+  }
+
   addInstrumentsList(List<String> totalInstrumentsList) {
     List<String> alreadyAddedInstruments = [];
 
-    for (var element in state) {
-      alreadyAddedInstruments.add(element.keys.first);
-    }
+    alreadyAddedInstruments.addAll(state.keys);
 
     return totalInstrumentsList.toSet().difference(alreadyAddedInstruments.toSet()).toList();
   }
 
   addInstrument(String _instrument) {
-    state.add({
-      _instrument: [],
-    });
+    Map<String, dynamic> _temp = state;
 
-    state = state.toList();
+    _temp[_instrument] = [];
+
+    state = Map<String, dynamic>.from(_temp);
   }
 
-  removeInstruments(String instrument) {
-    state.removeWhere((element) {
-      return element.keys.first == instrument;
-    });
+  removeInstruments(String _instrument) {
+    Map<String, dynamic> _temp = state;
 
-    state = state.toList();
+    _temp.remove(_instrument);
+
+    state = Map<String, dynamic>.from(_temp);
   }
 
-  addMusician({required String instrument, required String musician}) {
-    Map<String, dynamic> _instrument = state.firstWhere((element) {
-      return element.keys.first == instrument;
-    });
+  addMusicians({required String instrument, required List<String> musicians}) {
+    Map<String, dynamic> _temp = state;
 
-    _instrument.values.first.add(musician);
-    _alreadyAssignedMembers.add(musician);
+    _temp[instrument].addAll(musicians);
+    _alreadyAssignedMembers.addAll(musicians);
 
-    state = state.toList();
+    state = Map<String, dynamic>.from(_temp);
   }
 
   removeMusician({required String instrument, required String musician}) {
-    Map<String, dynamic> _instrument = state.firstWhere((element) {
-      return element.keys.first == instrument;
-    });
+    Map<String, dynamic> _temp = state;
 
-    _instrument.values.first.remove(musician);
+    _temp[instrument].remove(musician);
     _alreadyAssignedMembers.remove(musician);
-
-    state = state.toList();
+    state = Map<String, dynamic>.from(_temp);
   }
 
   List<String> getUnassignedMembersList(List<String> completeMembersList) {
-    return  completeMembersList.toSet().difference(_alreadyAssignedMembers.toSet()).toList();
+    return completeMembersList.toSet().difference(_alreadyAssignedMembers.toSet()).toList();
   }
 }

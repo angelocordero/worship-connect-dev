@@ -16,7 +16,7 @@ class ScheduleInfoMusiciansPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     WCUserInfoData? _wcUserInfoData = ref.watch(wcUserInfoDataStream).asData!.value;
 
-    List<Map<String, dynamic>> _instrumentsList = ref.watch(scheduleMusiciansProvider);
+    Map<String, dynamic> _instrumentsList = ref.watch(scheduleMusiciansProvider);
 
     return Padding(
       padding: const EdgeInsets.all(8),
@@ -34,9 +34,18 @@ class ScheduleInfoMusiciansPage extends ConsumerWidget {
                 },
                 child: ListView.builder(
                   itemBuilder: (context, index) {
-                    return InstrumentsTile(instrument: _instrumentsList[index] );
+                    String _instrumentName = _instrumentsList.keys.elementAt(index);
+                    // Map<String, dynamic> _instrumentData = _instrumentsList.entries.firstWhere((element) {
+                    //   return element.key == _instrumentName;
+                    // }) as Map<String, dynamic>;
+
+                    Map<String, dynamic> _instrumentData = Map<String, dynamic>.fromEntries(_instrumentsList.entries.where((element) {
+                      return element.key == _instrumentName;
+                    }));
+
+                    return InstrumentsTile(instrument: _instrumentData);
                   },
-                  itemCount: _instrumentsList.length,
+                  itemCount: _instrumentsList.keys.length,
                 ),
               ),
             ),
@@ -75,7 +84,9 @@ class ScheduleInfoMusiciansPage extends ConsumerWidget {
         ),
         Expanded(
           child: ElevatedButton(
-            onPressed: () async {},
+            onPressed: () async {
+              ref.read(scheduleMusiciansProvider.notifier).saveMusicians();
+            },
             child: const Text('Save'),
           ),
         ),

@@ -23,8 +23,11 @@ class SchedulesFirebaseAPI {
     try {
       DocumentSnapshot<Map> _doc = await _scheduleDoc.get();
 
+      WriteBatch _writeBatch = FirebaseFirestore.instance.batch();
+
       if (_doc.exists) {
-        _scheduleDoc.update(
+        _writeBatch.update(
+          _scheduleDoc,
           {
             scheduleDateCode: FieldValue.arrayUnion(
               [
@@ -39,7 +42,8 @@ class SchedulesFirebaseAPI {
           },
         );
       } else {
-        _scheduleDoc.set(
+        _writeBatch.set(
+          _scheduleDoc,
           {
             scheduleDateCode: [
               <String, dynamic>{
@@ -52,6 +56,17 @@ class SchedulesFirebaseAPI {
           },
         );
       }
+
+      _writeBatch.set(
+        _scheduleDoc.collection('scheduleData').doc(scheduleID),
+        {
+          'songs': [],
+          'musicians': {},
+        },
+      );
+
+      _writeBatch.commit();
+
       EasyLoading.dismiss();
     } catch (e) {
       WCUtils.wcShowError('Failed to add schedule');
@@ -161,12 +176,25 @@ class SchedulesFirebaseAPI {
     EasyLoading.show();
 
     try {
-      await _scheduleDoc.collection('scheduleData').doc(scheduleID).set({
+      await _scheduleDoc.collection('scheduleData').doc(scheduleID).update({
         'songs': scheduleData,
       });
       EasyLoading.dismiss();
     } catch (e) {
       WCUtils.wcShowError('Failed to save schedule data');
+    }
+  }
+
+  Future saveMusiciansData(Map<String, dynamic> musiciansData, String scheduleID) async {
+    EasyLoading.show();
+
+    try {
+      await _scheduleDoc.collection('scheduleData').doc(scheduleID).update({
+        'musicians': musiciansData,
+      });
+      EasyLoading.dismiss();
+    } catch (e) {
+      WCUtils.wcShowError('Failed to save musicians data');
     }
   }
 }

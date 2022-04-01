@@ -65,6 +65,7 @@ class SchedulesCalendarTile extends ConsumerWidget {
       onTap: () async {
         ref.read(scheduleInfoProvider.state).state = scheduleData;
         await ref.read(schedulesSongsProvider.notifier).init();
+        await ref.read(scheduleMusiciansProvider.notifier).init();
 
         Navigator.push(
           context,
