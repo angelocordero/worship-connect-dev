@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:worship_connect/settings/utils/settings_providers_definition.dart';
 
 class MembersListPage extends ConsumerWidget {
@@ -14,7 +15,10 @@ class MembersListPage extends ConsumerWidget {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Members'),
+          title: Text(
+            'Members',
+            style: GoogleFonts.exo2(),
+          ),
         ),
         body: RefreshIndicator(
           onRefresh: () async {

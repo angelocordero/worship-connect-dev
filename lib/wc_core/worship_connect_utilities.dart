@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:nanoid/nanoid.dart';
 import 'package:intl/intl.dart';
 import 'package:worship_connect/sign_in/utils/wc_user_info_data.dart';
@@ -119,7 +120,10 @@ class WCUtils {
           backgroundColor: Colors.transparent,
           elevation: 0,
           onPressed: onPressed,
-          label: Text(labelText),
+          label: Text(
+            labelText,
+            style: GoogleFonts.exo2(),
+          ),
           icon: icon,
         ),
       ),

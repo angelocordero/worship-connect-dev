@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:worship_connect/schedules/utils/schedule_data.dart';
 import 'package:worship_connect/schedules/utils/schedules_providers_definition.dart';
@@ -31,7 +32,10 @@ class _SchedulesHomePageState extends ConsumerState<SchedulesHomePage> {
     return Scaffold(
       floatingActionButton: _addScheduleButton(context),
       appBar: AppBar(
-        title: const Text('Schedules'),
+        title: Text(
+          'Schedules',
+          style: GoogleFonts.exo2(),
+        ),
       ),
       body: SizedBox(
         height: WCUtils.screenHeightSafeAreaAppBarBottomBar(context),

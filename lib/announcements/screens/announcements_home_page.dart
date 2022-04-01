@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:worship_connect/announcements/providers/announcement_list_provider.dart';
 import 'package:worship_connect/announcements/utils/announcements_providers_definition.dart';
 import 'package:worship_connect/announcements/widgets/announcement_list_tile.dart';
@@ -31,7 +32,10 @@ class _AnnouncementsHomePageState extends ConsumerState<AnnouncementsHomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Announcements'),
+        title: Text(
+          'Announcements',
+          style: GoogleFonts.exo2(),
+        ),
       ),
       floatingActionButton: _newAnnouncementButton(context, _wcUserInfoData!),
       body: Builder(

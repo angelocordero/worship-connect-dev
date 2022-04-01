@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:worship_connect/schedules/utils/schedules_providers_definition.dart';
 
 class SelectMusiciansPage extends ConsumerStatefulWidget {
@@ -23,7 +24,10 @@ class SelectMusiciansPageState extends ConsumerState<SelectMusiciansPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add musicians'),
+        title: Text(
+          'Add musicians',
+          style: GoogleFonts.exo2(),
+        ),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,

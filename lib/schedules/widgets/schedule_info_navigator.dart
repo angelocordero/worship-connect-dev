@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:worship_connect/schedules/screens/schedule_info_musicians_page.dart';
 import 'package:worship_connect/schedules/screens/schedule_info_songs_page.dart';
 import 'package:worship_connect/schedules/utils/schedule_data.dart';
 import 'package:worship_connect/schedules/utils/schedules_providers_definition.dart';
-
 
 class ScheduleInfoNavigator extends ConsumerStatefulWidget {
   const ScheduleInfoNavigator({Key? key}) : super(key: key);
@@ -27,8 +27,14 @@ class _ScheduleInfoNavigatorState extends ConsumerState<ScheduleInfoNavigator> {
     return Scaffold(
       appBar: AppBar(
         title: ListTile(
-          title: Text(_scheduleData.scheduleTitle),
-          subtitle: Text(_scheduleData.timeString),
+          title: Text(
+            _scheduleData.scheduleTitle,
+            style: GoogleFonts.exo2(),
+          ),
+          subtitle: Text(
+            _scheduleData.timeString,
+            style: GoogleFonts.exo2(),
+          ),
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
