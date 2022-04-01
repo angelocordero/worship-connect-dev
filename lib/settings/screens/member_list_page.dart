@@ -9,6 +9,8 @@ class MembersListPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final _membersListNotifier = ref.watch(membersListProvider.notifier);
 
+    //TODO: list not reseting
+
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(

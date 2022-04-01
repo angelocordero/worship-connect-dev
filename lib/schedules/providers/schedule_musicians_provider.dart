@@ -7,6 +7,7 @@ class ScheduleMusiciansProvider extends StateNotifier<List<Map<String, dynamic>>
 
   String teamID;
   String scheduleID;
+  static final List<String> _alreadyAssignedMembers = [];
 
   init() async {
     DocumentSnapshot<Map<String, dynamic>>? doc = await SchedulesFirebaseAPI(teamID).getScheduleInfo(scheduleID);
@@ -26,6 +27,7 @@ class ScheduleMusiciansProvider extends StateNotifier<List<Map<String, dynamic>>
 
   reset() async {
     state.clear();
+    _alreadyAssignedMembers.clear();
     await init();
   }
 
@@ -61,6 +63,7 @@ class ScheduleMusiciansProvider extends StateNotifier<List<Map<String, dynamic>>
     });
 
     _instrument.values.first.add(musician);
+    _alreadyAssignedMembers.add(musician);
 
     state = state.toList();
   }
@@ -71,7 +74,12 @@ class ScheduleMusiciansProvider extends StateNotifier<List<Map<String, dynamic>>
     });
 
     _instrument.values.first.remove(musician);
+    _alreadyAssignedMembers.remove(musician);
 
     state = state.toList();
+  }
+
+  List<String> getUnassignedMembersList(List<String> completeMembersList) {
+    return  completeMembersList.toSet().difference(_alreadyAssignedMembers.toSet()).toList();
   }
 }

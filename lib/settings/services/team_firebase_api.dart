@@ -90,7 +90,6 @@ class TeamFirebaseAPI {
     try {
       return await teamsDataCollection.doc(teamID).collection('data').doc('members').get();
     } catch (e) {
-      debugPrint(e.toString());
       WCUtils.wcShowError('Failed to get members list');
       return Future.error(e.toString());
     }
@@ -180,5 +179,25 @@ class TeamFirebaseAPI {
 
   Future<void> removeFromTeam(WCUserInfoData _memberData) async {
     await leaveTeam(_memberData);
+  }
+
+  Future getCompleteMembersNamesList() async {
+    try {
+      DocumentSnapshot<Map<String, dynamic>> _doc = await teamsDataCollection.doc(teamID).collection('data').doc('members').get();
+
+      Map<String, dynamic> _admins = _doc.data()!['admins'] ?? {};
+      Map<String, dynamic> _members = _doc.data()?['normalMembers'] ?? {};
+      Map<String, dynamic> _leader = _doc.data()?['leader'];
+
+      List<String> _list = [
+        _leader.values.first,
+        ..._admins.values,
+        ..._members.values,
+      ];
+
+      return _list;
+    } catch (e) {
+      WCUtils.wcShowError('Failed to get members list');
+    }
   }
 }

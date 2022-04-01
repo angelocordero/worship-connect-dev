@@ -18,6 +18,7 @@ class WCAboutCard extends StatelessWidget {
             children: [
               RichText(
                 text: TextSpan(
+                  style: DefaultTextStyle.of(context).style,
                   text: 'To send issues or to contact me, please visit the ',
                   children: [
                     TextSpan(

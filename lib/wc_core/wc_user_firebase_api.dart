@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:worship_connect/wc_core/worship_connect_constants.dart';
 import 'package:worship_connect/sign_in/utils/wc_user_info_data.dart';
@@ -9,13 +10,14 @@ class WCUSerFirebaseAPI {
 
   initializeWCUserData(String userID) {
     try {
-      wcUserDataCollection.doc(userID).set({
+      wcUserDataCollection.doc(userID).set(<String, dynamic>{
         WCUserInfoDataEnum.userID.name: userID,
         WCUserInfoDataEnum.userName.name: '',
-        WCUserInfoDataEnum.userStatusString: UserStatusEnum.noTeam.name,
+        WCUserInfoDataEnum.userStatusString.name: UserStatusEnum.noTeam.name,
         WCUserInfoDataEnum.teamID.name: '',
       });
     } catch (e) {
+      debugPrint('WCError: ' + e.toString());
       WCUtils.wcShowError('Failed to initialize user data');
     }
   }

@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:worship_connect/schedules/screens/pick_musicians._page.dart';
 import 'package:worship_connect/schedules/utils/schedules_providers_definition.dart';
+import 'package:worship_connect/settings/services/team_firebase_api.dart';
+import 'package:worship_connect/sign_in/utils/wc_user_info_data.dart';
+import 'package:worship_connect/wc_core/worship_connect.dart';
 
 class InstrumentsTile extends ConsumerWidget {
   const InstrumentsTile({Key? key, required this.instrument}) : super(key: key);
@@ -31,13 +35,34 @@ class InstrumentsTile extends ConsumerWidget {
   }
 
   SizedBox _buildAddButton(BuildContext context, WidgetRef ref) {
+    WCUserInfoData? _wcUserInfoData = ref.watch(wcUserInfoDataStream).asData!.value;
+
     return SizedBox(
       width: MediaQuery.of(context).size.width * 2 / 3,
       child: ListTile(
         leading: const Icon(Icons.add_circle_outline),
         title: const Text('Add'),
-        onTap: () {
-          ref.read(scheduleMusiciansProvider.notifier).addMusician(instrument: instrument.keys.first, musician: 'Angelo Test');
+        onTap: () async {
+          List<String> _completeMembersList = await TeamFirebaseAPI(_wcUserInfoData!.teamID).getCompleteMembersNamesList();
+          List<String> _unassignedMembersList =  ref.read(scheduleMusiciansProvider.notifier).getUnassignedMembersList(_completeMembersList);
+
+          _unassignedMembersList.sort(
+            (a, b) {
+              return a.toLowerCase().compareTo(b.toLowerCase());
+            },
+          );
+
+
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) {
+                return PickMusiciansPage(
+                  unassignedMembersList: _unassignedMembersList,
+                );
+              },
+            ),
+          );
         },
       ),
     );

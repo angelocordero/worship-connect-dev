@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:worship_connect/settings/services/team_firebase_api.dart';
+import 'package:worship_connect/settings/utils/settings_providers_definition.dart';
 import 'package:worship_connect/settings/widgets/role_icon.dart';
 import 'package:worship_connect/sign_in/utils/wc_user_info_data.dart';
 import 'package:worship_connect/wc_core/worship_connect.dart';
@@ -30,14 +31,14 @@ class MemberListTile extends ConsumerWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             if (WCUtils.isAdminOrLeader(memberData)) RoleIcon(role: memberData.userStatus), //role icon
-            if (WCUtils.isAdminOrLeader(_userData)) _popupMenuButton(_userData), // popup menu
+            if (WCUtils.isAdminOrLeader(_userData)) _popupMenuButton(_userData, ref), // popup menu
           ],
         ),
       ),
     );
   }
 
-  PopupMenuButton<int> _popupMenuButton(WCUserInfoData _userData) {
+  PopupMenuButton<int> _popupMenuButton(WCUserInfoData _userData, WidgetRef ref) {
     UserStatusEnum _userStatus = _userData.userStatus;
     UserStatusEnum _memberStatus = memberData.userStatus;
 
@@ -55,18 +56,23 @@ class MemberListTile extends ConsumerWidget {
               userData: _userData,
               memberData: memberData,
             );
+            ref.read(membersListProvider.notifier).initMemberList();
             break;
           case 1:
-            await TeamFirebaseAPI(_userData.teamID).leaveTeam(_userData);
+            await TeamFirebaseAPI(_userData.teamID).promoteToAdmin(memberData);
+            ref.read(membersListProvider.notifier).initMemberList();
             break;
           case 2:
             await TeamFirebaseAPI(_userData.teamID).demoteToMember(memberData);
+            ref.read(membersListProvider.notifier).initMemberList();
             break;
           case 3:
             await TeamFirebaseAPI(_userData.teamID).removeFromTeam(memberData);
+            ref.read(membersListProvider.notifier).initMemberList();
             break;
           case 4:
-            await TeamFirebaseAPI(_userData.teamID).demoteToMember(_userData);
+            await TeamFirebaseAPI(_userData.teamID).demoteToMember(memberData);
+            ref.read(membersListProvider.notifier).initMemberList();
             break;
           default:
             WCUtils.wcShowError('Error');

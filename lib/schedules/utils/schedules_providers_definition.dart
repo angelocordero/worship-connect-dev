@@ -39,6 +39,7 @@ final scheduleMusiciansProvider = StateNotifierProvider<ScheduleMusiciansProvide
   WCUserInfoData? _wcUserInfoData = ref.watch(wcUserInfoDataStream).asData?.value;
   String _scheduleID = ref.watch(scheduleInfoProvider).scheduleID;
 
+
   return ScheduleMusiciansProvider(
     teamID: _wcUserInfoData!.teamID,
     scheduleID: _scheduleID,
