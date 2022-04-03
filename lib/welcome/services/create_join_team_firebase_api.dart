@@ -51,15 +51,7 @@ class CreateJoinTeamFirebaseAPI {
 
       //create team instruments list
       _writeBatch.set(wcTeamDataCollection.doc(_teamID).collection('data').doc('instruments'), {
-        'coreInstruments': [
-          'Worship Leader',
-          'Backup Singers',
-          'Acoustic Guitar',
-          'Electric Guitar',
-          'Bass',
-          'Keyboards',
-          'Drums',
-        ],
+        'coreInstruments': wcCoreInstruments,
         'customInstruments': [],
       });
 

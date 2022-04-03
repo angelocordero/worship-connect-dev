@@ -49,3 +49,12 @@ TextStyle wcHintStyle = const TextStyle(color: Colors.grey);
 
 Icon wcTrailingIcon = const Icon(Icons.arrow_forward_ios);
 
+List<String> wcCoreInstruments = [
+  'Worship Leader',
+  'Backup Singers',
+  'Acoustic Guitar',
+  'Electric Guitar',
+  'Bass',
+  'Keyboards',
+  'Drums',
+];

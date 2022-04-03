@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:worship_connect/schedules/services/schedules_firebase_api.dart';
+import 'package:worship_connect/settings/services/team_firebase_api.dart';
 
 class ScheduleMusiciansProvider extends StateNotifier<Map<String, dynamic>> {
   ScheduleMusiciansProvider({required this.teamID, required this.scheduleID}) : super({});
@@ -10,6 +11,8 @@ class ScheduleMusiciansProvider extends StateNotifier<Map<String, dynamic>> {
   static final List<String> _alreadyAssignedMembers = [];
 
   init() async {
+    _alreadyAssignedMembers.clear();
+
     DocumentSnapshot<Map<String, dynamic>>? doc = await SchedulesFirebaseAPI(teamID).getScheduleInfo(scheduleID);
 
     if (doc == null) {
@@ -55,8 +58,19 @@ class ScheduleMusiciansProvider extends StateNotifier<Map<String, dynamic>> {
     state = Map<String, dynamic>.from(_temp);
   }
 
+  addCustomInstrument(String _instrument) async {
+    await TeamFirebaseAPI(teamID).addCustomInstrument(_instrument);
+    addInstrument(_instrument);
+  }
+
   removeInstruments(String _instrument) {
     Map<String, dynamic> _temp = state;
+
+    List _list = _temp[_instrument];
+
+    for (var element in _list) {
+      _alreadyAssignedMembers.remove(element);
+    }
 
     _temp.remove(_instrument);
 
@@ -82,5 +96,9 @@ class ScheduleMusiciansProvider extends StateNotifier<Map<String, dynamic>> {
 
   List<String> getUnassignedMembersList(List<String> completeMembersList) {
     return completeMembersList.toSet().difference(_alreadyAssignedMembers.toSet()).toList();
+  }
+
+  deleteCustomInstrument(String _instrument) async {
+    await TeamFirebaseAPI(teamID).deleteCustomInstrument(_instrument);
   }
 }

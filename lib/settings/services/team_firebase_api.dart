@@ -200,4 +200,32 @@ class TeamFirebaseAPI {
       WCUtils.wcShowError('Failed to get members list');
     }
   }
+
+  Future addCustomInstrument(String instrument) async {
+    EasyLoading.show();
+
+    try {
+      teamsDataCollection.doc(teamID).collection('data').doc('instruments').update({
+        'customInstruments': FieldValue.arrayUnion([instrument]),
+      });
+
+      await EasyLoading.dismiss();
+    } catch (e) {
+      WCUtils.wcShowError('Failed to add custom instrument');
+    }
+  }
+
+  Future deleteCustomInstrument(String instrument) async {
+    EasyLoading.show();
+
+    try {
+      teamsDataCollection.doc(teamID).collection('data').doc('instruments').update({
+        'customInstruments': FieldValue.arrayRemove([instrument]),
+      });
+
+      await EasyLoading.dismiss();
+    } catch (e) {
+      WCUtils.wcShowError('Failed to remove custom instrument');
+    }
+  }
 }

@@ -35,9 +35,6 @@ class ScheduleInfoMusiciansPage extends ConsumerWidget {
                 child: ListView.builder(
                   itemBuilder: (context, index) {
                     String _instrumentName = _instrumentsList.keys.elementAt(index);
-                    // Map<String, dynamic> _instrumentData = _instrumentsList.entries.firstWhere((element) {
-                    //   return element.key == _instrumentName;
-                    // }) as Map<String, dynamic>;
 
                     Map<String, dynamic> _instrumentData = Map<String, dynamic>.fromEntries(_instrumentsList.entries.where((element) {
                       return element.key == _instrumentName;
@@ -66,6 +63,7 @@ class ScheduleInfoMusiciansPage extends ConsumerWidget {
             child: ElevatedButton(
               onPressed: () async {
                 await ref.read(instrumentsListProvider.notifier).init();
+                ref.read(customInstrumentProvider.state).state = '';
                 Navigator.push(
                   context,
                   WCCustomRoute(

@@ -197,4 +197,6 @@ class SchedulesFirebaseAPI {
       WCUtils.wcShowError('Failed to save musicians data');
     }
   }
+
+  
 }
