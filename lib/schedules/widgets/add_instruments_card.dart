@@ -75,7 +75,7 @@ class AddInstrumentsCard extends ConsumerWidget {
                               String _customInstrument = ref.read(customInstrumentProvider);
 
                               if (_selectedInstrument.isEmpty && _customInstrument.isEmpty) {
-                                WCUtils.wcShowError('No instrument selected');
+                                WCUtils.wcShowError(wcError: 'No instrument selected');
                                 return;
                               }
 

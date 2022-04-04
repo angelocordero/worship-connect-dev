@@ -8,7 +8,6 @@ import 'package:worship_connect/wc_core/worship_connect_constants.dart';
 import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
 import 'package:worship_connect/wc_core/core_providers_definition.dart';
 
-
 class MemberListTile extends ConsumerWidget {
   const MemberListTile({Key? key, required this.memberData}) : super(key: key);
 
@@ -82,7 +81,7 @@ class MemberListTile extends ConsumerWidget {
             ref.read(membersListProvider.notifier).reset();
             break;
           default:
-            WCUtils.wcShowError('Error');
+            WCUtils.wcShowError(wcError: 'Error');
             break;
         }
       },

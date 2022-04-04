@@ -12,7 +12,6 @@ import 'package:worship_connect/wc_core/worship_connect_constants.dart';
 import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
 import 'package:worship_connect/wc_core/core_providers_definition.dart';
 
-
 class TeamSettings extends ConsumerWidget {
   const TeamSettings({Key? key}) : super(key: key);
 
@@ -26,7 +25,7 @@ class TeamSettings extends ConsumerWidget {
         style: ElevatedButton.styleFrom(shape: wcButtonShape),
         onPressed: () async {
           if (WCUtils.isAdminOrLeader(userData)) {
-            WCUtils.wcShowError('Team leader and admins cannot leave team');
+            WCUtils.wcShowError(wcError: 'Team leader and admins cannot leave team');
             return;
           }
 
@@ -106,7 +105,7 @@ class TeamSettings extends ConsumerWidget {
         icon: const Icon(Icons.copy),
         onPressed: () async {
           if (_teamID.isEmpty) {
-            WCUtils.wcShowError('Unable to copy team ID');
+            WCUtils.wcShowError(wcError: 'Unable to copy team ID');
             return;
           }
           await FlutterClipboard.copy(_teamID);

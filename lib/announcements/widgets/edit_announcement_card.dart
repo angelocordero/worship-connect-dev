@@ -8,7 +8,6 @@ import 'package:worship_connect/sign_in/utils/wc_user_info_data.dart';
 import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
 import 'package:worship_connect/wc_core/core_providers_definition.dart';
 
-
 class EditAnnouncementCard extends ConsumerStatefulWidget {
   const EditAnnouncementCard({Key? key, required this.announcement}) : super(key: key);
   final WCAnnouncementsData announcement;
@@ -20,7 +19,6 @@ class EditAnnouncementCard extends ConsumerStatefulWidget {
 class _EditAnnouncementCardState extends ConsumerState<EditAnnouncementCard> {
   static final TextEditingController _announcementTextController = TextEditingController();
 
-
   @override
   void initState() {
     _announcementTextController.text = widget.announcement.announcementText;
@@ -31,7 +29,6 @@ class _EditAnnouncementCardState extends ConsumerState<EditAnnouncementCard> {
 
   @override
   Widget build(BuildContext context) {
-
     return SafeArea(
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(32),
@@ -122,7 +119,7 @@ class _EditAnnouncementCardState extends ConsumerState<EditAnnouncementCard> {
             },
             onTap: () async {
               if (_announcementTextController.text.isEmpty) {
-                WCUtils.wcShowError('Announcement cannot be empty');
+                WCUtils.wcShowError(wcError: 'Announcement cannot be empty');
                 return;
               }
 

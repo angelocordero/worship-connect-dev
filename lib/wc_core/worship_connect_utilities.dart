@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -75,9 +76,17 @@ class WCUtils {
     return DateFormat('yyyyMMdd').format(_date);
   }
 
-  static void wcShowError(String error) {
+  static Future<void> wcShowError({Object? e,  StackTrace? st, required String wcError}) async {
+    if (e != null && st != null) {
+      await FirebaseCrashlytics.instance.recordError(
+        e,
+        st,
+        reason: wcError,
+      );
+    }
+
     EasyLoading.showError(
-      error,
+      wcError,
       dismissOnTap: true,
     );
   }

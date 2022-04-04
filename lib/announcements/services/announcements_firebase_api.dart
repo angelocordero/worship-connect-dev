@@ -33,8 +33,8 @@ class AnnouncementsFirebaseAPI {
       });
 
       EasyLoading.dismiss();
-    } catch (e) {
-      WCUtils.wcShowError('Failed to send announcement');
+    } catch (e, st) {
+      WCUtils.wcShowError(e: e, st: st, wcError: 'Failed to send announcement');
     }
   }
 
@@ -50,8 +50,8 @@ class AnnouncementsFirebaseAPI {
       });
 
       EasyLoading.dismiss();
-    } catch (e) {
-      WCUtils.wcShowError('Failed to edit announcement');
+    } catch (e, st) {
+      WCUtils.wcShowError(e: e, st: st, wcError: 'Failed to edit announcement');
     }
   }
 
@@ -64,8 +64,8 @@ class AnnouncementsFirebaseAPI {
       });
 
       EasyLoading.dismiss();
-    } catch (e) {
-      WCUtils.wcShowError('Failed to delete announcement');
+    } catch (e, st) {
+      WCUtils.wcShowError(e: e, st: st, wcError: 'Failed to delete announcement');
     }
   }
 
@@ -79,8 +79,8 @@ class AnnouncementsFirebaseAPI {
           return value;
         },
       );
-    } catch (error) {
-      WCUtils.wcShowError('Failed to get announcements');
+    } catch (e, st) {
+      WCUtils.wcShowError(e: e, st: st, wcError: 'Failed to get announcements');
       return null;
     }
   }

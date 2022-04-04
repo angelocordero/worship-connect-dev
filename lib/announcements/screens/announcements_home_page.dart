@@ -73,7 +73,7 @@ class _AnnouncementsHomePageState extends ConsumerState<AnnouncementsHomePage> {
         labelText: 'New Announcement',
         onPressed: () {
           if (ref.read(announcementListProvider).length >= 10) {
-            WCUtils.wcShowError('You can only post up to 10 announcements.');
+            WCUtils.wcShowError(wcError: 'You can only post up to 10 announcements.');
             return;
           }
           Navigator.push(

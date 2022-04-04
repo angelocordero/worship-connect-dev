@@ -10,7 +10,6 @@ import 'package:worship_connect/sign_in/utils/wc_user_info_data.dart';
 import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
 import 'package:worship_connect/wc_core/core_providers_definition.dart';
 
-
 class EditScheduleCard extends ConsumerStatefulWidget {
   const EditScheduleCard({Key? key, required this.scheduleData}) : super(key: key);
 
@@ -149,7 +148,7 @@ class _EditScheduleCardState extends ConsumerState<EditScheduleCard> {
           TapDebouncer(
             onTap: () async {
               if (_scheduleTextController.text.isEmpty) {
-                WCUtils.wcShowError('Schedule title cannot be empty');
+                WCUtils.wcShowError(wcError: 'Schedule title cannot be empty');
                 return;
               }
 

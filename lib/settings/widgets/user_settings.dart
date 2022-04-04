@@ -7,7 +7,6 @@ import 'package:worship_connect/wc_core/wc_custom_route.dart';
 import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
 import 'package:worship_connect/wc_core/core_providers_definition.dart';
 
-
 class UserSettings extends ConsumerWidget {
   const UserSettings({Key? key}) : super(key: key);
 
@@ -43,7 +42,7 @@ class UserSettings extends ConsumerWidget {
         icon: const Icon(Icons.copy),
         onPressed: () async {
           if (_userID.isEmpty) {
-            WCUtils.wcShowError('Unable to copy User ID');
+            WCUtils.wcShowError(wcError: 'Unable to copy User ID');
             return;
           }
           await FlutterClipboard.copy(_userID);

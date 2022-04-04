@@ -16,25 +16,29 @@ class WCUSerFirebaseAPI {
         WCUserInfoDataEnum.userStatusString.name: UserStatusEnum.noTeam.name,
         WCUserInfoDataEnum.teamID.name: '',
       });
-    } catch (e) {
+    } catch (e, st) {
       debugPrint('WCError: ' + e.toString());
-      WCUtils.wcShowError('Failed to initialize user data');
+      WCUtils.wcShowError(e: e, st: st, wcError: 'Failed to initialize user data');
     }
   }
 
   Stream<WCUserInfoData?> wcUserInfoDataStream(String? userID) {
-    return wcUserDataCollection.doc(userID).snapshots().map(
-      (DocumentSnapshot snapshot) {
-        Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
+    if (userID == null) {
+      return Stream.value(null);
+    } else {
+      return wcUserDataCollection.doc(userID).snapshots().map(
+        (DocumentSnapshot snapshot) {
+          Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
 
-        return WCUserInfoData(
-          userID: data[WCUserInfoDataEnum.userID.name],
-          userName: data[WCUserInfoDataEnum.userName.name],
-          userStatusString: data[WCUserInfoDataEnum.userStatusString.name],
-          teamID: data[WCUserInfoDataEnum.teamID.name],
-        );
-      },
-    );
+          return WCUserInfoData(
+            userID: data[WCUserInfoDataEnum.userID.name],
+            userName: data[WCUserInfoDataEnum.userName.name],
+            userStatusString: data[WCUserInfoDataEnum.userStatusString.name],
+            teamID: data[WCUserInfoDataEnum.teamID.name],
+          );
+        },
+      );
+    }
   }
 
   Future updateUserName({required String userID, required String userName, String? teamID}) async {
@@ -55,8 +59,8 @@ class WCUSerFirebaseAPI {
       // TODO: also change user name in team member list
       // TODO: also change user name in announcements data
 
-    } catch (e) {
-      WCUtils.wcShowError('Failed to update user name');
+    } catch (e, st) {
+      WCUtils.wcShowError(e: e, st: st, wcError: 'Failed to update user name');
     }
   }
 }

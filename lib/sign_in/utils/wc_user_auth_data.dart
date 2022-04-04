@@ -1,7 +1,7 @@
 class WCUserAuthData {
-  final String? userAuthID;
+  final String userAuthID;
 
   WCUserAuthData({
-    required this.userAuthID ,
+    required this.userAuthID,
   });
 }

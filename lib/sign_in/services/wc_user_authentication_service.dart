@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:worship_connect/wc_core/wc_user_firebase_api.dart';
@@ -20,6 +21,9 @@ class WCUserAuthentication {
 
   signOut() async {
     EasyLoading.show();
+
+    FirebaseCrashlytics.instance.setUserIdentifier('');
+
     GoogleSignIn _googleSignIn = GoogleSignIn();
     await _firebaseAuth.signOut();
     await _googleSignIn.signOut();
@@ -35,6 +39,10 @@ class WCUserAuthentication {
   }
 
   WCUserAuthData? _getWCUserAuthData(User? user) {
-    return WCUserAuthData(userAuthID: user!.uid);
+    if (user == null) {
+      return null;
+    } else {
+      return WCUserAuthData(userAuthID: user.uid);
+    }
   }
 }

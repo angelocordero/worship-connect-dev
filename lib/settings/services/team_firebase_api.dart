@@ -43,8 +43,8 @@ class TeamFirebaseAPI {
     try {
       await teamsDataCollection.doc(teamID).update({TeamDataEnum.teamName.name: newTeamName});
       EasyLoading.dismiss();
-    } catch (e) {
-      WCUtils.wcShowError('Change name failed');
+    } catch (e, st) {
+      WCUtils.wcShowError(e: e, st: st, wcError: 'Change name failed');
     }
   }
 
@@ -56,8 +56,8 @@ class TeamFirebaseAPI {
         TeamDataEnum.isOpen.name: !currentStatus,
       });
       EasyLoading.dismiss();
-    } catch (e) {
-      WCUtils.wcShowError(e.toString());
+    } catch (e, st) {
+      WCUtils.wcShowError(e: e, st: st, wcError: e.toString());
     }
   }
 
@@ -81,16 +81,16 @@ class TeamFirebaseAPI {
       await _writeBatch.commit();
 
       EasyLoading.dismiss();
-    } catch (error) {
-      WCUtils.wcShowError('Unable to leave team');
+    } catch (e, st) {
+      WCUtils.wcShowError(e: e, st: st, wcError: 'Unable to leave team');
     }
   }
 
   Future<DocumentSnapshot> getMembersDocument() async {
     try {
       return await teamsDataCollection.doc(teamID).collection('data').doc('members').get();
-    } catch (e) {
-      WCUtils.wcShowError('Failed to get members list');
+    } catch (e, st) {
+      WCUtils.wcShowError(e: e, st: st, wcError: 'Failed to get members list');
       return Future.error(e.toString());
     }
   }
@@ -98,9 +98,9 @@ class TeamFirebaseAPI {
   Future<DocumentSnapshot> getInstrumentsDocument() async {
     try {
       return await teamsDataCollection.doc(teamID).collection('data').doc('instruments').get();
-    } catch (e) {
+    } catch (e, st) {
       debugPrint(e.toString());
-      WCUtils.wcShowError('Failed to get instruments list');
+      WCUtils.wcShowError(e: e, st: st, wcError: 'Failed to get instruments list');
       return Future.error(e.toString());
     }
   }
@@ -122,8 +122,8 @@ class TeamFirebaseAPI {
 
       await _writeBatch.commit();
       EasyLoading.dismiss();
-    } catch (e) {
-      WCUtils.wcShowError('Failed to promote');
+    } catch (e, st) {
+      WCUtils.wcShowError(e: e, st: st, wcError: 'Failed to promote');
     }
   }
 
@@ -150,8 +150,8 @@ class TeamFirebaseAPI {
 
       await _writeBatch.commit();
       EasyLoading.dismiss();
-    } catch (e) {
-      WCUtils.wcShowError('Failed to promote');
+    } catch (e, st) {
+      WCUtils.wcShowError(e: e, st: st, wcError: 'Failed to promote');
     }
   }
 
@@ -172,8 +172,8 @@ class TeamFirebaseAPI {
 
       await _writeBatch.commit();
       EasyLoading.dismiss();
-    } catch (e) {
-      WCUtils.wcShowError('Failed to demote');
+    } catch (e, st) {
+      WCUtils.wcShowError(e: e, st: st, wcError: 'Failed to demote');
     }
   }
 
@@ -196,8 +196,8 @@ class TeamFirebaseAPI {
       ];
 
       return _list;
-    } catch (e) {
-      WCUtils.wcShowError('Failed to get members list');
+    } catch (e, st) {
+      WCUtils.wcShowError(e: e, st: st, wcError: 'Failed to get members list');
     }
   }
 
@@ -210,8 +210,8 @@ class TeamFirebaseAPI {
       });
 
       await EasyLoading.dismiss();
-    } catch (e) {
-      WCUtils.wcShowError('Failed to add custom instrument');
+    } catch (e, st) {
+      WCUtils.wcShowError(e: e, st: st, wcError: 'Failed to add custom instrument');
     }
   }
 
@@ -224,8 +224,8 @@ class TeamFirebaseAPI {
       });
 
       await EasyLoading.dismiss();
-    } catch (e) {
-      WCUtils.wcShowError('Failed to remove custom instrument');
+    } catch (e, st) {
+      WCUtils.wcShowError(e: e, st: st, wcError: 'Failed to remove custom instrument');
     }
   }
 }

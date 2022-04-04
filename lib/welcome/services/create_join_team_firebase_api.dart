@@ -76,8 +76,8 @@ class CreateJoinTeamFirebaseAPI {
       await _writeBatch.commit();
 
       EasyLoading.dismiss();
-    } catch (e) {
-      WCUtils.wcShowError(e.toString());
+    } catch (e, st) {
+      WCUtils.wcShowError(e: e, st: st, wcError: e.toString());
       debugPrint(e.toString());
     }
   }

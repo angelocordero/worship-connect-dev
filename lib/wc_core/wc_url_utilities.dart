@@ -11,14 +11,14 @@ class WCUrlUtils {
     String error = 'Cannot open Github page';
 
     if (!await canLaunch(wcGithubPageLink)) {
-      WCUtils.wcShowError(error);
+      WCUtils.wcShowError(wcError: error);
       return;
     }
 
     try {
       return await launch(wcGithubPageLink);
-    } catch (e) {
-      WCUtils.wcShowError(error);
+    } catch (e, st) {
+      WCUtils.wcShowError(e: e, st: st, wcError: error);
     }
   }
 

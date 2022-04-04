@@ -68,8 +68,8 @@ class SchedulesFirebaseAPI {
       _writeBatch.commit();
 
       EasyLoading.dismiss();
-    } catch (e) {
-      WCUtils.wcShowError('Failed to add schedule');
+    } catch (e, st) {
+      WCUtils.wcShowError(e: e, st: st, wcError: 'Failed to add schedule');
     }
   }
 
@@ -81,8 +81,8 @@ class SchedulesFirebaseAPI {
         EasyLoading.dismiss();
         return value;
       });
-    } catch (error) {
-      WCUtils.wcShowError('Failed to get schedule data');
+    } catch (e, st) {
+      WCUtils.wcShowError(e: e, st: st, wcError: 'Failed to get schedule data');
       return null;
     }
   }
@@ -109,8 +109,8 @@ class SchedulesFirebaseAPI {
       await _writeBatch.commit();
 
       EasyLoading.dismiss();
-    } catch (e) {
-      WCUtils.wcShowError('Failed to delete schedule');
+    } catch (e, st) {
+      WCUtils.wcShowError(e: e, st: st, wcError: 'Failed to delete schedule');
     }
   }
 
@@ -152,8 +152,8 @@ class SchedulesFirebaseAPI {
 
       await _writeBatch.commit();
       EasyLoading.dismiss();
-    } catch (e) {
-      WCUtils.wcShowError('Failed to edit schedule');
+    } catch (e, st) {
+      WCUtils.wcShowError(e: e, st: st, wcError: 'Failed to edit schedule');
     }
   }
 
@@ -180,8 +180,8 @@ class SchedulesFirebaseAPI {
         'songs': scheduleData,
       });
       EasyLoading.dismiss();
-    } catch (e) {
-      WCUtils.wcShowError('Failed to save schedule data');
+    } catch (e, st) {
+      WCUtils.wcShowError(e: e, st: st, wcError: 'Failed to save schedule data');
     }
   }
 
@@ -193,10 +193,8 @@ class SchedulesFirebaseAPI {
         'musicians': musiciansData,
       });
       EasyLoading.dismiss();
-    } catch (e) {
-      WCUtils.wcShowError('Failed to save musicians data');
+    } catch (e, st) {
+      WCUtils.wcShowError(e: e, st: st, wcError: 'Failed to save musicians data');
     }
   }
-
-  
 }

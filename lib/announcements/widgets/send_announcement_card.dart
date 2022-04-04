@@ -7,7 +7,6 @@ import 'package:worship_connect/sign_in/utils/wc_user_info_data.dart';
 import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
 import 'package:worship_connect/wc_core/core_providers_definition.dart';
 
-
 class SendAnnouncementCard extends ConsumerWidget {
   const SendAnnouncementCard({Key? key}) : super(key: key);
 
@@ -106,7 +105,7 @@ class SendAnnouncementCard extends ConsumerWidget {
             },
             onTap: () async {
               if (_announcementTextController.text.isEmpty) {
-                WCUtils.wcShowError('Announcement cannot be empty');
+                WCUtils.wcShowError(wcError: 'Announcement cannot be empty');
                 return;
               }
 
