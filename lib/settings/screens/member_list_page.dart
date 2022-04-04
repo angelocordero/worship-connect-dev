@@ -12,7 +12,7 @@ class MembersListPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final _membersListNotifier = ref.watch(membersListProvider.notifier);
-    final List<WCUserInfoData> _adminsList = ref.watch(membersListProvider).values.where(
+    final List<WCUserInfoData> _adminList = ref.watch(membersListProvider).values.where(
       (element) {
         return element.userStatus == UserStatusEnum.admin;
       },
@@ -24,13 +24,12 @@ class MembersListPage extends ConsumerWidget {
       },
     ).toList();
 
-    _adminsList.sort((a, b) {
+    _adminList.sort((a, b) {
       return a.userName.compareTo(b.userName);
     });
     _membersList.sort((a, b) {
       return a.userName.compareTo(b.userName);
     });
-
 
     return SafeArea(
       child: Scaffold(
@@ -53,7 +52,7 @@ class MembersListPage extends ConsumerWidget {
                   },
                 ),
               ),
-              ..._adminsList.map(
+              ..._adminList.map(
                 (admin) {
                   return MemberListTile(memberData: admin);
                 },

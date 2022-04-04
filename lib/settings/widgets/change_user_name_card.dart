@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tap_debouncer/tap_debouncer.dart';
+import 'package:worship_connect/sign_in/utils/wc_user_info_data.dart';
 import 'package:worship_connect/wc_core/wc_user_firebase_api.dart';
 import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
 import 'package:worship_connect/wc_core/core_providers_definition.dart';
-
 
 class ChangeUserNameCard extends ConsumerWidget {
   const ChangeUserNameCard({Key? key, required this.userName}) : super(key: key);
@@ -63,7 +63,7 @@ class ChangeUserNameCard extends ConsumerWidget {
 
   SingleChildScrollView _changeNameButtons({
     required BuildContext context,
-    required String userID,
+    required WCUserInfoData userData,
   }) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
@@ -94,7 +94,12 @@ class ChangeUserNameCard extends ConsumerWidget {
             },
             onTap: () async {
               if (newName.isNotEmpty && newName.trim() != userName) {
-                WCUSerFirebaseAPI().updateUserName(userID: userID, userName: newName);
+                WCUSerFirebaseAPI().updateUserName(
+                  userID: userData.userID,
+                  userName: newName,
+                  teamID: userData.teamID,
+                  userStatus: userData.userStatus,
+                );
               }
               newName = '';
               Navigator.pop(context);
@@ -107,7 +112,7 @@ class ChangeUserNameCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    String _userID = ref.watch(wcUserInfoDataStream).asData!.value!.userID;
+    WCUserInfoData _userData = ref.watch(wcUserInfoDataStream).asData!.value!;
 
     return SafeArea(
       child: SingleChildScrollView(
@@ -133,7 +138,7 @@ class ChangeUserNameCard extends ConsumerWidget {
                   _nameTextField(),
                   _changeNameButtons(
                     context: context,
-                    userID: _userID,
+                    userData: _userData,
                   ),
                 ],
               ),

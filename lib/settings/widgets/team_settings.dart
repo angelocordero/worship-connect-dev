@@ -25,7 +25,7 @@ class TeamSettings extends ConsumerWidget {
         style: ElevatedButton.styleFrom(shape: wcButtonShape),
         onPressed: () async {
           if (WCUtils.isAdminOrLeader(userData)) {
-            WCUtils.wcShowError(wcError: 'Team leader and admins cannot leave team');
+            WCUtils.wcShowError(wcError: 'Team leader and admin cannot leave team');
             return;
           }
 

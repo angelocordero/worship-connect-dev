@@ -8,7 +8,6 @@ import 'package:worship_connect/sign_in/utils/wc_user_info_data.dart';
 import 'package:worship_connect/welcome/screens/welcome_page.dart';
 import 'package:worship_connect/wc_core/core_providers_definition.dart';
 
-
 class WorshipConnectNavigator extends ConsumerWidget {
   const WorshipConnectNavigator({Key? key}) : super(key: key);
 
@@ -23,9 +22,15 @@ class WorshipConnectNavigator extends ConsumerWidget {
         return wcUserInfoData.when(
           data: (data) {
             EasyLoading.dismiss();
-            if (data!.teamID.isEmpty || data.userName.isEmpty) {
+
+            if (data == null) {
               _pushToWelcomePage(context);
-              return Container();
+              return WCUtils.authLoadingWidget();
+            }
+
+            if (data.teamID.isEmpty || data.userName.isEmpty) {
+              _pushToWelcomePage(context);
+              return WCUtils.authLoadingWidget();
             } else {
               return const HomeNavigator();
             }
@@ -47,20 +52,20 @@ class WorshipConnectNavigator extends ConsumerWidget {
       },
     );
   }
+}
 
-  _pushToWelcomePage(BuildContext context) {
-    WidgetsBinding.instance?.addPostFrameCallback(
-      (_) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) {
-              EasyLoading.dismiss();
-              return const WelcomePage();
-            },
-          ),
-        );
-      },
-    );
-  }
+_pushToWelcomePage(BuildContext context) {
+  WidgetsBinding.instance?.addPostFrameCallback(
+    (_) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) {
+            EasyLoading.dismiss();
+            return const WelcomePage();
+          },
+        ),
+      );
+    },
+  );
 }

@@ -102,8 +102,8 @@ class WelcomePageState extends ConsumerState<WelcomePage> {
 
   @override
   Widget build(BuildContext context) {
-    AsyncData<WCUserAuthData?>? wcUserAuthState = ref.watch(wcUserAuthStateStream).asData;
-    AsyncData<WCUserInfoData?>? wcUserInfoData = ref.watch(wcUserInfoDataStream).asData;
+    WCUserAuthData? wcUserAuthState = ref.watch(wcUserAuthStateStream).asData?.value;
+    WCUserInfoData? wcUserInfoData = ref.watch(wcUserInfoDataStream).asData?.value;
 
     signInWidgetLeftInitial = (WCUtils.screenWidth(context) - wcSignInButtonSize.width) / 2;
     signInWidgetLeftFinal = -300;
@@ -129,12 +129,12 @@ class WelcomePageState extends ConsumerState<WelcomePage> {
     if (wcUserInfoData == null) {
       enterNameWidgetBottomAnimated = enterNameWidgetBottomInitial;
       editNameWidgetOpacityAnimated = 0;
-    } else if (wcUserInfoData.value!.userName.isNotEmpty) {
+    } else if (wcUserInfoData.userName.isNotEmpty) {
       enterNameWidgetBottomAnimated = enterNameWidgetBottomFinal;
       logoWidgetTopAnimated = logoWidgetTopFinal;
       editNameWidgetOpacityAnimated = 1;
 
-      if (wcUserInfoData.value!.teamID.isNotEmpty && mounted) {
+      if (wcUserInfoData.teamID.isNotEmpty && mounted) {
         enterNameWidgetDuration = const Duration(seconds: 0);
         WidgetsBinding.instance?.addPostFrameCallback(
           (_) {

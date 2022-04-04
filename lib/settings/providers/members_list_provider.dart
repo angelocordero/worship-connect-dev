@@ -26,14 +26,14 @@ class MembersListProvider extends StateNotifier<Map<String, WCUserInfoData>> {
 
     DocumentSnapshot<Map<String, dynamic>> _doc = await _getMembersDoc() as DocumentSnapshot<Map<String, dynamic>>;
 
-    _setNormalMembers(_doc.data()?['normalMembers']);
-    _setAdmins(_doc.data()?['admins']);
+    _setMembers(_doc.data()?['members']);
+    _setAdmins(_doc.data()?['admin']);
     _setLeader(_doc.data()!['leader']);
 
     EasyLoading.dismiss();
   }
 
-  void _setNormalMembers(Map<String, dynamic>? _map) {
+  void _setMembers(Map<String, dynamic>? _map) {
     try {
       _map?.forEach(
         (key, value) {

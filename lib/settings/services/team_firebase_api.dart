@@ -75,7 +75,7 @@ class TeamFirebaseAPI {
 
       // update team members list
       _writeBatch.update(CreateJoinTeamFirebaseAPI().wcTeamDataCollection.doc(teamID).collection('data').doc('members'), {
-        'normalMembers.${_userData.userID}': FieldValue.delete(),
+        'members.${_userData.userID}': FieldValue.delete(),
       });
 
       await _writeBatch.commit();
@@ -116,8 +116,8 @@ class TeamFirebaseAPI {
       });
 
       _writeBatch.update(teamsDataCollection.doc(teamID).collection('data').doc('members'), {
-        'normalMembers.${_memberData.userID}': FieldValue.delete(),
-        'admins.${_memberData.userID}': _memberData.userName,
+        'members.${_memberData.userID}': FieldValue.delete(),
+        'admin.${_memberData.userID}': _memberData.userName,
       });
 
       await _writeBatch.commit();
@@ -144,8 +144,8 @@ class TeamFirebaseAPI {
       _writeBatch.update(teamsDataCollection.doc(teamID).collection('data').doc('members'), {
         'leader.${memberData.userID}': memberData.userName,
         'leader.${userData.userID}': FieldValue.delete(),
-        'admins.${memberData.userID}': FieldValue.delete(),
-        'admins.${userData.userID}': userData.userName,
+        'admin.${memberData.userID}': FieldValue.delete(),
+        'admin.${userData.userID}': userData.userName,
       });
 
       await _writeBatch.commit();
@@ -166,8 +166,8 @@ class TeamFirebaseAPI {
       });
 
       _writeBatch.update(teamsDataCollection.doc(teamID).collection('data').doc('members'), {
-        'admins.${_memberData.userID}': FieldValue.delete(),
-        'normalMembers.${_memberData.userID}': _memberData.userName,
+        'admin.${_memberData.userID}': FieldValue.delete(),
+        'members.${_memberData.userID}': _memberData.userName,
       });
 
       await _writeBatch.commit();
@@ -185,13 +185,13 @@ class TeamFirebaseAPI {
     try {
       DocumentSnapshot<Map<String, dynamic>> _doc = await teamsDataCollection.doc(teamID).collection('data').doc('members').get();
 
-      Map<String, dynamic> _admins = _doc.data()!['admins'] ?? {};
-      Map<String, dynamic> _members = _doc.data()?['normalMembers'] ?? {};
+      Map<String, dynamic> _admin = _doc.data()!['admin'] ?? {};
+      Map<String, dynamic> _members = _doc.data()?['members'] ?? {};
       Map<String, dynamic> _leader = _doc.data()?['leader'];
 
       List<String> _list = [
         _leader.values.first,
-        ..._admins.values,
+        ..._admin.values,
         ..._members.values,
       ];
 

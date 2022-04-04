@@ -10,7 +10,7 @@ import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
 
 class CreateJoinTeamFirebaseAPI {
   final FirebaseFirestore _firebaseInstance = FirebaseFirestore.instance;
-  final CollectionReference wcTeamDataCollection = FirebaseFirestore.instance.collection('WCTeams');
+  late final CollectionReference wcTeamDataCollection = _firebaseInstance.collection('WCTeams');
 
   Future createTeam({
     required String teamName,
@@ -124,7 +124,7 @@ class CreateJoinTeamFirebaseAPI {
 
     // update member list
     _writeBatch.update(wcTeamDataCollection.doc(teamID).collection('data').doc('members'), {
-      'normalMembers.$joinerID': joinerName,
+      'members.$joinerID': joinerName,
     });
 
     // update user data

@@ -1,12 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:worship_connect/settings/services/team_firebase_api.dart';
 import 'package:worship_connect/wc_core/worship_connect_constants.dart';
 import 'package:worship_connect/sign_in/utils/wc_user_info_data.dart';
 import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
 
 class WCUSerFirebaseAPI {
-  final CollectionReference wcUserDataCollection = FirebaseFirestore.instance.collection('WCUsers');
+  final FirebaseFirestore _firebaseInstance = FirebaseFirestore.instance;
+  late final CollectionReference wcUserDataCollection = _firebaseInstance.collection('WCUsers');
 
   initializeWCUserData(String userID) {
     try {
@@ -41,24 +43,30 @@ class WCUSerFirebaseAPI {
     }
   }
 
-  Future updateUserName({required String userID, required String userName, String? teamID}) async {
+  Future updateUserName({required String userID, required String userName, String? teamID, UserStatusEnum? userStatus}) async {
     EasyLoading.show();
 
     try {
+      WriteBatch _writeBatch = _firebaseInstance.batch();
+
       if (userName.isEmpty) {
         EasyLoading.showError('User name must not be empty');
         return;
       }
 
-      await wcUserDataCollection.doc(userID).update({
+      _writeBatch.update(wcUserDataCollection.doc(userID), {
         WCUserInfoDataEnum.userName.name: userName,
       });
 
+      if (teamID != null && userStatus != UserStatusEnum.noTeam) {
+        _writeBatch.update(TeamFirebaseAPI(teamID).teamsDataCollection.doc(teamID).collection('data').doc('members'), {
+          '${userStatus!.name}.$userID': userName,
+        });
+      }
+
+      await _writeBatch.commit();
+
       EasyLoading.dismiss();
-
-      // TODO: also change user name in team member list
-      // TODO: also change user name in announcements data
-
     } catch (e, st) {
       WCUtils.wcShowError(e: e, st: st, wcError: 'Failed to update user name');
     }
