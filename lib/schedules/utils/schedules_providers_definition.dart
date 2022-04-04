@@ -5,7 +5,8 @@ import 'package:worship_connect/schedules/providers/schedule_songs_provider.dart
 import 'package:worship_connect/schedules/utils/schedule_data.dart';
 import 'package:worship_connect/schedules/providers/calendar_schedule_list_provider.dart';
 import 'package:worship_connect/sign_in/utils/wc_user_info_data.dart';
-import 'package:worship_connect/wc_core/worship_connect.dart';
+import 'package:worship_connect/wc_core/core_providers_definition.dart';
+
 
 final calendarSelectedDayProvider = StateProvider<DateTime>((ref) {
   return DateTime.now();

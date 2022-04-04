@@ -7,8 +7,9 @@ import 'package:worship_connect/schedules/widgets/schedule_info_navigator.dart';
 import 'package:worship_connect/sign_in/utils/wc_user_info_data.dart';
 import 'package:worship_connect/schedules/utils/schedules_providers_definition.dart';
 import 'package:worship_connect/wc_core/wc_custom_route.dart';
-import 'package:worship_connect/wc_core/worship_connect.dart';
 import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
+import 'package:worship_connect/wc_core/core_providers_definition.dart';
+
 
 class SchedulesCalendarTile extends ConsumerWidget {
   const SchedulesCalendarTile({Key? key, required this.scheduleData}) : super(key: key);

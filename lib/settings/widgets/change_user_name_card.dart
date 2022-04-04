@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tap_debouncer/tap_debouncer.dart';
 import 'package:worship_connect/wc_core/wc_user_firebase_api.dart';
-import 'package:worship_connect/wc_core/worship_connect.dart';
 import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
+import 'package:worship_connect/wc_core/core_providers_definition.dart';
+
 
 class ChangeUserNameCard extends ConsumerWidget {
   const ChangeUserNameCard({Key? key, required this.userName}) : super(key: key);

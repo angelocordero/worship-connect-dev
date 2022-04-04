@@ -7,10 +7,11 @@ import 'package:worship_connect/settings/services/team_firebase_api.dart';
 import 'package:worship_connect/settings/widgets/change_team_name_card.dart';
 import 'package:worship_connect/sign_in/utils/wc_user_info_data.dart';
 import 'package:worship_connect/wc_core/wc_custom_route.dart';
-import 'package:worship_connect/wc_core/worship_connect.dart';
 import 'package:clipboard/clipboard.dart';
 import 'package:worship_connect/wc_core/worship_connect_constants.dart';
 import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
+import 'package:worship_connect/wc_core/core_providers_definition.dart';
+
 
 class TeamSettings extends ConsumerWidget {
   const TeamSettings({Key? key}) : super(key: key);
@@ -64,7 +65,7 @@ class TeamSettings extends ConsumerWidget {
       trailing: IconButton(
         icon: wcTrailingIcon,
         onPressed: () async {
-          await ref.read(membersListProvider.notifier).initMemberList();
+          await ref.read(membersListProvider.notifier).init();
           Navigator.push(
             context,
             MaterialPageRoute(

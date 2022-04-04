@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:worship_connect/sign_in/utils/wc_user_info_data.dart';
-import 'package:worship_connect/wc_core/worship_connect.dart';
+import 'package:worship_connect/wc_core/core_providers_definition.dart';
+
 
 final userNameProvider = StateProvider.autoDispose<String>((ref) {
   AsyncData<WCUserInfoData?>? wcUserInfoData = ref.watch(wcUserInfoDataStream).asData;

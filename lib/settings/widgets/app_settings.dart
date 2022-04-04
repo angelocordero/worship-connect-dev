@@ -5,8 +5,9 @@ import 'package:worship_connect/settings/widgets/wc_about_card.dart';
 import 'package:worship_connect/sign_in/services/wc_user_authentication_service.dart';
 import 'package:worship_connect/wc_core/wc_custom_route.dart';
 import 'package:worship_connect/wc_core/wc_themes.dart';
-import 'package:worship_connect/wc_core/worship_connect.dart';
 import 'package:worship_connect/wc_core/worship_connect_constants.dart';
+import 'package:worship_connect/wc_core/core_providers_definition.dart';
+
 
 class AppSettins extends ConsumerWidget {
   const AppSettins({Key? key}) : super(key: key);

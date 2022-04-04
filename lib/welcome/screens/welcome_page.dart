@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:worship_connect/wc_core/worship_connect.dart';
 import 'package:worship_connect/wc_core/worship_connect_constants.dart';
 import 'package:worship_connect/wc_core/worship_connect_navigator.dart';
 import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
@@ -13,6 +12,8 @@ import 'package:worship_connect/sign_in/widgets/wc_login_screen_logo.dart';
 import 'package:worship_connect/welcome/widgets/edit_name_widget.dart';
 import 'package:worship_connect/welcome/widgets/enter_name_widget.dart';
 import 'package:worship_connect/welcome/widgets/join_create_team_form_switcher.dart';
+import 'package:worship_connect/wc_core/core_providers_definition.dart';
+
 
 class WelcomePage extends ConsumerStatefulWidget {
   const WelcomePage({Key? key}) : super(key: key);

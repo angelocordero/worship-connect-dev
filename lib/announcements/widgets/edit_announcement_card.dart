@@ -5,8 +5,9 @@ import 'package:worship_connect/announcements/services/announcements_firebase_ap
 import 'package:worship_connect/announcements/utils/announcements_data.dart';
 import 'package:worship_connect/announcements/utils/announcements_providers_definition.dart';
 import 'package:worship_connect/sign_in/utils/wc_user_info_data.dart';
-import 'package:worship_connect/wc_core/worship_connect.dart';
 import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
+import 'package:worship_connect/wc_core/core_providers_definition.dart';
+
 
 class EditAnnouncementCard extends ConsumerStatefulWidget {
   const EditAnnouncementCard({Key? key, required this.announcement}) : super(key: key);
