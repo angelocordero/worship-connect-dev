@@ -2,14 +2,20 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:worship_connect/settings/services/team_firebase_api.dart';
 
-class InstrumentsListProvider extends StateNotifier<Map<String, dynamic>> {
-  InstrumentsListProvider({required this.teamID}) : super({});
+class CustomInstrumentsListProvider extends StateNotifier<List<String>> {
+  CustomInstrumentsListProvider({required this.teamID}) : super([]);
 
   final String teamID;
 
   init() async {
-    DocumentSnapshot _doc = await TeamFirebaseAPI(teamID).getInstrumentsDocument();
+    try {
+      DocumentSnapshot _doc = await TeamFirebaseAPI(teamID).getInstrumentsDocument();
 
-    state = _doc.data() as Map<String, dynamic>;
+      Map<String, dynamic>? _map = _doc.data() as Map<String, dynamic>;
+
+      state = List.from(_map['customInstruments'] ?? []);
+    } catch (e) {
+      state = [];
+    }
   }
 }

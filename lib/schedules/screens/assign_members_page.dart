@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:worship_connect/schedules/utils/schedules_providers_definition.dart';
 
-class SelectMusiciansPage extends ConsumerStatefulWidget {
-  const SelectMusiciansPage({
+class AssignMembersPage extends ConsumerStatefulWidget {
+  const AssignMembersPage({
     Key? key,
     required this.unassignedMembersList,
     required this.instrumentName,
@@ -14,10 +14,10 @@ class SelectMusiciansPage extends ConsumerStatefulWidget {
   final String instrumentName;
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => SelectMusiciansPageState();
+  ConsumerState<ConsumerStatefulWidget> createState() => AssignMembersPageState();
 }
 
-class SelectMusiciansPageState extends ConsumerState<SelectMusiciansPage> {
+class AssignMembersPageState extends ConsumerState<AssignMembersPage> {
   final List<String> _selectedMembers = [];
 
   @override
@@ -25,7 +25,7 @@ class SelectMusiciansPageState extends ConsumerState<SelectMusiciansPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Add musicians',
+          'Assign members',
           style: GoogleFonts.exo2(),
         ),
       ),

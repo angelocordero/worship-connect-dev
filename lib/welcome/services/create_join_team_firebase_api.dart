@@ -48,10 +48,8 @@ class CreateJoinTeamFirebaseAPI {
         UserStatusEnum.leader.name: <String, String>{creatorID: creatorName},
       });
 
-
       //create team instruments list
       _writeBatch.set(wcTeamDataCollection.doc(_teamID).collection('data').doc('instruments'), {
-        'coreInstruments': wcCoreInstruments,
         'customInstruments': [],
       });
 

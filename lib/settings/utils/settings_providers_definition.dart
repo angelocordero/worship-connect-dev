@@ -23,8 +23,8 @@ final membersListProvider = StateNotifierProvider<MembersListProvider, Map<Strin
   },
 );
 
-final instrumentsListProvider = StateNotifierProvider<InstrumentsListProvider, Map>((ref) {
+final customInstrumentsListProvider = StateNotifierProvider<CustomInstrumentsListProvider, List<String>>((ref) {
   final WCUserInfoData _wcUserInfoData = ref.watch(wcUserInfoDataStream).asData!.value!;
 
-  return InstrumentsListProvider(teamID: _wcUserInfoData.teamID);
+  return CustomInstrumentsListProvider(teamID: _wcUserInfoData.teamID);
 });

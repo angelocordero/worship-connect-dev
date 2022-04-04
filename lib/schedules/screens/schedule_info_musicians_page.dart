@@ -63,7 +63,7 @@ class ScheduleInfoMusiciansPage extends ConsumerWidget {
             tag: 'instruments',
             child: ElevatedButton(
               onPressed: () async {
-                await ref.read(instrumentsListProvider.notifier).init();
+                await ref.read(customInstrumentsListProvider.notifier).init();
                 ref.read(customInstrumentProvider.state).state = '';
                 Navigator.push(
                   context,

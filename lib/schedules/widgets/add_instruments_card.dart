@@ -12,12 +12,11 @@ class AddInstrumentsCard extends ConsumerWidget {
   static final ScrollController _scrollController = ScrollController();
   static List<String> _instrumentsList = [];
 
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     _instrumentsList = ref.watch(scheduleMusiciansProvider.notifier).addInstrumentsList([
-      ...ref.watch(instrumentsListProvider)['coreInstruments'] ?? [],
-      ...ref.watch(instrumentsListProvider)['customInstruments'] ?? [],
+      ...wcCoreInstruments,
+      ...ref.watch(customInstrumentsListProvider) ?? [],
     ]);
 
     return SafeArea(
@@ -126,7 +125,7 @@ class AddInstrumentsCard extends ConsumerWidget {
             icon: const Icon(Icons.delete),
             onPressed: () async {
               await ref.read(scheduleMusiciansProvider.notifier).deleteCustomInstrument(_instrument);
-              _instrumentsList.remove(_instrument);
+              await ref.read(customInstrumentsListProvider.notifier).init();
             },
           ),
         ),
