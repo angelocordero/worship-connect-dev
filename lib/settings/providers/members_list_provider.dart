@@ -35,8 +35,6 @@ class MembersListProvider extends StateNotifier<Map<String, WCUserInfoData>> {
 
   void _setNormalMembers(Map<String, dynamic>? _map) {
     try {
-      Map<String, WCUserInfoData> _temp = state;
-
       _map?.forEach(
         (key, value) {
           WCUserInfoData _member = WCUserInfoData(
@@ -46,19 +44,17 @@ class MembersListProvider extends StateNotifier<Map<String, WCUserInfoData>> {
             teamID: teamID,
           );
 
-          _temp[_member.userID] = _member;
+          state[_member.userID] = _member;
         },
       );
 
-      state = Map<String, WCUserInfoData>.from(_temp);
+      state = Map<String, WCUserInfoData>.from(state);
     } catch (e) {
       // return empty list
     }
   }
 
   void _setAdmins(Map<String, dynamic>? _map) {
-    Map<String, WCUserInfoData> _temp = state;
-
     try {
       _map?.forEach(
         (key, value) {
@@ -69,11 +65,11 @@ class MembersListProvider extends StateNotifier<Map<String, WCUserInfoData>> {
             teamID: teamID,
           );
 
-          _temp[_admin.userID] = _admin;
+          state[_admin.userID] = _admin;
         },
       );
 
-      state = Map<String, WCUserInfoData>.from(_temp);
+      state = Map<String, WCUserInfoData>.from(state);
     } catch (e) {
       // return empty list
     }
@@ -87,10 +83,8 @@ class MembersListProvider extends StateNotifier<Map<String, WCUserInfoData>> {
       teamID: teamID,
     );
 
-    Map<String, WCUserInfoData> _temp = state;
+    state[_leader.userID] = _leader;
 
-    _temp[_leader.userID] = _leader;
-
-    state = Map<String, WCUserInfoData>.from(_temp);
+    state = Map<String, WCUserInfoData>.from(state);
   }
 }
