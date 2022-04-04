@@ -42,6 +42,7 @@ class _SchedulesHomePageState extends ConsumerState<SchedulesHomePage> {
           'Schedules',
           style: GoogleFonts.exo2(),
         ),
+        actions: const [],
       ),
       body: SizedBox(
         height: WCUtils.screenHeightSafeAreaAppBarBottomBar(context),
