@@ -76,8 +76,9 @@ class WCUtils {
     return DateFormat('yyyyMMdd').format(_date);
   }
 
-  static Future<void> wcShowError({Object? e,  StackTrace? st, required String wcError}) async {
+  static Future<void> wcShowError({Object? e, StackTrace? st, required String wcError}) async {
     if (e != null && st != null) {
+      debugPrint(e.toString());
       await FirebaseCrashlytics.instance.recordError(
         e,
         st,

@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.angelocordero.worship_connect">
+    <uses-permission android:name="android.permission.INTERNET"/>
     <queries>
         <intent>
             <action android:name="android.intent.action.VIEW" />
@@ -22,6 +23,8 @@
         android:label="Worship Connect"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+        <meta-data android:name="com.facebook.sdk.ClientToken" android:value="@string/facebook_client_token"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"
