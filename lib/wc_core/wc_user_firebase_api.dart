@@ -1,50 +1,74 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:worship_connect/settings/services/team_firebase_api.dart';
 import 'package:worship_connect/wc_core/worship_connect_constants.dart';
-import 'package:worship_connect/wc_sign_in/data_classes/wc_user_info_data.dart';
+import 'package:worship_connect/sign_in/utils/wc_user_info_data.dart';
+import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
 
 class WCUSerFirebaseAPI {
-  final CollectionReference wcUserDataCollection = FirebaseFirestore.instance.collection('WCUsers');
+  final FirebaseFirestore _firebaseInstance = FirebaseFirestore.instance;
+  late final CollectionReference wcUserDataCollection = _firebaseInstance.collection('WCUsers');
 
   initializeWCUserData(String userID) {
-    wcUserDataCollection.doc(userID).set({
-      'userID': userID,
-      'userName': '',
-      'userStatusString': UserStatus.noTeam.name,
-      'teamID': '',
-    });
+    try {
+      wcUserDataCollection.doc(userID).set(<String, dynamic>{
+        WCUserInfoDataEnum.userID.name: userID,
+        WCUserInfoDataEnum.userName.name: '',
+        WCUserInfoDataEnum.userStatusString.name: UserStatusEnum.noTeam.name,
+        WCUserInfoDataEnum.teamID.name: '',
+      });
+    } catch (e, st) {
+      debugPrint('WCError: ' + e.toString());
+      WCUtils.wcShowError(e: e, st: st, wcError: 'Failed to initialize user data');
+    }
   }
 
   Stream<WCUserInfoData?> wcUserInfoDataStream(String? userID) {
-    return wcUserDataCollection.doc(userID).snapshots().map(
-      (DocumentSnapshot snapshot) {
-        Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
+    if (userID == null) {
+      return Stream.value(null);
+    } else {
+      return wcUserDataCollection.doc(userID).snapshots().map(
+        (DocumentSnapshot snapshot) {
+          Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
 
-        return WCUserInfoData(
-          userID: data['userID'],
-          userName: data['userName'],
-          userStatusString: data['userStatusString'],
-          teamID: data['teamID'],
-        );
-      },
-    );
+          return WCUserInfoData(
+            userID: data[WCUserInfoDataEnum.userID.name],
+            userName: data[WCUserInfoDataEnum.userName.name],
+            userStatusString: data[WCUserInfoDataEnum.userStatusString.name],
+            teamID: data[WCUserInfoDataEnum.teamID.name],
+          );
+        },
+      );
+    }
   }
 
-  Future updateUserName({required String userID, required String userName, String? teamID}) async {
+  Future updateUserName({required String userID, required String userName, String? teamID, UserStatusEnum? userStatus}) async {
     EasyLoading.show();
 
-    if (userName.isNotEmpty) {
-      return await wcUserDataCollection.doc(userID).update({
-        'userName': userName,
-      }).then((value) {
-        EasyLoading.dismiss();
-      });
-    } else {
-      String _error = 'Username must not be empty';
-      EasyLoading.showError(_error);
-      return;
-    }
+    try {
+      WriteBatch _writeBatch = _firebaseInstance.batch();
 
-    // TODO: also change user name in team member list
+      if (userName.isEmpty) {
+        EasyLoading.showError('User name must not be empty');
+        return;
+      }
+
+      _writeBatch.update(wcUserDataCollection.doc(userID), {
+        WCUserInfoDataEnum.userName.name: userName,
+      });
+
+      if (teamID != null && userStatus != UserStatusEnum.noTeam) {
+        _writeBatch.update(TeamFirebaseAPI(teamID).teamsDataCollection.doc(teamID).collection('data').doc('members'), {
+          '${userStatus!.name}.$userID': userName,
+        });
+      }
+
+      await _writeBatch.commit();
+
+      EasyLoading.dismiss();
+    } catch (e, st) {
+      WCUtils.wcShowError(e: e, st: st, wcError: 'Failed to update user name');
+    }
   }
 }
