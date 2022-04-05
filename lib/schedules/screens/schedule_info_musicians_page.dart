@@ -27,7 +27,7 @@ class ScheduleInfoMusiciansPage extends ConsumerWidget {
             child: Visibility(
               visible: _instrumentsList.isNotEmpty,
               replacement: const Center(
-                child: Text('No songs for this schedule'),
+                child: Text('No assigned members for this schedule'),
               ),
               child: RefreshIndicator(
                 onRefresh: () {

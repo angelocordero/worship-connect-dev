@@ -3,7 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:worship_connect/schedules/utils/schedules_providers_definition.dart';
 import 'package:worship_connect/schedules/utils/song_data.dart';
 import 'package:worship_connect/schedules/widgets/edit_song_card.dart';
+import 'package:worship_connect/sign_in/utils/wc_user_info_data.dart';
+import 'package:worship_connect/wc_core/core_providers_definition.dart';
 import 'package:worship_connect/wc_core/wc_custom_route.dart';
+import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
 
 class SongTile extends ConsumerWidget {
   const SongTile({
@@ -17,13 +20,19 @@ class SongTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    WCUserInfoData? _wcUserInfoData = ref.watch(wcUserInfoDataStream).asData!.value;
+    bool _isAdminOrLeader = WCUtils.isAdminOrLeader(_wcUserInfoData!);
+
     return Card(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _songInfo(),
-          _dragHandle(ref),
-          _popupMenu(context, ref),
+          _dragHandle(ref, _isAdminOrLeader),
+          Visibility(
+            visible: _isAdminOrLeader,
+            child: _popupMenu(context, ref),
+          ),
         ],
       ),
     );
@@ -100,11 +109,11 @@ class SongTile extends ConsumerWidget {
     }
   }
 
-  Expanded _dragHandle(WidgetRef ref) {
+  Expanded _dragHandle(WidgetRef ref, bool _isAdminOrLeader) {
     return Expanded(
       flex: 1,
       child: Visibility(
-        visible: ref.watch(schedulesSongsProvider).length > 1,
+        visible: ref.watch(schedulesSongsProvider).length > 1 && _isAdminOrLeader,
         child: ReorderableDelayedDragStartListener(
           index: index,
           child: const Tooltip(

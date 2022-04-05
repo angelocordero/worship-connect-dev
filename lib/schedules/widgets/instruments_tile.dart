@@ -5,6 +5,7 @@ import 'package:worship_connect/schedules/utils/schedules_providers_definition.d
 import 'package:worship_connect/settings/services/team_firebase_api.dart';
 import 'package:worship_connect/sign_in/utils/wc_user_info_data.dart';
 import 'package:worship_connect/wc_core/core_providers_definition.dart';
+import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
 
 class InstrumentsTile extends ConsumerWidget {
   const InstrumentsTile({Key? key, required this.instrument}) : super(key: key);
@@ -14,15 +15,17 @@ class InstrumentsTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     List _musicians = instrument.values.first;
+    WCUserInfoData? _wcUserInfoData = ref.watch(wcUserInfoDataStream).asData!.value;
+    bool _isAdminOrLeader = WCUtils.isAdminOrLeader(_wcUserInfoData!);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        _buildHeader(ref),
+        _buildHeader(ref, _isAdminOrLeader),
         if (_musicians.isNotEmpty)
           ..._musicians.map(
             (element) {
-              return _buildMusicianTile(context, ref, element);
+              return _buildMusicianTile(context, ref, element, _isAdminOrLeader);
             },
           ),
         if (_musicians.isEmpty)
@@ -68,29 +71,35 @@ class InstrumentsTile extends ConsumerWidget {
     );
   }
 
-  ListTile _buildHeader(WidgetRef ref) {
+  ListTile _buildHeader(WidgetRef ref, bool _isAdminOrLeader) {
     return ListTile(
-      trailing: IconButton(
-        onPressed: () {
-          ref.read(scheduleMusiciansProvider.notifier).removeInstruments(instrument.keys.first);
-        },
-        icon: const Icon(Icons.delete),
+      trailing: Visibility(
+        visible: _isAdminOrLeader,
+        child: IconButton(
+          onPressed: () {
+            ref.read(scheduleMusiciansProvider.notifier).removeInstruments(instrument.keys.first);
+          },
+          icon: const Icon(Icons.delete),
+        ),
       ),
       title: Text(instrument.keys.first),
     );
   }
 
-  SizedBox _buildMusicianTile(BuildContext context, WidgetRef ref, dynamic element) {
+  SizedBox _buildMusicianTile(BuildContext context, WidgetRef ref, dynamic _element, bool _isAdminOrLeader) {
     return SizedBox(
       width: MediaQuery.of(context).size.width * 2 / 3,
       child: ListTile(
-        trailing: IconButton(
-          onPressed: () {
-            ref.read(scheduleMusiciansProvider.notifier).removeMusician(instrument: instrument.keys.first, musician: element.toString());
-          },
-          icon: const Icon(Icons.delete),
+        trailing: Visibility(
+          visible: _isAdminOrLeader,
+          child: IconButton(
+            onPressed: () {
+              ref.read(scheduleMusiciansProvider.notifier).removeMusician(instrument: instrument.keys.first, musician: _element.toString());
+            },
+            icon: const Icon(Icons.delete),
+          ),
         ),
-        title: Text(element.toString()),
+        title: Text(_element.toString()),
       ),
     );
   }
