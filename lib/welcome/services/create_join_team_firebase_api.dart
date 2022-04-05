@@ -10,7 +10,7 @@ import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
 
 class CreateJoinTeamFirebaseAPI {
   final FirebaseFirestore _firebaseInstance = FirebaseFirestore.instance;
-  late final CollectionReference wcTeamDataCollection = _firebaseInstance.collection('WCTeams');
+  late final CollectionReference wcWCTeamDataCollection = _firebaseInstance.collection('WCTeams');
 
   Future createTeam({
     required String teamName,
@@ -36,20 +36,20 @@ class CreateJoinTeamFirebaseAPI {
       WriteBatch _writeBatch = _firebaseInstance.batch();
 
       //set team info
-      _writeBatch.set(wcTeamDataCollection.doc(_teamID), {
-        TeamDataEnum.teamName.name: teamName,
-        TeamDataEnum.creatorID.name: creatorID,
-        TeamDataEnum.isOpen.name: true,
-        TeamDataEnum.teamID.name: _teamID,
+      _writeBatch.set(wcWCTeamDataCollection.doc(_teamID), {
+        WCTeamDataEnum.teamName.name: teamName,
+        WCTeamDataEnum.creatorID.name: creatorID,
+        WCTeamDataEnum.isOpen.name: true,
+        WCTeamDataEnum.teamID.name: _teamID,
       });
 
       //create member file
-      _writeBatch.set(wcTeamDataCollection.doc(_teamID).collection('data').doc('members'), {
+      _writeBatch.set(wcWCTeamDataCollection.doc(_teamID).collection('data').doc('members'), {
         UserStatusEnum.leader.name: <String, String>{creatorID: creatorName},
       });
 
       //create team instruments list
-      _writeBatch.set(wcTeamDataCollection.doc(_teamID).collection('data').doc('instruments'), {
+      _writeBatch.set(wcWCTeamDataCollection.doc(_teamID).collection('data').doc('instruments'), {
         'customInstruments': [],
       });
 
@@ -63,7 +63,7 @@ class CreateJoinTeamFirebaseAPI {
       //sends new team announcement
       String _announcementID = WCUtils.generateRandomID();
 
-      _writeBatch.set(wcTeamDataCollection.doc(_teamID).collection('data').doc('announcements'), {
+      _writeBatch.set(wcWCTeamDataCollection.doc(_teamID).collection('data').doc('announcements'), {
         _announcementID: <String, dynamic>{
           WCAnnouncementsDataEnum.announcementText.name: 'Welcome to $teamName. Created $createdDay by $creatorName.',
           WCAnnouncementsDataEnum.announcementPosterID.name: 'Worship Connect',
@@ -102,7 +102,7 @@ class CreateJoinTeamFirebaseAPI {
     WriteBatch _writeBatch = _firebaseInstance.batch();
 
     // try to get team document
-    DocumentSnapshot _doc = await wcTeamDataCollection.doc(teamID).get();
+    DocumentSnapshot _doc = await wcWCTeamDataCollection.doc(teamID).get();
 
     // check if the team exists
     if (!_doc.exists) {
@@ -114,7 +114,7 @@ class CreateJoinTeamFirebaseAPI {
     }
 
     // check if team is open
-    if (!(_doc.data() as Map<String, dynamic>)[TeamDataEnum.isOpen.name]) {
+    if (!(_doc.data() as Map<String, dynamic>)[WCTeamDataEnum.isOpen.name]) {
       EasyLoading.showError(
         'Team is not open.',
         dismissOnTap: true,
@@ -123,7 +123,7 @@ class CreateJoinTeamFirebaseAPI {
     }
 
     // update member list
-    _writeBatch.update(wcTeamDataCollection.doc(teamID).collection('data').doc('members'), {
+    _writeBatch.update(wcWCTeamDataCollection.doc(teamID).collection('data').doc('members'), {
       'members.$joinerID': joinerName,
     });
 

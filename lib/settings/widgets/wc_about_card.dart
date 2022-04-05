@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:worship_connect/wc_core/wc_about_details.dart';
 import 'package:worship_connect/wc_core/wc_url_utilities.dart';
 
 class WCAboutCard extends StatelessWidget {
@@ -12,9 +13,9 @@ class WCAboutCard extends StatelessWidget {
       child: Center(
         child: SingleChildScrollView(
           child: AboutDialog(
-            applicationIcon: const FlutterLogo(),
-            applicationName: 'Worship Connect',
-            applicationVersion: '1.0.0-release',
+            applicationIcon: wcApplicationIcon,
+            applicationName: wcApplicationName,
+            applicationVersion: wcApplicationVersion,
             children: [
               RichText(
                 text: TextSpan(
@@ -34,11 +35,6 @@ class WCAboutCard extends StatelessWidget {
                   ],
                 ),
               ),
-
-              // SizedBox(
-              //   height: 20,
-              // ),
-              // Text('Special thanks to my baby, Krystelle Sylvia Alvarado, for inspiring me in making  this.')
             ],
           ),
         ),

@@ -1,24 +1,24 @@
-enum TeamDataEnum {
+enum WCTeamDataEnum {
   creatorID,
   teamName,
   teamID,
   isOpen,
 }
 
-class TeamData {
+class WCTeamData {
   final String creatorID;
   final String teamName;
   final String teamID;
   final bool isOpen;
 
-  TeamData({
+  WCTeamData({
     required this.creatorID,
     required this.teamID,
     required this.teamName,
     required this.isOpen,
   });
 
-  TeamData.empty()
+  WCTeamData.empty()
       : creatorID = '',
         teamID = '',
         teamName = '',

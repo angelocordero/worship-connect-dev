@@ -36,7 +36,6 @@ class WCUserAuthentication {
       debugPrint(e.toString());
     }
 
-    // TODO: add facebook sign out
 
     EasyLoading.dismiss();
   }

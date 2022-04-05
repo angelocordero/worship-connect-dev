@@ -17,17 +17,17 @@ class TeamFirebaseAPI {
 
   late final CollectionReference teamsDataCollection = _firebaseInstance.collection('WCTeams');
 
-  Stream<TeamData> teamData() {
+  Stream<WCTeamData> teamData() {
     try {
       return teamsDataCollection.doc(teamID).snapshots().map(
         (DocumentSnapshot object) {
           Map<String, dynamic>? data = (object as DocumentSnapshot<Map<String, dynamic>>).data();
 
-          return TeamData(
-            creatorID: data?[TeamDataEnum.creatorID.name] ?? '',
-            teamID: data?[TeamDataEnum.teamID.name] ?? '',
-            teamName: data?[TeamDataEnum.teamName.name] ?? '',
-            isOpen: data?[TeamDataEnum.isOpen.name] ?? '',
+          return WCTeamData(
+            creatorID: data?[WCTeamDataEnum.creatorID.name] ?? '',
+            teamID: data?[WCTeamDataEnum.teamID.name] ?? '',
+            teamName: data?[WCTeamDataEnum.teamName.name] ?? '',
+            isOpen: data?[WCTeamDataEnum.isOpen.name] ?? '',
           );
         },
       );
@@ -41,7 +41,7 @@ class TeamFirebaseAPI {
     EasyLoading.show();
 
     try {
-      await teamsDataCollection.doc(teamID).update({TeamDataEnum.teamName.name: newTeamName});
+      await teamsDataCollection.doc(teamID).update({WCTeamDataEnum.teamName.name: newTeamName});
       EasyLoading.dismiss();
     } catch (e, st) {
       WCUtils.wcShowError(e: e, st: st, wcError: 'Change name failed');
@@ -53,7 +53,7 @@ class TeamFirebaseAPI {
 
     try {
       await teamsDataCollection.doc(teamID).update({
-        TeamDataEnum.isOpen.name: !currentStatus,
+        WCTeamDataEnum.isOpen.name: !currentStatus,
       });
       EasyLoading.dismiss();
     } catch (e, st) {
@@ -74,7 +74,7 @@ class TeamFirebaseAPI {
       });
 
       // update team members list
-      _writeBatch.update(CreateJoinTeamFirebaseAPI().wcTeamDataCollection.doc(teamID).collection('data').doc('members'), {
+      _writeBatch.update(CreateJoinTeamFirebaseAPI().wcWCTeamDataCollection.doc(teamID).collection('data').doc('members'), {
         'members.${_userData.userID}': FieldValue.delete(),
       });
 

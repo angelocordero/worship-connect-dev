@@ -149,7 +149,7 @@ class TeamSettings extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    TeamData _teamData = ref.watch(wcTeamDataStream).asData?.value ?? TeamData.empty();
+    WCTeamData _teamData = ref.watch(wcWCTeamDataStream).asData?.value ?? WCTeamData.empty();
     WCUserInfoData? _userData = ref.watch(wcUserInfoDataStream).asData?.value;
     bool _isAdminOrLeader = WCUtils.isAdminOrLeader(_userData!);
 

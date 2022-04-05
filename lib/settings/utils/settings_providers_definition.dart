@@ -6,7 +6,7 @@ import 'package:worship_connect/settings/utils/wc_team_data.dart';
 import 'package:worship_connect/sign_in/utils/wc_user_info_data.dart';
 import 'package:worship_connect/wc_core/core_providers_definition.dart';
 
-final wcTeamDataStream = StreamProvider<TeamData?>((ref) {
+final wcWCTeamDataStream = StreamProvider<WCTeamData?>((ref) {
   final WCUserInfoData? _wcUserInfoData = ref.watch(wcUserInfoDataStream).asData?.value;
 
   if (_wcUserInfoData == null) {

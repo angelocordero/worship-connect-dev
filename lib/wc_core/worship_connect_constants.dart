@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
 
-enum UserAuthProvider {
-  facebook,
-  google,
-}
-
 enum UserStatusEnum {
   noTeam,
   member,
