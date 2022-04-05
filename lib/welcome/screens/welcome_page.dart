@@ -14,7 +14,6 @@ import 'package:worship_connect/welcome/widgets/enter_name_widget.dart';
 import 'package:worship_connect/welcome/widgets/join_create_team_form_switcher.dart';
 import 'package:worship_connect/wc_core/core_providers_definition.dart';
 
-
 class WelcomePage extends ConsumerStatefulWidget {
   const WelcomePage({Key? key}) : super(key: key);
 
@@ -177,7 +176,7 @@ class WelcomePageState extends ConsumerState<WelcomePage> {
             child: Stack(
               alignment: AlignmentDirectional.topCenter,
               children: [
-                testingButton(),
+                //    testingButton(),
                 _logoWidget(),
                 _signInWidget(),
                 _enterNameWidget(),
