@@ -15,8 +15,46 @@ import 'package:worship_connect/wc_core/core_providers_definition.dart';
 class TeamSettings extends ConsumerWidget {
   const TeamSettings({Key? key}) : super(key: key);
 
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    WCTeamData _teamData = ref.watch(wcWCTeamDataStream).asData?.value ?? WCTeamData.empty();
+    WCUserInfoData? _userData = ref.watch(wcUserInfoDataStream).asData?.value;
+    bool _isAdminOrLeader = WCUtils.isAdminOrLeader(_userData);
+
+    return Card(
+      margin: const EdgeInsets.all(12),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Align(
+              child: Text('Team Settings'),
+              alignment: Alignment.centerLeft,
+            ),
+            const Divider(),
+            _teamNameTile(
+              context: context,
+              teamName: _teamData.teamName,
+              isAdminOrLeader: _isAdminOrLeader,
+            ),
+            _teamIDTile(_teamData.teamID),
+            _teamInvitesTile(
+              isOpen: _teamData.isOpen,
+              teamID: _teamData.teamID,
+              isAdminOrLeader: _isAdminOrLeader,
+            ),
+            _membersTile(context, ref),
+            _leaveTeamButton(userData: _userData, context: context)
+          ],
+        ),
+      ),
+    );
+  }
+
   Padding _leaveTeamButton({
-    required WCUserInfoData userData,
+    required final WCUserInfoData? userData,
     required BuildContext context,
   }) {
     return Padding(
@@ -43,8 +81,9 @@ class TeamSettings extends ConsumerWidget {
                   ),
                   TextButton(
                     onPressed: () async {
-                      await TeamFirebaseAPI(userData.teamID).leaveTeam(userData);
-                      Navigator.pop(context);
+                      if (userData != null) {
+                        await TeamFirebaseAPI(userData.teamID).leaveTeam(userData);
+                      }
                     },
                     child: const Text('Yes'),
                   ),
@@ -78,6 +117,24 @@ class TeamSettings extends ConsumerWidget {
     );
   }
 
+  ListTile _teamIDTile(String _teamID) {
+    return ListTile(
+      title: Text(_teamID),
+      subtitle: const Text('Team ID'),
+      trailing: IconButton(
+        icon: const Icon(Icons.copy),
+        onPressed: () async {
+          if (_teamID.isEmpty) {
+            WCUtils.wcShowError(wcError: 'Unable to copy team ID');
+            return;
+          }
+          await FlutterClipboard.copy(_teamID);
+          WCUtils.wcShowSuccess('Team ID copied to clipboard');
+        },
+      ),
+    );
+  }
+
   Visibility _teamInvitesTile({
     required bool isOpen,
     required bool isAdminOrLeader,
@@ -93,24 +150,6 @@ class TeamSettings extends ConsumerWidget {
             await TeamFirebaseAPI(teamID).toggleIsTeamOpen(isOpen);
           },
         ),
-      ),
-    );
-  }
-
-  ListTile _teamIDTile(String _teamID) {
-    return ListTile(
-      title: Text(_teamID),
-      subtitle: const Text('Team ID'),
-      trailing: IconButton(
-        icon: const Icon(Icons.copy),
-        onPressed: () async {
-          if (_teamID.isEmpty) {
-            WCUtils.wcShowError(wcError: 'Unable to copy team ID');
-            return;
-          }
-          await FlutterClipboard.copy(_teamID);
-          WCUtils.wcShowSuccess('Team ID copied to clipboard');
-        },
       ),
     );
   }
@@ -142,44 +181,6 @@ class TeamSettings extends ConsumerWidget {
               );
             },
           ),
-        ),
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    WCTeamData _teamData = ref.watch(wcWCTeamDataStream).asData?.value ?? WCTeamData.empty();
-    WCUserInfoData? _userData = ref.watch(wcUserInfoDataStream).asData?.value;
-    bool _isAdminOrLeader = WCUtils.isAdminOrLeader(_userData!);
-
-    return Card(
-      margin: const EdgeInsets.all(12),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Align(
-              child: Text('Team Settings'),
-              alignment: Alignment.centerLeft,
-            ),
-            const Divider(),
-            _teamNameTile(
-              context: context,
-              teamName: _teamData.teamName,
-              isAdminOrLeader: _isAdminOrLeader,
-            ),
-            _teamIDTile(_teamData.teamID),
-            _teamInvitesTile(
-              isOpen: _teamData.isOpen,
-              teamID: _teamData.teamID,
-              isAdminOrLeader: _isAdminOrLeader,
-            ),
-            _membersTile(context, ref),
-            _leaveTeamButton(userData: _userData, context: context)
-          ],
         ),
       ),
     );

@@ -24,18 +24,19 @@ class WCUserAuthentication {
   signOut() async {
     EasyLoading.show();
 
+    GoogleSignIn _googleSignIn = GoogleSignIn();
     try {
-      FirebaseCrashlytics.instance.setUserIdentifier('');
+      await FirebaseCrashlytics.instance.setUserIdentifier('');
+
       await _firebaseAuth.signOut();
-      GoogleSignIn _googleSignIn = GoogleSignIn();
-      await _googleSignIn.signOut();
-      await _googleSignIn.disconnect();
 
       await FacebookAuth.instance.logOut();
+
+      await _googleSignIn.signOut();
+      await _googleSignIn.disconnect();
     } catch (e) {
       debugPrint(e.toString());
     }
-
 
     EasyLoading.dismiss();
   }

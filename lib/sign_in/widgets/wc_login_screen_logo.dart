@@ -9,27 +9,34 @@ class WCLoginScreenLogo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        SizedBox(height: WCUtils.screenHeightSafeArea(context) / 4),
-        GradientText(
-          'WORSHIP',
-          style: GoogleFonts.exo2(
-            textStyle: wcSignInLogoTextStyle,
+    return SizedBox(
+      height: WCUtils.screenHeightSafeArea(context) / 2,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(40.0, 60.0, 40.0, 40.0),
+        child: FittedBox(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              GradientText(
+                'WORSHIP',
+                style: GoogleFonts.rajdhani(
+                  textStyle: wcSignInLogoTextStyle,
+                ),
+                colors: wcGradientColors,
+              ),
+              GradientText(
+                'CONNECT',
+                colors: wcGradientColors,
+                style: GoogleFonts.rajdhani(
+                  textStyle: wcSignInLogoTextStyle,
+                ),
+              ),
+            ],
           ),
-          colors: wcGradientColors,
         ),
-        GradientText(
-          'CONNECT',
-          colors: wcGradientColors,
-          style: GoogleFonts.exo2(
-            textStyle: wcSignInLogoTextStyle,
-          ),
-        ),
-      ],
+      ),
     );
   }
 }

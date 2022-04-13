@@ -8,7 +8,6 @@ import 'package:worship_connect/wc_core/wc_themes.dart';
 import 'package:worship_connect/wc_core/worship_connect_constants.dart';
 import 'package:worship_connect/wc_core/core_providers_definition.dart';
 
-
 class AppSettins extends ConsumerWidget {
   const AppSettins({Key? key}) : super(key: key);
 
@@ -44,8 +43,8 @@ class AppSettins extends ConsumerWidget {
       child: ElevatedButton(
         child: const Text('Logout'),
         style: ElevatedButton.styleFrom(shape: wcButtonShape),
-        onPressed: () {
-          WCUserAuthentication().signOut();
+        onPressed: () async {
+          await WCUserAuthentication().signOut();
         },
       ),
     );

@@ -19,6 +19,11 @@ class TeamFirebaseAPI {
 
   Stream<WCTeamData> teamData() {
     try {
+
+      if (teamID.isEmpty) {
+        return const Stream.empty();
+      }
+
       return teamsDataCollection.doc(teamID).snapshots().map(
         (DocumentSnapshot object) {
           Map<String, dynamic>? data = (object as DocumentSnapshot<Map<String, dynamic>>).data();

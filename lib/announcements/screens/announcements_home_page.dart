@@ -26,7 +26,7 @@ class _AnnouncementsHomePageState extends ConsumerState<AnnouncementsHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    WCUserInfoData? _wcUserInfoData = ref.watch(wcUserInfoDataStream).asData!.value;
+    WCUserInfoData? _wcUserInfoData = ref.watch(wcUserInfoDataStream).asData?.value;
     List _announcementList = ref.watch(announcementListProvider);
     AnnouncementListProvider _announcementNotifier = ref.watch(announcementListProvider.notifier);
 
@@ -34,10 +34,10 @@ class _AnnouncementsHomePageState extends ConsumerState<AnnouncementsHomePage> {
       appBar: AppBar(
         title: Text(
           'Announcements',
-          style: GoogleFonts.exo2(),
+          style: GoogleFonts.raleway(),
         ),
       ),
-      floatingActionButton: _newAnnouncementButton(context, _wcUserInfoData!),
+      floatingActionButton: _newAnnouncementButton(context, _wcUserInfoData),
       body: Builder(
         builder: (context) {
           if (_announcementList.isEmpty) {
@@ -65,7 +65,7 @@ class _AnnouncementsHomePageState extends ConsumerState<AnnouncementsHomePage> {
     );
   }
 
-  Visibility _newAnnouncementButton(BuildContext context, WCUserInfoData wcUserInfoData) {
+  Visibility _newAnnouncementButton(BuildContext context, WCUserInfoData? wcUserInfoData) {
     return Visibility(
       visible: WCUtils.isAdminOrLeader(wcUserInfoData),
       child: WCUtils.wcExtendedFloatingActionButton(

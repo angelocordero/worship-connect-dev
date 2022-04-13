@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:worship_connect/announcements/services/announcements_firebase_api.dart';
 import 'package:worship_connect/announcements/utils/announcements_data.dart';
 import 'package:worship_connect/announcements/providers/announcement_list_provider.dart';
@@ -50,8 +51,10 @@ class AnnouncementListTile extends ConsumerWidget {
       padding: const EdgeInsets.all(8.0),
       child: Text(
         _announcementData.announcementText,
-        style: const TextStyle(
-          fontSize: 15,
+        style: GoogleFonts.openSans(
+          textStyle: const TextStyle(
+            fontSize: 15,
+          ),
         ),
       ),
     );
@@ -74,14 +77,18 @@ class AnnouncementListTile extends ConsumerWidget {
             children: [
               Text(
                 announcementData.announcementPosterName,
-                style: const TextStyle(fontSize: 14),
+                style: GoogleFonts.raleway(
+                  textStyle: const TextStyle(fontSize: 14, color: Colors.grey),
+                ),
               ),
               const SizedBox(
                 height: 4,
               ),
               Text(
                 announcementData.announcementDateString,
-                style: const TextStyle(fontSize: 12),
+                style: GoogleFonts.raleway(
+                  textStyle: const TextStyle(fontSize: 14, color: Colors.grey),
+                ),
               ),
             ],
           ),

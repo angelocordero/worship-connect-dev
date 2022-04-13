@@ -30,11 +30,11 @@ class _SchedulesHomePageState extends ConsumerState<SchedulesHomePage> {
   @override
   Widget build(BuildContext context) {
     final calendarSelectedDay = ref.watch(calendarSelectedDayProvider);
-    WCUserInfoData? _wcUserInfoData = ref.watch(wcUserInfoDataStream).asData!.value;
+    WCUserInfoData? _wcUserInfoData = ref.watch(wcUserInfoDataStream).asData?.value;
 
     return Scaffold(
       floatingActionButton: Visibility(
-        visible: WCUtils.isAdminOrLeader(_wcUserInfoData!),
+        visible: WCUtils.isAdminOrLeader(_wcUserInfoData),
         child: _addScheduleButton(context),
       ),
       appBar: AppBar(
@@ -63,7 +63,11 @@ class _SchedulesHomePageState extends ConsumerState<SchedulesHomePage> {
                       padding: const EdgeInsets.all(12),
                       child: Builder(
                         builder: (context) {
-                          return _buildScheduleList(calendarSelectedDay);
+                          try {
+                            return _buildScheduleList(calendarSelectedDay);
+                          } catch (e) {
+                            return Container();
+                          }
                         },
                       ),
                     ),

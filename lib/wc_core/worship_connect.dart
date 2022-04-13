@@ -3,8 +3,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:worship_connect/sign_in/screens/login_page.dart';
 import 'package:worship_connect/sign_in/utils/wc_user_info_data.dart';
-import 'package:worship_connect/wc_core/worship_connect_navigator.dart';
+import 'package:worship_connect/wc_core/wc_home_navigator.dart';
 import 'package:worship_connect/wc_core/core_providers_definition.dart';
 
 class WorshipConnect extends ConsumerWidget {
@@ -36,10 +37,13 @@ class WorshipConnect extends ConsumerWidget {
     return MaterialApp(
       showPerformanceOverlay: kProfileMode ? true : false,
       builder: EasyLoading.init(),
-      home: const WorshipConnectNavigator(),
       theme: ThemeData.light(),
       darkTheme: ThemeData.dark(),
       themeMode: _wcTheme,
+      routes: {
+        '/': (context) => const LoginPage(),
+        '/home': (context) => const HomeNavigator(),
+      },
     );
   }
 }

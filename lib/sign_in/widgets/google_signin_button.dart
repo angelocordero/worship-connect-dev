@@ -7,29 +7,26 @@ class GoogleSignInButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 20),
-      child: ElevatedButton.icon(
-        style: ElevatedButton.styleFrom(
-            padding: const EdgeInsets.only(left: 45),
-            alignment: Alignment.centerLeft,
-            minimumSize: wcSignInButtonSize,
-            maximumSize: wcSignInButtonSize,
-            primary: Colors.white,
-            shape: wcButtonShape),
-        icon: Image.asset(
-          'assets/google_logo.png',
-          width: 50,
-          height: 44,
-        ),
-        label: Text(
-          'Sign in with Google',
-          style: wcSignInButtonTextStyle,
-        ),
-        onPressed: () async {
-          await WCSignIn().googleSignIn();
-        },
+    return ElevatedButton.icon(
+      style: ElevatedButton.styleFrom(
+          padding: const EdgeInsets.only(left: 45),
+          alignment: Alignment.centerLeft,
+          minimumSize: wcSignInButtonSize,
+          maximumSize: wcSignInButtonSize,
+          primary: Colors.white,
+          shape: wcButtonShape),
+      icon: Image.asset(
+        'assets/google_logo.png',
+        width: 50,
+        height: 44,
       ),
+      label: Text(
+        'Sign in with Google',
+        style: wcSignInButtonTextStyle,
+      ),
+      onPressed: () async {
+        await WCSignIn().googleSignIn();
+      },
     );
   }
 }
