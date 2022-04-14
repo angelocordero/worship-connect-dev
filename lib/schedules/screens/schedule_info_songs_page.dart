@@ -10,7 +10,6 @@ import 'package:worship_connect/wc_core/wc_custom_route.dart';
 import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
 import 'package:worship_connect/wc_core/core_providers_definition.dart';
 
-
 class ScheduleInfoSongsPage extends ConsumerWidget {
   const ScheduleInfoSongsPage({Key? key}) : super(key: key);
 
@@ -28,8 +27,11 @@ class ScheduleInfoSongsPage extends ConsumerWidget {
           Expanded(
             child: Visibility(
               visible: _songList.isNotEmpty,
-              replacement: const Center(
-                child: Text('No songs for this schedule'),
+              replacement: Center(
+                child: Text(
+                  'No songs for this schedule',
+                  style: Theme.of(context).textTheme.subtitle1,
+                ),
               ),
               child: RefreshIndicator(
                 onRefresh: () {
@@ -54,7 +56,7 @@ class ScheduleInfoSongsPage extends ConsumerWidget {
     );
   }
 
-  Row _buildButtons(BuildContext context, WidgetRef ref , ScheduleSongsProvider _songsNotifier) {
+  Row _buildButtons(BuildContext context, WidgetRef ref, ScheduleSongsProvider _songsNotifier) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [

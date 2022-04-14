@@ -19,19 +19,16 @@ class CreateTeamForm extends ConsumerWidget {
           style: TextStyle(color: Colors.white),
         ),
         TextField(
-          style: const TextStyle(
-            fontSize: 14,
-            color: Colors.white,
-          ),
+          style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.white),
           onChanged: (value) {
             createTeamName.state = value;
           },
           textAlign: TextAlign.center,
           decoration: InputDecoration(
+            hintStyle: wcHintStyle,
             isDense: true,
             contentPadding: const EdgeInsets.all(8),
             hintText: "Enter Team Name",
-            hintStyle: wcHintStyle,
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(30),
               borderSide: const BorderSide(

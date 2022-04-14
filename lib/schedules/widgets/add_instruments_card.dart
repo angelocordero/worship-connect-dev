@@ -122,7 +122,7 @@ class AddInstrumentsCard extends ConsumerWidget {
         trailing: Visibility(
           visible: !wcCoreInstruments.contains(_instrument),
           child: IconButton(
-            icon: const Icon(Icons.delete),
+            icon: const Icon(Icons.delete_outline),
             onPressed: () async {
               await ref.read(scheduleMusiciansProvider.notifier).deleteCustomInstrument(_instrument);
               await ref.read(customInstrumentsListProvider.notifier).init();

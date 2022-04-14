@@ -13,6 +13,45 @@ class ChangeUserNameCard extends ConsumerWidget {
 
   final String userName;
 
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    WCUserInfoData _userData = ref.watch(wcUserInfoDataStream).asData!.value!;
+
+    return SafeArea(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(32),
+        child: Hero(
+          tag: 'userName',
+          child: Material(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Text(
+                    'Change name',
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  _nameTextField(context),
+                  _changeNameButtons(
+                    context: context,
+                    userData: _userData,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   Future<dynamic> showCancelDialog(BuildContext context) async {
     showDialog(
       context: context,
@@ -37,27 +76,6 @@ class ChangeUserNameCard extends ConsumerWidget {
           ],
         );
       },
-    );
-  }
-
-  TextFormField _nameTextField() {
-    return TextFormField(
-      initialValue: userName,
-      onChanged: (value) {
-        newName = value;
-      },
-      minLines: 1,
-      maxLines: 1,
-      decoration: const InputDecoration(
-        isDense: true,
-        contentPadding: EdgeInsets.all(12),
-        hintText: 'User name',
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(12.0),
-          ),
-        ),
-      ),
     );
   }
 
@@ -110,39 +128,22 @@ class ChangeUserNameCard extends ConsumerWidget {
     );
   }
 
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    WCUserInfoData _userData = ref.watch(wcUserInfoDataStream).asData!.value!;
-
-    return SafeArea(
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.all(32),
-        child: Hero(
-          tag: 'userName',
-          child: Material(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  const Text(
-                    'Change name',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  _nameTextField(),
-                  _changeNameButtons(
-                    context: context,
-                    userData: _userData,
-                  ),
-                ],
-              ),
-            ),
+  TextFormField _nameTextField(BuildContext context) {
+    return TextFormField(
+      style: Theme.of(context).textTheme.bodyText2,
+      initialValue: userName,
+      onChanged: (value) {
+        newName = value;
+      },
+      minLines: 1,
+      maxLines: 1,
+      decoration: const InputDecoration(
+        isDense: true,
+        contentPadding: EdgeInsets.all(12),
+        hintText: 'User name',
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(12.0),
           ),
         ),
       ),

@@ -6,7 +6,6 @@ import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
 import 'package:worship_connect/sign_in/utils/wc_user_auth_data.dart';
 import 'package:worship_connect/wc_core/core_providers_definition.dart';
 
-
 class EnterNameWidget extends ConsumerStatefulWidget {
   const EnterNameWidget({Key? key}) : super(key: key);
 
@@ -44,7 +43,7 @@ class _EnterNameWidgetState extends ConsumerState<EnterNameWidget> {
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           padding: EdgeInsets.zero,
-          shape: wcButtonShape,
+          shape: const StadiumBorder(),
         ),
         onPressed: () async {
           FocusManager.instance.primaryFocus?.unfocus();
@@ -71,7 +70,7 @@ class _EnterNameWidgetState extends ConsumerState<EnterNameWidget> {
   Expanded _enterNameTextField() {
     return Expanded(
       child: TextField(
-        style: const TextStyle(color: Colors.white),
+        style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.white),
         controller: _userNameTextEditingController,
         decoration: InputDecoration(
           isDense: true,

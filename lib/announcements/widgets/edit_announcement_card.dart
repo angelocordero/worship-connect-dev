@@ -43,9 +43,9 @@ class _EditAnnouncementCardState extends ConsumerState<EditAnnouncementCard> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  const Text(
+                  Text(
                     'Edit Announcement',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    style: Theme.of(context).textTheme.headline6,
                   ),
                   const SizedBox(
                     height: 10,
@@ -141,8 +141,8 @@ class _EditAnnouncementCardState extends ConsumerState<EditAnnouncementCard> {
     );
   }
 
-  TextFormField _announcementTextField() {
-    return TextFormField(
+  TextField _announcementTextField() {
+    return TextField(
       controller: _announcementTextController,
       minLines: 5,
       maxLines: 5,
@@ -160,6 +160,7 @@ class _EditAnnouncementCardState extends ConsumerState<EditAnnouncementCard> {
           ),
         ),
       ),
+      style: Theme.of(context).textTheme.bodyText2,
     );
   }
 }

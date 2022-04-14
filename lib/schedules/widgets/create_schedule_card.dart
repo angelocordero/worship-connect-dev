@@ -43,14 +43,11 @@ class _CreateScheduleCardState extends ConsumerState<CreateScheduleCard> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Padding(
-                        padding: EdgeInsets.all(16.0),
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
                         child: Text(
                           'Create schedule',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: Theme.of(context).textTheme.headline6,
                         ),
                       ),
                       _scheduleTitleTextField(),
@@ -183,6 +180,7 @@ class _CreateScheduleCardState extends ConsumerState<CreateScheduleCard> {
 
   TextField _scheduleTitleTextField() {
     return TextField(
+      style: Theme.of(context).textTheme.bodyText2,
       controller: _scheduleTextController,
       minLines: 2,
       maxLines: 2,
@@ -190,6 +188,8 @@ class _CreateScheduleCardState extends ConsumerState<CreateScheduleCard> {
       enableSuggestions: true,
       cursorColor: Colors.black,
       decoration: const InputDecoration(
+        isDense: true,
+        contentPadding: EdgeInsets.all(12),
         hintText: 'Title',
         border: OutlineInputBorder(
           borderRadius: BorderRadius.all(

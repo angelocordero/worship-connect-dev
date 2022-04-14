@@ -60,7 +60,6 @@ class TeamSettings extends ConsumerWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: ElevatedButton(
-        style: ElevatedButton.styleFrom(shape: wcButtonShape),
         onPressed: () async {
           if (WCUtils.isAdminOrLeader(userData)) {
             WCUtils.wcShowError(wcError: 'Team leader and admin cannot leave team');
@@ -167,7 +166,7 @@ class TeamSettings extends ConsumerWidget {
         child: Hero(
           tag: 'teamName',
           child: IconButton(
-            icon: const Icon(Icons.edit),
+            icon: const Icon(Icons.edit_outlined),
             onPressed: () {
               Navigator.push(
                 context,

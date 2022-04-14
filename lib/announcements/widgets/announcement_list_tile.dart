@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:worship_connect/announcements/services/announcements_firebase_api.dart';
 import 'package:worship_connect/announcements/utils/announcements_data.dart';
 import 'package:worship_connect/announcements/providers/announcement_list_provider.dart';
@@ -38,7 +37,7 @@ class AnnouncementListTile extends ConsumerWidget {
                 announcementListNotifier: _announcementListNotifier,
               ),
               const Divider(),
-              _announcementText(_announcementData),
+              _announcementText(_announcementData, context),
             ],
           ),
         ),
@@ -46,16 +45,12 @@ class AnnouncementListTile extends ConsumerWidget {
     );
   }
 
-  Padding _announcementText(WCAnnouncementsData _announcementData) {
+  Padding _announcementText(WCAnnouncementsData _announcementData, BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Text(
         _announcementData.announcementText,
-        style: GoogleFonts.openSans(
-          textStyle: const TextStyle(
-            fontSize: 15,
-          ),
-        ),
+        style: Theme.of(context).textTheme.bodyText2,
       ),
     );
   }
@@ -75,21 +70,11 @@ class AnnouncementListTile extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                announcementData.announcementPosterName,
-                style: GoogleFonts.raleway(
-                  textStyle: const TextStyle(fontSize: 14, color: Colors.grey),
-                ),
-              ),
+              Text(announcementData.announcementPosterName, style: Theme.of(context).textTheme.bodyText1),
               const SizedBox(
                 height: 4,
               ),
-              Text(
-                announcementData.announcementDateString,
-                style: GoogleFonts.raleway(
-                  textStyle: const TextStyle(fontSize: 14, color: Colors.grey),
-                ),
-              ),
+              Text(announcementData.announcementDateString, style: Theme.of(context).textTheme.bodyText1),
             ],
           ),
         ),
@@ -98,7 +83,7 @@ class AnnouncementListTile extends ConsumerWidget {
             tag: announcementData.announcementID,
             child: IconButton(
               icon: const Icon(
-                Icons.edit,
+                Icons.edit_outlined,
                 size: 14,
               ),
               onPressed: () async {
@@ -118,7 +103,7 @@ class AnnouncementListTile extends ConsumerWidget {
         if (_adminOrLeader)
           IconButton(
             icon: const Icon(
-              Icons.delete,
+              Icons.delete_outline,
               size: 14,
             ),
             onPressed: () async {

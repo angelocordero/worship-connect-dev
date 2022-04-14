@@ -4,17 +4,14 @@ import 'package:worship_connect/settings/widgets/theme_selection_card.dart';
 import 'package:worship_connect/settings/widgets/wc_about_card.dart';
 import 'package:worship_connect/sign_in/services/wc_user_authentication_service.dart';
 import 'package:worship_connect/wc_core/wc_custom_route.dart';
-import 'package:worship_connect/wc_core/wc_themes.dart';
-import 'package:worship_connect/wc_core/worship_connect_constants.dart';
 import 'package:worship_connect/wc_core/core_providers_definition.dart';
+import 'package:worship_connect/wc_core/worship_connect_constants.dart';
 
-class AppSettins extends ConsumerWidget {
-  const AppSettins({Key? key}) : super(key: key);
+class AppSettings extends StatelessWidget {
+  const AppSettings({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final WCThemeProvider _wcThemeNotifier = ref.watch(wcThemeProvider.notifier);
-
+  Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.all(12),
       child: Padding(
@@ -28,7 +25,7 @@ class AppSettins extends ConsumerWidget {
               alignment: Alignment.centerLeft,
             ),
             const Divider(),
-            _themeListTile(_wcThemeNotifier, context),
+            _themeListTile(),
             _wcAboutListTile(context),
             _signOutButton()
           ],
@@ -42,7 +39,6 @@ class AppSettins extends ConsumerWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: ElevatedButton(
         child: const Text('Logout'),
-        style: ElevatedButton.styleFrom(shape: wcButtonShape),
         onPressed: () async {
           await WCUserAuthentication().signOut();
         },
@@ -50,29 +46,46 @@ class AppSettins extends ConsumerWidget {
     );
   }
 
-  ListTile _themeListTile(WCThemeProvider _wcThemeNotifier, BuildContext context) {
-    return ListTile(
-      title: const Text('Theme'),
-      subtitle: Text(
-        _wcThemeNotifier.getCurrentThemeName(),
-      ),
-      trailing: Hero(
-        tag: 'theme',
-        child: IconButton(
-          icon: wcTrailingIcon,
-          onPressed: () {
-            Navigator.push(
-              context,
-              WCCustomRoute(
-                builder: (BuildContext context) {
-                  return const ThemeSelectionCard();
-                },
-              ),
-            );
-          },
+  Consumer _themeListTile() {
+    return Consumer(builder: (context, ref, child) {
+      String _themeModeString = 'System Default';
+
+      ThemeMode _currentTheme = ref.watch(wcThemeProvider);
+
+      switch (_currentTheme) {
+        case ThemeMode.dark:
+          _themeModeString = 'Dark';
+          break;
+
+        case ThemeMode.light:
+          _themeModeString = 'Light';
+          break;
+        default:
+          _themeModeString = 'System Default';
+          break;
+      }
+
+      return ListTile(
+        title: Text(_themeModeString),
+        subtitle: const Text('Theme'),
+        trailing: Hero(
+          tag: 'theme',
+          child: IconButton(
+            icon: wcTrailingIcon,
+            onPressed: () {
+              Navigator.push(
+                context,
+                WCCustomRoute(
+                  builder: (BuildContext context) {
+                    return const ThemeSelectionCard();
+                  },
+                ),
+              );
+            },
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 
   ListTile _wcAboutListTile(BuildContext context) {

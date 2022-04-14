@@ -1,7 +1,6 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:nanoid/nanoid.dart';
 import 'package:intl/intl.dart';
 import 'package:worship_connect/sign_in/utils/wc_user_info_data.dart';
@@ -10,21 +9,12 @@ import 'package:worship_connect/wc_core/worship_connect_constants.dart';
 class WCUtils {
   static const String _wcAlphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 
-  static Widget authLoadingWidget() {
-    EasyLoading.show();
-    return Container();
-  }
-
   static double screenHeight(BuildContext context) {
     return MediaQuery.of(context).size.height;
   }
 
   static double screenHeightSafeArea(BuildContext context) {
     return MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top;
-  }
-
-  static double screenHeightSafeAreaAppBar(BuildContext context) {
-    return MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top - kToolbarHeight;
   }
 
   static double screenHeightSafeAreaAppBarBottomBar(BuildContext context) {
@@ -92,13 +82,6 @@ class WCUtils {
     );
   }
 
-  static void wcShowInfo(String info) {
-    EasyLoading.showInfo(
-      info,
-      dismissOnTap: true,
-    );
-  }
-
   static void wcShowSuccess(String success) {
     EasyLoading.showSuccess(
       success,
@@ -131,12 +114,9 @@ class WCUtils {
         ),
         child: FloatingActionButton.extended(
           heroTag: null,
-          backgroundColor: Colors.transparent,
-          elevation: 0,
           onPressed: onPressed,
           label: Text(
             labelText,
-            style: GoogleFonts.exo2(),
           ),
           icon: icon,
         ),

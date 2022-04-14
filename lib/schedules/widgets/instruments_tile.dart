@@ -29,8 +29,11 @@ class InstrumentsTile extends ConsumerWidget {
             },
           ),
         if (_musicians.isEmpty)
-          const Align(
-            child: Text('No musician for this instrument'),
+          Align(
+            child: Text(
+              'No musician for this instrument',
+              style: Theme.of(context).textTheme.subtitle1,
+            ),
           ),
         _buildAddButton(context, ref),
       ],
@@ -79,7 +82,7 @@ class InstrumentsTile extends ConsumerWidget {
           onPressed: () {
             ref.read(scheduleMusiciansProvider.notifier).removeInstruments(instrument.keys.first);
           },
-          icon: const Icon(Icons.delete),
+          icon: const Icon(Icons.delete_outline),
         ),
       ),
       title: Text(instrument.keys.first),
@@ -96,7 +99,7 @@ class InstrumentsTile extends ConsumerWidget {
             onPressed: () {
               ref.read(scheduleMusiciansProvider.notifier).removeMusician(instrument: instrument.keys.first, musician: _element.toString());
             },
-            icon: const Icon(Icons.delete),
+            icon: const Icon(Icons.delete_outline),
           ),
         ),
         title: Text(_element.toString()),

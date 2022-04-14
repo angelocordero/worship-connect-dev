@@ -59,7 +59,7 @@ class UserSettings extends ConsumerWidget {
       trailing: Hero(
         tag: 'userName',
         child: IconButton(
-          icon: const Icon(Icons.edit),
+          icon: const Icon(Icons.edit_outlined),
           onPressed: () {
             Navigator.push(
               context,

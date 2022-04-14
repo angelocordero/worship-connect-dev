@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:worship_connect/schedules/utils/schedule_data.dart';
 import 'package:worship_connect/schedules/utils/schedules_providers_definition.dart';
@@ -21,13 +20,6 @@ class SchedulesHomePage extends ConsumerStatefulWidget {
 
 class _SchedulesHomePageState extends ConsumerState<SchedulesHomePage> {
   @override
-  void initState() {
-    ref.read(calendarScheduleListProvider.notifier).initScheduleProvider();
-    ref.read(scheduleInfoProvider.state);
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final calendarSelectedDay = ref.watch(calendarSelectedDayProvider);
     WCUserInfoData? _wcUserInfoData = ref.watch(wcUserInfoDataStream).asData?.value;
@@ -38,9 +30,8 @@ class _SchedulesHomePageState extends ConsumerState<SchedulesHomePage> {
         child: _addScheduleButton(context),
       ),
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Schedules',
-          style: GoogleFonts.exo2(),
         ),
         actions: const [],
       ),
@@ -100,26 +91,6 @@ class _SchedulesHomePageState extends ConsumerState<SchedulesHomePage> {
     );
   }
 
-  Widget _buildScheduleList(DateTime calendarSelectedDay) {
-    List scheduleList = ref.watch(calendarScheduleListProvider)[DateFormat('yyyyMMdd').format(calendarSelectedDay)] ?? [];
-
-    if (scheduleList.isEmpty) {
-      return Center(
-        child: Text(
-          'No schedules for\n${WCUtils.dateToString(calendarSelectedDay)}',
-          textAlign: TextAlign.center,
-        ),
-      );
-    } else {
-      return ListView.builder(
-        itemCount: scheduleList.length,
-        itemBuilder: (BuildContext context, int index) {
-          return _buildScheduleCalendarTiles(scheduleList, index);
-        },
-      );
-    }
-  }
-
   SchedulesCalendarTile _buildScheduleCalendarTiles(List<dynamic> scheduleList, int index) {
     Map<String, dynamic> _scheduleDataFromList = scheduleList[index];
     WCScheduleData _scheduleData = WCScheduleData(
@@ -132,5 +103,26 @@ class _SchedulesHomePageState extends ConsumerState<SchedulesHomePage> {
     return SchedulesCalendarTile(
       scheduleData: _scheduleData,
     );
+  }
+
+  Widget _buildScheduleList(DateTime calendarSelectedDay) {
+    List scheduleList = ref.watch(calendarScheduleListProvider)[DateFormat('yyyyMMdd').format(calendarSelectedDay)] ?? [];
+
+    if (scheduleList.isEmpty) {
+      return Center(
+        child: Text(
+          'No schedules for\n${WCUtils.dateToString(calendarSelectedDay)}',
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.subtitle1,
+        ),
+      );
+    } else {
+      return ListView.builder(
+        itemCount: scheduleList.length,
+        itemBuilder: (BuildContext context, int index) {
+          return _buildScheduleCalendarTiles(scheduleList, index);
+        },
+      );
+    }
   }
 }

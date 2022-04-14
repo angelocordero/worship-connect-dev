@@ -54,17 +54,15 @@ class _EditSongCardState extends ConsumerState<EditSongCard> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Padding(
-                        padding: EdgeInsets.all(16.0),
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
                         child: Text(
                           'Edit song',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: Theme.of(context).textTheme.headline6,
                         ),
                       ),
                       TextField(
+                        style: Theme.of(context).textTheme.bodyText2,
                         controller: _titleEditingController,
                         autocorrect: true,
                         enableSuggestions: true,
@@ -87,6 +85,7 @@ class _EditSongCardState extends ConsumerState<EditSongCard> {
                       ),
                       const SizedBox(height: 12),
                       TextField(
+                        style: Theme.of(context).textTheme.bodyText2,
                         controller: _linkEditingController,
                         autocorrect: true,
                         enableSuggestions: true,

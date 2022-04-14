@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:worship_connect/settings/utils/settings_providers_definition.dart';
 import 'package:worship_connect/settings/widgets/member_list_tile.dart';
 import 'package:worship_connect/sign_in/utils/wc_user_info_data.dart';
@@ -31,39 +30,36 @@ class MembersListPage extends ConsumerWidget {
       return a.userName.compareTo(b.userName);
     });
 
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            'Members',
-            style: GoogleFonts.exo2(),
-          ),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'Members',
         ),
-        body: RefreshIndicator(
-          onRefresh: () async {
-            await _membersListNotifier.reset();
-          },
-          child: ListView(
-            children: [
-              MemberListTile(
-                memberData: ref.watch(membersListProvider).values.firstWhere(
-                  (element) {
-                    return element.userStatus == UserStatusEnum.leader;
-                  },
-                ),
-              ),
-              ..._adminList.map(
-                (admin) {
-                  return MemberListTile(memberData: admin);
+      ),
+      body: RefreshIndicator(
+        onRefresh: () async {
+          await _membersListNotifier.reset();
+        },
+        child: ListView(
+          children: [
+            MemberListTile(
+              memberData: ref.watch(membersListProvider).values.firstWhere(
+                (element) {
+                  return element.userStatus == UserStatusEnum.leader;
                 },
               ),
-              ..._membersList.map(
-                (member) {
-                  return MemberListTile(memberData: member);
-                },
-              ),
-            ],
-          ),
+            ),
+            ..._adminList.map(
+              (admin) {
+                return MemberListTile(memberData: admin);
+              },
+            ),
+            ..._membersList.map(
+              (member) {
+                return MemberListTile(memberData: member);
+              },
+            ),
+          ],
         ),
       ),
     );

@@ -9,7 +9,6 @@ import 'package:worship_connect/wc_core/wc_custom_route.dart';
 import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
 import 'package:worship_connect/wc_core/core_providers_definition.dart';
 
-
 class ScheduleInfoMusiciansPage extends ConsumerWidget {
   const ScheduleInfoMusiciansPage({Key? key}) : super(key: key);
 
@@ -26,12 +25,15 @@ class ScheduleInfoMusiciansPage extends ConsumerWidget {
           Expanded(
             child: Visibility(
               visible: _instrumentsList.isNotEmpty,
-              replacement: const Center(
-                child: Text('No assigned members for this schedule'),
+              replacement: Center(
+                child: Text(
+                  'No assigned members for this schedule',
+                  style: Theme.of(context).textTheme.subtitle1,
+                ),
               ),
               child: RefreshIndicator(
                 onRefresh: () {
-                  return Future.delayed(const Duration(seconds: 1));
+                  return Future.delayed(const Duration(seconds: 1)); //TODO make refresh indicator functional
                 },
                 child: ListView.builder(
                   itemBuilder: (context, index) {

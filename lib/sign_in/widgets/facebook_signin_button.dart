@@ -14,7 +14,7 @@ class FacebookSignInButton extends StatelessWidget {
         minimumSize: wcSignInButtonSize,
         maximumSize: wcSignInButtonSize,
         primary: Colors.white,
-        shape: wcButtonShape,
+        shape: const StadiumBorder(),
       ),
       icon: Image.asset(
         'assets/facebook_logo.png',

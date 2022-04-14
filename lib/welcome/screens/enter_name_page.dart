@@ -24,6 +24,9 @@ class _EnterNamePageState extends ConsumerState<EnterNamePage> {
     bool isOnTop = ModalRoute.of(context)?.isCurrent ?? false;
 
     if (_wcUserInfoData != null && _wcUserInfoData.userName.isNotEmpty && _wcUserInfoData.teamID.isEmpty && isOnTop) {
+
+
+
       WidgetsBinding.instance?.addPostFrameCallback(
         (_) async {
           setState(() {
@@ -42,7 +45,6 @@ class _EnterNamePageState extends ConsumerState<EnterNamePage> {
     }
 
     if (_wcUserInfoData != null && _wcUserInfoData.userName.isNotEmpty && _wcUserInfoData.teamID.isNotEmpty && isOnTop) {
-
       WidgetsBinding.instance?.addPostFrameCallback(
         (_) async {
           await Navigator.pushReplacementNamed(context, '/home');

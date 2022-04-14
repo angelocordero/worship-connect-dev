@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:worship_connect/wc_core/wc_themes.dart';
+import 'package:worship_connect/wc_core/wc_themes_provider.dart';
 import 'package:worship_connect/wc_core/core_providers_definition.dart';
-
 
 class ThemeSelectionCard extends ConsumerWidget {
   const ThemeSelectionCard({Key? key}) : super(key: key);
@@ -19,7 +18,7 @@ class ThemeSelectionCard extends ConsumerWidget {
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: SizedBox(
-              height: 250,
+              height: 260,
               width: 250,
               child: Card(
                 child: Padding(

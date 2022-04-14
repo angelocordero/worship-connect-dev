@@ -28,14 +28,14 @@ class SendAnnouncementCard extends ConsumerWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  const Text(
+                  Text(
                     'Send Announcement',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    style: Theme.of(context).textTheme.headline6,
                   ),
                   const SizedBox(
                     height: 10,
                   ),
-                  _announcementTextField(),
+                  _announcementTextField(context),
                   _announcementButtons(context, ref),
                 ],
               ),
@@ -126,8 +126,8 @@ class SendAnnouncementCard extends ConsumerWidget {
     );
   }
 
-  TextFormField _announcementTextField() {
-    return TextFormField(
+  TextField _announcementTextField(BuildContext context) {
+    return TextField(
       controller: _announcementTextController,
       minLines: 5,
       maxLines: 5,
@@ -145,6 +145,7 @@ class SendAnnouncementCard extends ConsumerWidget {
           ),
         ),
       ),
+      style: Theme.of(context).textTheme.bodyText2,
     );
   }
 }

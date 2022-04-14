@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 import 'package:worship_connect/wc_core/worship_connect_constants.dart';
 import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
@@ -21,17 +20,13 @@ class WCLoginScreenLogo extends StatelessWidget {
             children: [
               GradientText(
                 'WORSHIP',
-                style: GoogleFonts.rajdhani(
-                  textStyle: wcSignInLogoTextStyle,
-                ),
+                style: wcSignInLogoTextStyle,
                 colors: wcGradientColors,
               ),
               GradientText(
                 'CONNECT',
                 colors: wcGradientColors,
-                style: GoogleFonts.rajdhani(
-                  textStyle: wcSignInLogoTextStyle,
-                ),
+                style: wcSignInLogoTextStyle,
               ),
             ],
           ),

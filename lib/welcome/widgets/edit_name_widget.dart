@@ -23,7 +23,7 @@ class _EditNameWidgetState extends State<EditNameWidget> {
         height: WCUtils.screenHeightSafeArea(context) / 4,
         decoration: BoxDecoration(
           color: Colors.black38,
-          border: Border.all(color: wcPrimaryColor),
+          border: Border.all(color: wcAccentColor),
           borderRadius: BorderRadius.vertical(
             bottom: Radius.elliptical(
               WCUtils.screenWidth(context),
@@ -63,15 +63,10 @@ class _EditNameWidgetState extends State<EditNameWidget> {
                     onChanged: (value) {
                       ref.watch(userNameProvider.state).state = value;
                     },
-                    style: GoogleFonts.exo2(
-                      textStyle: const TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
-                      ),
-                    ),
+                    style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.white),
                     decoration: InputDecoration(
                       suffixIcon: const Icon(
-                        Icons.edit,
+                        Icons.edit_outlined,
                         color: Colors.grey,
                       ),
                       isDense: true,

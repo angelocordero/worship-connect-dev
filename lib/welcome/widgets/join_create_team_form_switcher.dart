@@ -9,7 +9,6 @@ import 'package:worship_connect/welcome/widgets/create_team_form.dart';
 import 'package:worship_connect/welcome/widgets/join_team_form.dart';
 import 'package:worship_connect/wc_core/core_providers_definition.dart';
 
-
 final createTeamNameProvider = StateProvider.autoDispose<String>((ref) {
   return '';
 });
@@ -47,7 +46,7 @@ class _JoinCreateTeamFormSwitcherState extends State<JoinCreateTeamFormSwitcher>
         borderRadius: const BorderRadius.all(
           Radius.circular(10),
         ),
-        border: Border.all(color: wcPrimaryColor),
+        border: Border.all(color: wcAccentColor),
       ),
       child: Padding(
         padding: const EdgeInsets.all(14.0),
@@ -140,7 +139,7 @@ class _JoinCreateTeamFormSwitcherState extends State<JoinCreateTeamFormSwitcher>
           return ElevatedButton(
             style: ElevatedButton.styleFrom(
               padding: EdgeInsets.zero,
-              shape: wcButtonShape,
+              shape: const StadiumBorder(),
             ),
             onPressed: () async {
               if (currentIndex == 0) {

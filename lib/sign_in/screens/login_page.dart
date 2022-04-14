@@ -25,7 +25,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     bool isOnTop = ModalRoute.of(context)?.isCurrent ?? false;
 
     if (_wcUserInfoData != null && _wcUserInfoData.userName.isEmpty && isOnTop) {
-
       WidgetsBinding.instance?.addPostFrameCallback(
         (_) async {
           setState(() {
@@ -50,16 +49,18 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           setState(() {
             _opacity = 0;
           });
-          await Navigator.push(context,   PageTransition(
+          await Navigator.push(
+            context,
+            PageTransition(
               child: const JoinCreateTeamPage(),
               type: PageTransitionType.bottomToTop,
-            ),);
+            ),
+          );
         },
       );
     }
 
     if (_wcUserInfoData != null && _wcUserInfoData.userName.isNotEmpty && _wcUserInfoData.teamID.isNotEmpty && isOnTop) {
-
       WidgetsBinding.instance?.addPostFrameCallback(
         (_) async {
           await Navigator.pushReplacementNamed(context, '/home');
@@ -68,44 +69,49 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     }
 
     return Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: const AssetImage('assets/bg_image.jpg'),
-            fit: BoxFit.cover,
-            colorFilter: ColorFilter.mode(
-              Colors.black.withOpacity(0.5),
-              BlendMode.darken,
+      color: Colors.black,
+      child: SafeArea(
+        child: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: const AssetImage('assets/bg_image.jpg'),
+              fit: BoxFit.cover,
+              colorFilter: ColorFilter.mode(
+                Colors.black.withOpacity(0.5),
+                BlendMode.darken,
+              ),
             ),
+          ),
+          child: Column(
+            children: [
+              Hero(
+                tag: 'logo',
+                child: AnimatedOpacity(
+                  opacity: _opacity,
+                  duration: const Duration(milliseconds: 300),
+                  child: const WCLoginScreenLogo(),
+                ),
+              ),
+              const Spacer(),
+              AnimatedOpacity(
+                opacity: _opacity,
+                duration: const Duration(milliseconds: 300),
+                child: const GoogleSignInButton(),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              AnimatedOpacity(
+                opacity: _opacity,
+                duration: const Duration(milliseconds: 300),
+                child: const FacebookSignInButton(),
+              ),
+              const SizedBox(
+                height: 70,
+              ),
+            ],
           ),
         ),
-      child: Column(
-        children: [
-          Hero(
-            tag: 'logo',
-            child: AnimatedOpacity(
-              opacity: _opacity,
-              duration: const Duration(milliseconds: 300),
-              child: const WCLoginScreenLogo(),
-            ),
-          ),
-          const Spacer(),
-          AnimatedOpacity(
-            opacity: _opacity,
-            duration: const Duration(milliseconds: 300),
-            child: const GoogleSignInButton(),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          AnimatedOpacity(
-            opacity: _opacity,
-            duration: const Duration(milliseconds: 300),
-            child: const FacebookSignInButton(),
-          ),
-          const SizedBox(
-            height: 70,
-          ),
-        ],
       ),
     );
   }

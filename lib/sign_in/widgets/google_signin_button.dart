@@ -14,7 +14,7 @@ class GoogleSignInButton extends StatelessWidget {
           minimumSize: wcSignInButtonSize,
           maximumSize: wcSignInButtonSize,
           primary: Colors.white,
-          shape: wcButtonShape),
+          shape: const StadiumBorder()),
       icon: Image.asset(
         'assets/google_logo.png',
         width: 50,
