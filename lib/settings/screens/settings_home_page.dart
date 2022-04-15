@@ -15,6 +15,7 @@ class SettingsHomePage extends StatelessWidget {
         ),
       ),
       body: ListView(
+        padding: const EdgeInsets.all(4),
         children: const <Widget>[
           UserSettings(),
           TeamSettings(),

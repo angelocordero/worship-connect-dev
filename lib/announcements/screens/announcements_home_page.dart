@@ -45,6 +45,7 @@ class _AnnouncementsHomePageState extends ConsumerState<AnnouncementsHomePage> {
                 return await _announcementNotifier.getAnnouncements();
               },
               child: ListView.builder(
+                padding: const EdgeInsets.all(4),
                 itemCount: _announcementList.length,
                 itemBuilder: (BuildContext context, int index) {
                   return AnnouncementListTile(

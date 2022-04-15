@@ -31,7 +31,7 @@ class InstrumentsTile extends ConsumerWidget {
         if (_musicians.isEmpty)
           Align(
             child: Text(
-              'No musician for this instrument',
+              'No member assigned for this instrument',
               style: Theme.of(context).textTheme.subtitle1,
             ),
           ),

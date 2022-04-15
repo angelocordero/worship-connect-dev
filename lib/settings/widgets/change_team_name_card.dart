@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tap_debouncer/tap_debouncer.dart';
 import 'package:worship_connect/settings/services/team_firebase_api.dart';
-import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
 import 'package:worship_connect/wc_core/core_providers_definition.dart';
 
 class ChangeTeamNameCard extends ConsumerWidget {
@@ -19,31 +18,30 @@ class ChangeTeamNameCard extends ConsumerWidget {
     return SafeArea(
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(32),
-        child: Hero(
-          tag: 'teamName',
-          child: Material(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: SingleChildScrollView(
+        child: Material(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Padding(
               padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Text(
-                    'Change name',
-                    style: Theme.of(context).textTheme.headline6,
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  _nameTextField(context),
-                  _changeNameButtons(
-                    context: context,
-                    teamID: _teamID,
-                  ),
-                ],
-              ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                Text(
+                  'Change team name',
+                  style: Theme.of(context).textTheme.headline6,
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                _nameTextField(context),
+                _changeNameButtons(
+                  context: context,
+                  teamID: _teamID,
+                ),
+              ],
             ),
           ),
         ),
@@ -78,47 +76,40 @@ class ChangeTeamNameCard extends ConsumerWidget {
     );
   }
 
-  SingleChildScrollView _changeNameButtons({
+  _changeNameButtons({
     required BuildContext context,
     required String teamID,
   }) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          SizedBox(
-            width: (WCUtils.screenWidth(context) - 96) / 3,
-          ),
-          TextButton(
-            onPressed: () async {
-              if (newName.isNotEmpty) {
-                await showCancelDialog(context);
-              } else {
-                Navigator.pop(context);
-              }
-              newName = '';
-            },
-            child: const Text('Cancel'),
-          ),
-          TapDebouncer(
-            builder: (BuildContext context, TapDebouncerFunc? onTap) {
-              return TextButton(
-                onPressed: onTap,
-                child: const Text('Update'),
-              );
-            },
-            onTap: () async {
-              if (newName.isNotEmpty && newName.trim() != teamName) {
-                await TeamFirebaseAPI(teamID).changeTeamName(newName.trim());
-              }
-              newName = '';
+    return Row(
+      children: [
+        const Spacer(),
+        TextButton(
+          onPressed: () async {
+            if (newName.isNotEmpty) {
+              await showCancelDialog(context);
+            } else {
               Navigator.pop(context);
-            },
-          ),
-        ],
-      ),
+            }
+            newName = '';
+          },
+          child: const Text('Cancel'),
+        ),
+        TapDebouncer(
+          builder: (BuildContext context, TapDebouncerFunc? onTap) {
+            return TextButton(
+              onPressed: onTap,
+              child: const Text('Update'),
+            );
+          },
+          onTap: () async {
+            if (newName.isNotEmpty && newName.trim() != teamName) {
+              await TeamFirebaseAPI(teamID).changeTeamName(newName.trim());
+            }
+            newName = '';
+            Navigator.pop(context);
+          },
+        ),
+      ],
     );
   }
 

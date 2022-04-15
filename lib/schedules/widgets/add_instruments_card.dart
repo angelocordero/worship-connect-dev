@@ -34,15 +34,15 @@ class AddInstrumentsCard extends ConsumerWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
                         child: Text(
                           'Add Instrument',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: Theme.of(context).textTheme.headline6?.copyWith(fontWeight: FontWeight.bold),
                         ),
+                      ),
+                      const SizedBox(
+                        height: 8,
                       ),
                       SizedBox(
                         height: WCUtils.screenHeightSafeArea(context) / 3,
@@ -114,7 +114,7 @@ class AddInstrumentsCard extends ConsumerWidget {
     return Container(
       decoration: const BoxDecoration(
         border: Border(
-          top: BorderSide(width: 0.5),
+          top: BorderSide(width: 1),
         ),
       ),
       child: ListTile(

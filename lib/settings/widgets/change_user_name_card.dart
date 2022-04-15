@@ -20,31 +20,28 @@ class ChangeUserNameCard extends ConsumerWidget {
     return SafeArea(
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(32),
-        child: Hero(
-          tag: 'userName',
-          child: Material(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Text(
-                    'Change name',
-                    style: Theme.of(context).textTheme.headline6,
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  _nameTextField(context),
-                  _changeNameButtons(
-                    context: context,
-                    userData: _userData,
-                  ),
-                ],
-              ),
+        child: Material(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Text(
+                  'Change username',
+                  style: Theme.of(context).textTheme.headline6,
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                _nameTextField(context),
+                _changeNameButtons(
+                  context: context,
+                  userData: _userData,
+                ),
+              ],
             ),
           ),
         ),

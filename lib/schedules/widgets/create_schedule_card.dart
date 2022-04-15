@@ -210,11 +210,7 @@ class _CreateScheduleCardState extends ConsumerState<CreateScheduleCard> {
     return ListTile(
       title: Text(_timeString),
       onTap: () => _timePicker(context),
-      trailing: const SizedBox(
-        height: 0,
-        width: 0,
-        child: Icon(Icons.timer),
-      ),
+      trailing: const Icon(Icons.timer),
     );
   }
 

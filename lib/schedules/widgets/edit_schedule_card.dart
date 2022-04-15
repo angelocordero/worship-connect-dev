@@ -220,11 +220,7 @@ class _EditScheduleCardState extends ConsumerState<EditScheduleCard> {
       onTap: () => _timePicker(
         context,
       ),
-      trailing: const SizedBox(
-        height: 0,
-        width: 0,
-        child: Icon(Icons.timer),
-      ),
+      trailing: const Icon(Icons.timer),
     );
   }
 

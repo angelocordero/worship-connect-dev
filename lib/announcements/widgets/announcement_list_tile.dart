@@ -21,25 +21,22 @@ class AnnouncementListTile extends ConsumerWidget {
     WCUserInfoData _userInfoData = ref.watch(wcUserInfoDataStream).asData!.value!;
     AnnouncementListProvider _announcementListNotifier = ref.watch(announcementListProvider.notifier);
 
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
-      child: Card(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _announcementInfo(
-                context: context,
-                userInfoData: _userInfoData,
-                announcementData: _announcementData,
-                announcementListNotifier: _announcementListNotifier,
-              ),
-              const Divider(),
-              _announcementText(_announcementData, context),
-            ],
-          ),
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _announcementInfo(
+              context: context,
+              userInfoData: _userInfoData,
+              announcementData: _announcementData,
+              announcementListNotifier: _announcementListNotifier,
+            ),
+            const Divider(),
+            _announcementText(_announcementData, context),
+          ],
         ),
       ),
     );

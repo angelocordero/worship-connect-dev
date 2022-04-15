@@ -6,7 +6,6 @@ import 'package:worship_connect/settings/screens/member_list_page.dart';
 import 'package:worship_connect/settings/services/team_firebase_api.dart';
 import 'package:worship_connect/settings/widgets/change_team_name_card.dart';
 import 'package:worship_connect/sign_in/utils/wc_user_info_data.dart';
-import 'package:worship_connect/wc_core/wc_custom_route.dart';
 import 'package:clipboard/clipboard.dart';
 import 'package:worship_connect/wc_core/worship_connect_constants.dart';
 import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
@@ -22,16 +21,15 @@ class TeamSettings extends ConsumerWidget {
     bool _isAdminOrLeader = WCUtils.isAdminOrLeader(_userData);
 
     return Card(
-      margin: const EdgeInsets.all(12),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Align(
-              child: Text('Team Settings'),
-              alignment: Alignment.centerLeft,
+            Text(
+              'Team Settings',
+              style: Theme.of(context).textTheme.subtitle1,
             ),
             const Divider(),
             _teamNameTile(
@@ -99,20 +97,19 @@ class TeamSettings extends ConsumerWidget {
   ListTile _membersTile(BuildContext context, WidgetRef ref) {
     return ListTile(
       title: const Text('Members'),
-      trailing: IconButton(
-        icon: wcTrailingIcon,
-        onPressed: () async {
-          await ref.read(membersListProvider.notifier).init();
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (BuildContext context) {
-                return const MembersListPage();
-              },
-            ),
-          );
-        },
-      ),
+      trailing: wcTrailingIcon,
+      onTap: () async {
+        await ref.read(membersListProvider.notifier).init();
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (BuildContext context) {
+              return const MembersListPage();
+            },
+          ),
+        );
+      },
     );
   }
 
@@ -120,17 +117,15 @@ class TeamSettings extends ConsumerWidget {
     return ListTile(
       title: Text(_teamID),
       subtitle: const Text('Team ID'),
-      trailing: IconButton(
-        icon: const Icon(Icons.copy),
-        onPressed: () async {
-          if (_teamID.isEmpty) {
-            WCUtils.wcShowError(wcError: 'Unable to copy team ID');
-            return;
-          }
-          await FlutterClipboard.copy(_teamID);
-          WCUtils.wcShowSuccess('Team ID copied to clipboard');
-        },
-      ),
+      trailing: const Icon(Icons.copy),
+      onTap: () async {
+        if (_teamID.isEmpty) {
+          WCUtils.wcShowError(wcError: 'Unable to copy team ID');
+          return;
+        }
+        await FlutterClipboard.copy(_teamID);
+        WCUtils.wcShowSuccess('Team ID copied to clipboard');
+      },
     );
   }
 
@@ -141,14 +136,12 @@ class TeamSettings extends ConsumerWidget {
   }) {
     return Visibility(
       visible: isAdminOrLeader,
-      child: ListTile(
+      child: SwitchListTile(
         title: const Text('Allow Team Invites'),
-        trailing: Switch(
-          value: isOpen,
-          onChanged: (value) async {
-            await TeamFirebaseAPI(teamID).toggleIsTeamOpen(isOpen);
-          },
-        ),
+        value: isOpen,
+        onChanged: (value) async {
+          await TeamFirebaseAPI(teamID).toggleIsTeamOpen(isOpen);
+        },
       ),
     );
   }
@@ -163,25 +156,20 @@ class TeamSettings extends ConsumerWidget {
       subtitle: const Text('Team Name'),
       trailing: Visibility(
         visible: isAdminOrLeader,
-        child: Hero(
-          tag: 'teamName',
-          child: IconButton(
-            icon: const Icon(Icons.edit_outlined),
-            onPressed: () {
-              Navigator.push(
-                context,
-                WCCustomRoute(
-                  builder: (context) {
-                    return ChangeTeamNameCard(
-                      teamName: teamName,
-                    );
-                  },
-                ),
-              );
-            },
-          ),
+        child: const Icon(
+          Icons.edit_outlined,
         ),
       ),
+      onTap: () {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return ChangeTeamNameCard(
+              teamName: teamName,
+            );
+          },
+        );
+      },
     );
   }
 }
