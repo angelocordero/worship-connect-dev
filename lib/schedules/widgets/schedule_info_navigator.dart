@@ -50,9 +50,9 @@ class _ScheduleInfoNavigatorState extends ConsumerState<ScheduleInfoNavigator> {
           ),
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.my_library_books,
+              Icons.queue_music,
             ),
-            label: 'Musicians',
+            label: 'Instruments',
           ),
         ],
       ),

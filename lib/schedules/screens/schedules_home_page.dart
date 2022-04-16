@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:worship_connect/schedules/screens/schedules_summary_page.dart';
 import 'package:worship_connect/schedules/utils/schedule_data.dart';
 import 'package:worship_connect/schedules/utils/schedules_providers_definition.dart';
 import 'package:worship_connect/schedules/widgets/create_schedule_card.dart';
@@ -33,7 +34,21 @@ class _SchedulesHomePageState extends ConsumerState<SchedulesHomePage> {
         title: const Text(
           'Schedules',
         ),
-        actions: const [],
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.format_list_bulleted),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return const SchedulesSummaryPage();
+                  },
+                ),
+              );
+            },
+          ),
+        ],
       ),
       body: SizedBox(
         height: WCUtils.screenHeightSafeAreaAppBarBottomBar(context),

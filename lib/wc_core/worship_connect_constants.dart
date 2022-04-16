@@ -143,9 +143,8 @@ Icon wcTrailingIcon = const Icon(Icons.arrow_forward_ios_outlined);
 List<String> wcCoreInstruments = [
   'Worship Leader',
   'Backup Singers',
-  'Acoustic Guitar',
-  'Electric Guitar',
-  'Bass',
-  'Keyboards',
-  'Drums',
+  'Acoustic Guitarist',
+  'Electric Guitarist',
+  'Bassist',
+  'Drummer',
 ];

@@ -5,6 +5,7 @@ import 'package:worship_connect/schedules/utils/song_data.dart';
 import 'package:worship_connect/schedules/widgets/edit_song_card.dart';
 import 'package:worship_connect/sign_in/utils/wc_user_info_data.dart';
 import 'package:worship_connect/wc_core/core_providers_definition.dart';
+import 'package:worship_connect/wc_core/wc_url_utilities.dart';
 import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
 
 class SongTile extends ConsumerWidget {
@@ -26,7 +27,7 @@ class SongTile extends ConsumerWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _songInfo(),
+          _songInfo(context),
           _dragHandle(ref, _isAdminOrLeader),
           Visibility(
             visible: _isAdminOrLeader,
@@ -37,29 +38,31 @@ class SongTile extends ConsumerWidget {
     );
   }
 
-  Expanded _songInfo() {
+  Expanded _songInfo(BuildContext context) {
+    TextStyle style = Theme.of(context).textTheme.bodyText2!;
+
     return Expanded(
       flex: 8,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16, 0),
+        padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16, 8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
               songData.songTitle,
-              style: const TextStyle(fontSize: 20),
+              style: style.copyWith(fontSize: 16),
             ),
             const SizedBox(
               height: 8,
             ),
             Text(
               'Key of ${songData.songKey}',
-              style: const TextStyle(fontSize: 14),
+              style: style,
             ),
             Visibility(
               replacement: const SizedBox(
-                height: 16,
+                height: 8,
               ),
               visible: songData.songURL != null,
               child: ListTile(
@@ -67,19 +70,16 @@ class SongTile extends ConsumerWidget {
                 horizontalTitleGap: 5,
                 dense: true,
                 leading: _leadingIcon(),
-                title: TextButton(
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      songData.songURLTitle ?? songData.songURL ?? '',
-                      style: const TextStyle(
-                        fontSize: 14,
-                      ),
-                      textAlign: TextAlign.start,
-                    ),
-                  ),
-                  onPressed: () {},
+                title: Text(
+                  songData.songURLTitle ?? songData.songURL ?? '',
+                  textAlign: TextAlign.start,
+                  style: style.copyWith(color: Colors.blue),
                 ),
+                onTap: () async {
+                  if (songData.songURL != null) {
+                    await WCUrlUtils.openURL(songData.songURL!);
+                  }
+                },
               ),
             ),
           ],

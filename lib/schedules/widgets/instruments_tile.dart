@@ -47,7 +47,7 @@ class InstrumentsTile extends ConsumerWidget {
       width: MediaQuery.of(context).size.width * 2 / 3,
       child: ListTile(
         leading: const Icon(Icons.add_circle_outline),
-        title: const Text('Add'),
+        title: const Text('Assign members'),
         onTap: () async {
           List<String> _completeMembersList = await TeamFirebaseAPI(_wcUserInfoData!.teamID).getCompleteMembersNamesList();
           List<String> _unassignedMembersList = ref.read(scheduleMusiciansProvider.notifier).getUnassignedMembersList(_completeMembersList);

@@ -44,53 +44,8 @@ class AddInstrumentsCard extends ConsumerWidget {
                       const SizedBox(
                         height: 8,
                       ),
-                      SizedBox(
-                        height: WCUtils.screenHeightSafeArea(context) / 3,
-                        child: ListView.builder(
-                          controller: _scrollController,
-                          itemCount: _instrumentsList.length + 1,
-                          itemBuilder: (context, index) {
-                            if (index < _instrumentsList.length) {
-                              return _buildInstumentsListTile(ref, _instrumentsList[index]);
-                            } else {
-                              return AddCustomInstrumentExpansionTile(
-                                scrollToBottom: scrollToBottom,
-                              );
-                            }
-                          },
-                        ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: const Text('Cancel'),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              String _selectedInstrument = ref.read(selectedInstrumentsProvider);
-                              String _customInstrument = ref.read(customInstrumentProvider);
-
-                              if (_selectedInstrument.isEmpty && _customInstrument.isEmpty) {
-                                WCUtils.wcShowError(wcError: 'No instrument selected');
-                                return;
-                              }
-
-                              if (wcCoreInstruments.contains(_selectedInstrument)) {
-                                ref.read(scheduleMusiciansProvider.notifier).addInstrument(_selectedInstrument);
-                              } else {
-                                ref.read(scheduleMusiciansProvider.notifier).addCustomInstrument(_customInstrument);
-                              }
-
-                              Navigator.pop(context);
-                            },
-                            child: const Text('Add'),
-                          ),
-                        ],
-                      )
+                      _buildInstrumentList(context, ref),
+                      _buildButtons(context, ref),
                     ],
                   ),
                 ),
@@ -99,6 +54,63 @@ class AddInstrumentsCard extends ConsumerWidget {
           ),
         ),
       ),
+    );
+  }
+
+  SizedBox _buildInstrumentList(BuildContext context, WidgetRef ref) {
+    return SizedBox(
+      height: WCUtils.screenHeightSafeArea(context) / 3,
+      child: Scrollbar(
+        isAlwaysShown: true,
+        controller: _scrollController,
+        child: ListView.builder(
+          controller: _scrollController,
+          itemCount: _instrumentsList.length + 1,
+          itemBuilder: (context, index) {
+            if (index < _instrumentsList.length) {
+              return _buildInstumentsListTile(ref, _instrumentsList[index]);
+            } else {
+              return AddCustomInstrumentExpansionTile(
+                scrollToBottom: scrollToBottom,
+              );
+            }
+          },
+        ),
+      ),
+    );
+  }
+
+  Row _buildButtons(BuildContext context, WidgetRef ref) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        TextButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: const Text('Cancel'),
+        ),
+        TextButton(
+          onPressed: () {
+            String _selectedInstrument = ref.read(selectedInstrumentsProvider);
+            String _customInstrument = ref.read(customInstrumentProvider);
+
+            if (_selectedInstrument.isEmpty && _customInstrument.isEmpty) {
+              WCUtils.wcShowError(wcError: 'No instrument selected');
+              return;
+            }
+
+            if (wcCoreInstruments.contains(_selectedInstrument)) {
+              ref.read(scheduleMusiciansProvider.notifier).addInstrument(_selectedInstrument);
+            } else {
+              ref.read(scheduleMusiciansProvider.notifier).addCustomInstrument(_customInstrument);
+            }
+
+            Navigator.pop(context);
+          },
+          child: const Text('Add'),
+        ),
+      ],
     );
   }
 

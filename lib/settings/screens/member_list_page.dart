@@ -47,6 +47,9 @@ class MembersListPage extends ConsumerWidget {
                 (element) {
                   return element.userStatus == UserStatusEnum.leader;
                 },
+                orElse: () {
+                  return WCUserInfoData.empty();
+                },
               ),
             ),
             ..._adminList.map(

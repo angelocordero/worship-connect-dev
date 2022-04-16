@@ -19,8 +19,23 @@ class AddCustomInstrumentExpansionTileState extends ConsumerState<AddCustomInstr
     return ExpansionTile(
       controlAffinity: ListTileControlAffinity.leading,
       title: const Text('Add Custom Instrument'),
-      leading: Icon(
-        _customTileExpanded ? Icons.remove_circle_outline : Icons.add_circle_outline,
+      leading: AnimatedSwitcher(
+        child: _customTileExpanded
+            ? const Icon(
+                Icons.remove_circle_outline,
+                key: Key('1'),
+              )
+            : const Icon(
+                Icons.add_circle_outline,
+                key: Key('2'),
+              ),
+        duration: const Duration(milliseconds: 500),
+        transitionBuilder: (child, animation) {
+          return FadeTransition(
+            opacity: animation,
+            child: child,
+          );
+        },
       ),
       children: <Widget>[
         TextFormField(
@@ -53,6 +68,8 @@ class AddCustomInstrumentExpansionTileState extends ConsumerState<AddCustomInstr
             _customTileExpanded = expanded;
           },
         );
+
+      
 
         await Future.delayed(const Duration(milliseconds: 250));
 

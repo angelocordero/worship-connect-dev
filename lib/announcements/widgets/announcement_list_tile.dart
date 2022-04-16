@@ -67,7 +67,11 @@ class AnnouncementListTile extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(announcementData.announcementPosterName, style: Theme.of(context).textTheme.bodyText1),
+              Text(announcementData.announcementPosterName,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyText1
+                      ?.copyWith(color: Theme.of(context).brightness == Brightness.light ? Colors.black : Colors.white)),
               const SizedBox(
                 height: 4,
               ),

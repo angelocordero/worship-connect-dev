@@ -143,7 +143,7 @@ class _CreateScheduleCardState extends ConsumerState<CreateScheduleCard> {
           TapDebouncer(
             onTap: () async {
               DateTime _date = WCUtils.setDateTimeFromDayAndTime(
-                dateTime: DateTime.now(),
+                dateTime: ref.watch(calendarSelectedDayProvider),
                 timeOfDay: _selectedTime,
               );
 
