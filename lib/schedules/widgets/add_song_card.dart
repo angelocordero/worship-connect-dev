@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tap_debouncer/tap_debouncer.dart';
@@ -14,8 +13,8 @@ class AddSongCard extends ConsumerStatefulWidget {
 }
 
 class _AddSongCardState extends ConsumerState<AddSongCard> {
-  final TextEditingController _titleEditingController = TextEditingController();
   final TextEditingController _linkEditingController = TextEditingController();
+  final TextEditingController _titleEditingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -25,128 +24,123 @@ class _AddSongCardState extends ConsumerState<AddSongCard> {
       child: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(32.0),
-          child: Hero(
-            tag: 'song',
-            child: Material(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+          child: Material(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12.0),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Text(
+                      'Add Song',
+                      style: Theme.of(context).textTheme.headline6?.copyWith(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  TextField(
+                    style: Theme.of(context).textTheme.bodyText2,
+                    controller: _titleEditingController,
+                    autocorrect: true,
+                    enableSuggestions: true,
+                    cursorColor: Colors.black,
+                    decoration: const InputDecoration(
+                      isDense: true,
+                      hintText: 'Title',
+                      contentPadding: EdgeInsets.all(12),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(12.0),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  const SizedBox(
+                    width: 150,
+                    child: SongKeyDropdown(),
+                  ),
+                  const SizedBox(height: 12),
+                  TextField(
+                    maxLines: 2,
+                    minLines: 2,
+                    style: Theme.of(context).textTheme.bodyText2,
+                    controller: _linkEditingController,
+                    autocorrect: true,
+                    enableSuggestions: true,
+                    cursorColor: Colors.black,
+                    decoration: const InputDecoration(
+                      isDense: true,
+                      hintText: 'Link',
+                      contentPadding: EdgeInsets.all(12),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(12.0),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      const Padding(
-                        padding: EdgeInsets.all(16.0),
-                        child: Text(
-                          'Add song',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width / 4 - 16,
                       ),
-                      TextField(
-                        controller: _titleEditingController,
-                        autocorrect: true,
-                        enableSuggestions: true,
-                        cursorColor: Colors.black,
-                        decoration: const InputDecoration(
-                          isDense: true,
-                          hintText: 'Title',
-                          contentPadding: EdgeInsets.all(12),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(12.0),
+                      TapDebouncer(
+                        onTap: () async {
+                          if (_titleEditingController.text.isNotEmpty) {
+                            showCancelDialog(context);
+                          } else {
+                            Navigator.pop(context);
+                          }
+                        },
+                        builder: (BuildContext context, TapDebouncerFunc? onTap) {
+                          return TextButton(
+                            onPressed: onTap,
+                            child: const Text(
+                              'Cancel',
+                              style: TextStyle(
+                                fontSize: 12.0,
+                              ),
                             ),
-                          ),
-                        ),
+                          );
+                        },
                       ),
-                      const SizedBox(height: 12),
                       const SizedBox(
-                        width: 150,
-                        child: SongKeyDropdown(),
+                        width: 16,
                       ),
-                      const SizedBox(height: 12),
-                      TextField(
-                        controller: _linkEditingController,
-                        autocorrect: true,
-                        enableSuggestions: true,
-                        cursorColor: Colors.black,
-                        decoration: const InputDecoration(
-                          isDense: true,
-                          hintText: 'Link',
-                          contentPadding: EdgeInsets.all(12),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(12.0),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width / 4 - 16,
-                            ),
-                            TapDebouncer(
-                              onTap: () async {
-                                if (_titleEditingController.text.isNotEmpty) {
-                                  showCancelDialog(context);
-                                } else {
-                                  Navigator.pop(context);
-                                }
-                              },
-                              builder: (BuildContext context, TapDebouncerFunc? onTap) {
-                                return TextButton(
-                                  onPressed: onTap,
-                                  child: const Text(
-                                    'Cancel',
-                                    style: TextStyle(
-                                      fontSize: 12.0,
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                            const SizedBox(
-                              width: 16,
-                            ),
-                            TapDebouncer(
-                              onTap: () async {
-                                if (_titleEditingController.text.isEmpty) {
-                                  WCUtils.wcShowError(wcError: 'Song title can not be empty');
-                                  return;
-                                }
+                      TapDebouncer(
+                        onTap: () async {
+                          if (_titleEditingController.text.isEmpty) {
+                            WCUtils.wcShowError(wcError: 'Song title can not be empty');
+                            return;
+                          }
 
-                                await ref.read(schedulesSongsProvider.notifier).addSong(
-                                      title: _titleEditingController.text.trim(),
-                                      key: _songKey,
-                                      url: _linkEditingController.text.trim().isNotEmpty ? _linkEditingController.text.trim() : null,
-                                    );
-                                Navigator.pop(context);
-                              },
-                              builder: (BuildContext context, TapDebouncerFunc? onTap) {
-                                return TextButton(
-                                  onPressed: onTap,
-                                  child: const Text(
-                                    'Add Song',
-                                    style: TextStyle(
-                                      fontSize: 12.0,
-                                    ),
-                                  ),
-                                );
-                              },
+                          await ref.read(schedulesSongsProvider.notifier).addSong(
+                                title: _titleEditingController.text.trim(),
+                                key: _songKey,
+                                url: _linkEditingController.text.trim().isNotEmpty ? _linkEditingController.text.trim() : null,
+                              );
+                          Navigator.pop(context);
+                        },
+                        builder: (BuildContext context, TapDebouncerFunc? onTap) {
+                          return TextButton(
+                            onPressed: onTap,
+                            child: const Text(
+                              'Add Song',
+                              style: TextStyle(
+                                fontSize: 12.0,
+                              ),
                             ),
-                          ],
-                        ),
+                          );
+                        },
                       ),
                     ],
                   ),
-                ),
+                ],
               ),
             ),
           ),
@@ -156,10 +150,10 @@ class _AddSongCardState extends ConsumerState<AddSongCard> {
   }
 
   Future<dynamic> showCancelDialog(BuildContext context) {
-    return showCupertinoDialog(
+    return showDialog(
       context: context,
       builder: (BuildContext context) {
-        return CupertinoAlertDialog(
+        return AlertDialog(
           title: const Text('Confirm cancel?'),
           actions: [
             TextButton(

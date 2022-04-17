@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:worship_connect/schedules/screens/schedules_summary_page.dart';
 import 'package:worship_connect/schedules/utils/schedule_data.dart';
 import 'package:worship_connect/schedules/utils/schedules_providers_definition.dart';
 import 'package:worship_connect/schedules/widgets/create_schedule_card.dart';
@@ -21,28 +21,34 @@ class SchedulesHomePage extends ConsumerStatefulWidget {
 
 class _SchedulesHomePageState extends ConsumerState<SchedulesHomePage> {
   @override
-  void initState() {
-    ref.read(calendarScheduleListProvider.notifier).initScheduleProvider();
-    ref.read(scheduleInfoProvider.state);
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final calendarSelectedDay = ref.watch(calendarSelectedDayProvider);
-    WCUserInfoData? _wcUserInfoData = ref.watch(wcUserInfoDataStream).asData!.value;
+    WCUserInfoData? _wcUserInfoData = ref.watch(wcUserInfoDataStream).asData?.value;
 
     return Scaffold(
       floatingActionButton: Visibility(
-        visible: WCUtils.isAdminOrLeader(_wcUserInfoData!),
+        visible: WCUtils.isAdminOrLeader(_wcUserInfoData),
         child: _addScheduleButton(context),
       ),
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Schedules',
-          style: GoogleFonts.exo2(),
         ),
-        actions: const [],
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.format_list_bulleted),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return const SchedulesSummaryPage();
+                  },
+                ),
+              );
+            },
+          ),
+        ],
       ),
       body: SizedBox(
         height: WCUtils.screenHeightSafeAreaAppBarBottomBar(context),
@@ -63,7 +69,11 @@ class _SchedulesHomePageState extends ConsumerState<SchedulesHomePage> {
                       padding: const EdgeInsets.all(12),
                       child: Builder(
                         builder: (context) {
-                          return _buildScheduleList(calendarSelectedDay);
+                          try {
+                            return _buildScheduleList(calendarSelectedDay);
+                          } catch (e) {
+                            return Container();
+                          }
                         },
                       ),
                     ),
@@ -104,29 +114,31 @@ class _SchedulesHomePageState extends ConsumerState<SchedulesHomePage> {
         child: Text(
           'No schedules for\n${WCUtils.dateToString(calendarSelectedDay)}',
           textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.subtitle1,
         ),
       );
     } else {
+      List<WCScheduleData> _scheduleDataList = scheduleList.map((element) {
+        return WCScheduleData(
+          scheduleTitle: element[WCScheduleDataEnum.scheduleTitle.name],
+          scheduleID: element[WCScheduleDataEnum.scheduleID.name],
+          timestamp: element[WCScheduleDataEnum.timestamp.name],
+          scheduleDateCode: element[WCScheduleDataEnum.scheduleDateCode.name],
+        );
+      }).toList();
+
+      _scheduleDataList.sort(
+        (a, b) {
+          return a.timestamp.compareTo(b.timestamp);
+        },
+      );
+
       return ListView.builder(
         itemCount: scheduleList.length,
         itemBuilder: (BuildContext context, int index) {
-          return _buildScheduleCalendarTiles(scheduleList, index);
+          return SchedulesCalendarTile(scheduleData: _scheduleDataList[index]);
         },
       );
     }
-  }
-
-  SchedulesCalendarTile _buildScheduleCalendarTiles(List<dynamic> scheduleList, int index) {
-    Map<String, dynamic> _scheduleDataFromList = scheduleList[index];
-    WCScheduleData _scheduleData = WCScheduleData(
-      scheduleTitle: _scheduleDataFromList[WCScheduleDataEnum.scheduleTitle.name],
-      scheduleID: _scheduleDataFromList[WCScheduleDataEnum.scheduleID.name],
-      timestamp: _scheduleDataFromList[WCScheduleDataEnum.timestamp.name],
-      scheduleDateCode: _scheduleDataFromList[WCScheduleDataEnum.scheduleDateCode.name],
-    );
-
-    return SchedulesCalendarTile(
-      scheduleData: _scheduleData,
-    );
   }
 }

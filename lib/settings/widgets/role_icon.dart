@@ -23,9 +23,9 @@ class RoleIcon extends StatelessWidget {
     }
 
     return Container(
-      decoration: const BoxDecoration(
-        color: Colors.blue,
-        borderRadius: BorderRadius.all(
+      decoration: BoxDecoration(
+        color: wcAccentColor,
+        borderRadius: const BorderRadius.all(
           Radius.circular(50),
         ),
       ),
@@ -34,7 +34,11 @@ class RoleIcon extends StatelessWidget {
       child: Center(
         child: Text(
           _roleString,
-          style: const TextStyle(color: Colors.white, fontSize: 10),
+          style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                color: Colors.black,
+                fontSize: 10,
+                fontWeight: FontWeight.bold,
+              ),
         ),
       ),
     );

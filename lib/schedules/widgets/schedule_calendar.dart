@@ -49,6 +49,7 @@ class _ScheduleCalendarState extends ConsumerState<ScheduleCalendar> {
         );
 
         selectedDayProvider.state = selectedDay;
+
       },
       onPageChanged: (focusedDay) {
         _focusedDay = focusedDay;

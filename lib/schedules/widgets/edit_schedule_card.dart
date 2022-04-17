@@ -46,14 +46,11 @@ class _EditScheduleCardState extends ConsumerState<EditScheduleCard> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Padding(
-                        padding: EdgeInsets.all(16.0),
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
                         child: Text(
                           'Edit schedule',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: Theme.of(context).textTheme.headline6,
                         ),
                       ),
                       _scheduleTitleTextField(),
@@ -191,6 +188,7 @@ class _EditScheduleCardState extends ConsumerState<EditScheduleCard> {
 
   TextField _scheduleTitleTextField() {
     return TextField(
+      style: Theme.of(context).textTheme.bodyText2,
       controller: _scheduleTextController,
       minLines: 2,
       maxLines: 2,
@@ -198,6 +196,8 @@ class _EditScheduleCardState extends ConsumerState<EditScheduleCard> {
       enableSuggestions: true,
       cursorColor: Colors.black,
       decoration: const InputDecoration(
+        isDense: true,
+        contentPadding: EdgeInsets.all(12),
         hintText: 'Title',
         border: OutlineInputBorder(
           borderRadius: BorderRadius.all(
@@ -220,11 +220,7 @@ class _EditScheduleCardState extends ConsumerState<EditScheduleCard> {
       onTap: () => _timePicker(
         context,
       ),
-      trailing: const SizedBox(
-        height: 0,
-        width: 0,
-        child: Icon(Icons.timer),
-      ),
+      trailing: const Icon(Icons.timer),
     );
   }
 

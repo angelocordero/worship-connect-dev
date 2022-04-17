@@ -21,38 +21,33 @@ class AnnouncementListTile extends ConsumerWidget {
     WCUserInfoData _userInfoData = ref.watch(wcUserInfoDataStream).asData!.value!;
     AnnouncementListProvider _announcementListNotifier = ref.watch(announcementListProvider.notifier);
 
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
-      child: Card(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _announcementInfo(
-                context: context,
-                userInfoData: _userInfoData,
-                announcementData: _announcementData,
-                announcementListNotifier: _announcementListNotifier,
-              ),
-              const Divider(),
-              _announcementText(_announcementData),
-            ],
-          ),
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _announcementInfo(
+              context: context,
+              userInfoData: _userInfoData,
+              announcementData: _announcementData,
+              announcementListNotifier: _announcementListNotifier,
+            ),
+            const Divider(),
+            _announcementText(_announcementData, context),
+          ],
         ),
       ),
     );
   }
 
-  Padding _announcementText(WCAnnouncementsData _announcementData) {
+  Padding _announcementText(WCAnnouncementsData _announcementData, BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Text(
         _announcementData.announcementText,
-        style: const TextStyle(
-          fontSize: 15,
-        ),
+        style: Theme.of(context).textTheme.bodyText2,
       ),
     );
   }
@@ -72,17 +67,15 @@ class AnnouncementListTile extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                announcementData.announcementPosterName,
-                style: const TextStyle(fontSize: 14),
-              ),
+              Text(announcementData.announcementPosterName,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyText1
+                      ?.copyWith(color: Theme.of(context).brightness == Brightness.light ? Colors.black : Colors.white)),
               const SizedBox(
                 height: 4,
               ),
-              Text(
-                announcementData.announcementDateString,
-                style: const TextStyle(fontSize: 12),
-              ),
+              Text(announcementData.announcementDateString, style: Theme.of(context).textTheme.bodyText1),
             ],
           ),
         ),
@@ -91,7 +84,7 @@ class AnnouncementListTile extends ConsumerWidget {
             tag: announcementData.announcementID,
             child: IconButton(
               icon: const Icon(
-                Icons.edit,
+                Icons.edit_outlined,
                 size: 14,
               ),
               onPressed: () async {
@@ -111,7 +104,7 @@ class AnnouncementListTile extends ConsumerWidget {
         if (_adminOrLeader)
           IconButton(
             icon: const Icon(
-              Icons.delete,
+              Icons.delete_outline,
               size: 14,
             ),
             onPressed: () async {

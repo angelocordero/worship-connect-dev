@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:worship_connect/wc_core/wc_themes.dart';
+import 'package:worship_connect/wc_core/wc_themes_provider.dart';
 import 'package:worship_connect/wc_core/core_providers_definition.dart';
-
 
 class ThemeSelectionCard extends ConsumerWidget {
   const ThemeSelectionCard({Key? key}) : super(key: key);
@@ -13,46 +12,28 @@ class ThemeSelectionCard extends ConsumerWidget {
     final ThemeMode _wcTheme = ref.watch(wcThemeProvider);
 
     return Center(
-      child: Hero(
-        tag: 'theme',
-        child: SingleChildScrollView(
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: SizedBox(
-              height: 250,
-              width: 250,
-              child: Card(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          'Theme',
-                          style: TextStyle(fontSize: 20),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          _lightRadioButton(_wcThemeNotifier, _wcTheme),
-                          _darkRadioButton(_wcThemeNotifier, _wcTheme),
-                          _systemDefaultRadioButton(_wcThemeNotifier, _wcTheme),
-                        ],
-                      ),
-                      _exitButton(context)
-                    ],
-                  ),
+      child: SizedBox(
+        height: 260,
+        width: 250,
+        child: Card(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Theme',
+                  style: Theme.of(context).textTheme.headline6?.copyWith(fontWeight: FontWeight.bold),
                 ),
-              ),
+                const SizedBox(
+                  height: 10,
+                ),
+                _lightRadioButton(_wcThemeNotifier, _wcTheme),
+                _darkRadioButton(_wcThemeNotifier, _wcTheme),
+                _systemDefaultRadioButton(_wcThemeNotifier, _wcTheme),
+                _exitButton(context)
+              ],
             ),
           ),
         ),

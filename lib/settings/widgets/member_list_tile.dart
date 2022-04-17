@@ -11,20 +11,45 @@ import 'package:worship_connect/wc_core/core_providers_definition.dart';
 class MemberListTile extends ConsumerWidget {
   const MemberListTile({Key? key, required this.memberData}) : super(key: key);
 
+  static bool _showPopupButton = false;
   final WCUserInfoData memberData;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final WCUserInfoData _userData = ref.watch(wcUserInfoDataStream).asData!.value!;
+    Text _nameText = Text(memberData.userName);
+
+    if (_userData.userStatus == UserStatusEnum.leader && memberData.userID != _userData.userID) {
+      _showPopupButton = true;
+    } else if (_userData.userStatus == UserStatusEnum.admin &&
+        memberData.userStatus == UserStatusEnum.admin &&
+        _userData.userID == memberData.userID) {
+      _showPopupButton = true; // if the user is admin, it should show the popup to demote himself
+    } else if (_userData.userStatus == UserStatusEnum.admin &&
+        memberData.userStatus == UserStatusEnum.admin &&
+        _userData.userID != memberData.userID) {
+      _showPopupButton = false; // if the user is admin, it would not show the popup to fellow admins
+    } else if (_userData.userStatus == UserStatusEnum.admin && memberData.userStatus == UserStatusEnum.member) {
+      _showPopupButton = true;
+    } else {
+      _showPopupButton = false;
+    }
+
+    if (_userData.userID == memberData.userID) {
+      _nameText = Text(
+        memberData.userName,
+        style: Theme.of(context).textTheme.subtitle1?.copyWith(fontStyle: FontStyle.italic),
+      );
+    }
 
     return Container(
       decoration: const BoxDecoration(
         border: Border(
-          bottom: BorderSide(),
+          bottom: BorderSide(width: 0.5),
         ),
       ),
       child: ListTile(
-        title: Text(memberData.userName),
+        title: _nameText,
         trailing: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -32,7 +57,7 @@ class MemberListTile extends ConsumerWidget {
           children: [
             if (WCUtils.isAdminOrLeader(memberData)) RoleIcon(role: memberData.userStatus), //role icon
             Visibility(
-              visible: WCUtils.isAdminOrLeader(_userData) && _userData.userID != memberData.userID,
+              visible: _showPopupButton,
               replacement: const SizedBox(
                 width: 46,
               ),
@@ -48,11 +73,13 @@ class MemberListTile extends ConsumerWidget {
     UserStatusEnum _userStatus = _userData.userStatus;
     UserStatusEnum _memberStatus = memberData.userStatus;
 
-    bool _canPassLeader = _userStatus == UserStatusEnum.leader && _memberStatus == UserStatusEnum.admin;
-    bool _canPromoteMemberToAdmin = _userStatus == UserStatusEnum.leader && _memberStatus == UserStatusEnum.member;
-    bool _canDemoteAdminToMember = _userStatus == UserStatusEnum.leader && _memberStatus == UserStatusEnum.admin;
-    bool _canRemoveFromTeam = WCUtils.isAdminOrLeader(_userData) && _memberStatus == UserStatusEnum.member;
-    bool _canDemoteSelfToMember = _userStatus == UserStatusEnum.admin;
+    bool _canPassLeader = _userStatus == UserStatusEnum.leader && _memberStatus == UserStatusEnum.admin && _userData.userID != memberData.userID;
+    bool _canPromoteMemberToAdmin =
+        _userStatus == UserStatusEnum.leader && _memberStatus == UserStatusEnum.member && _userData.userID != memberData.userID;
+    bool _canDemoteAdminToMember =
+        _userStatus == UserStatusEnum.leader && _memberStatus == UserStatusEnum.admin && _userData.userID != memberData.userID;
+    bool _canRemoveFromTeam = WCUtils.isAdminOrLeader(_userData) && _memberStatus == UserStatusEnum.member && _userData.userID != memberData.userID;
+    bool _canDemoteSelfToMember = _userStatus == UserStatusEnum.admin && _userData.userID == memberData.userID;
 
     return PopupMenuButton<int>(
       onSelected: (item) async {

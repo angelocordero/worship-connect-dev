@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:worship_connect/announcements/providers/announcement_list_provider.dart';
 import 'package:worship_connect/announcements/utils/announcements_providers_definition.dart';
 import 'package:worship_connect/announcements/widgets/announcement_list_tile.dart';
@@ -19,30 +18,26 @@ class AnnouncementsHomePage extends ConsumerStatefulWidget {
 
 class _AnnouncementsHomePageState extends ConsumerState<AnnouncementsHomePage> {
   @override
-  void initState() {
-    ref.read(announcementListProvider.notifier).getAnnouncements();
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    WCUserInfoData? _wcUserInfoData = ref.watch(wcUserInfoDataStream).asData!.value;
+    WCUserInfoData? _wcUserInfoData = ref.watch(wcUserInfoDataStream).asData?.value;
     List _announcementList = ref.watch(announcementListProvider);
     AnnouncementListProvider _announcementNotifier = ref.watch(announcementListProvider.notifier);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Announcements',
-          style: GoogleFonts.exo2(),
         ),
       ),
-      floatingActionButton: _newAnnouncementButton(context, _wcUserInfoData!),
+      floatingActionButton: _newAnnouncementButton(context, _wcUserInfoData),
       body: Builder(
         builder: (context) {
           if (_announcementList.isEmpty) {
-            return const Center(
-              child: Text("No announcement"),
+            return Center(
+              child: Text(
+                "No announcement",
+                style: Theme.of(context).textTheme.subtitle1,
+              ),
             );
           } else {
             return RefreshIndicator(
@@ -50,6 +45,7 @@ class _AnnouncementsHomePageState extends ConsumerState<AnnouncementsHomePage> {
                 return await _announcementNotifier.getAnnouncements();
               },
               child: ListView.builder(
+                padding: const EdgeInsets.all(4),
                 itemCount: _announcementList.length,
                 itemBuilder: (BuildContext context, int index) {
                   return AnnouncementListTile(
@@ -65,7 +61,7 @@ class _AnnouncementsHomePageState extends ConsumerState<AnnouncementsHomePage> {
     );
   }
 
-  Visibility _newAnnouncementButton(BuildContext context, WCUserInfoData wcUserInfoData) {
+  Visibility _newAnnouncementButton(BuildContext context, WCUserInfoData? wcUserInfoData) {
     return Visibility(
       visible: WCUtils.isAdminOrLeader(wcUserInfoData),
       child: WCUtils.wcExtendedFloatingActionButton(

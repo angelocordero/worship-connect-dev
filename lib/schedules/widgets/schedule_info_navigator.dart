@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:worship_connect/schedules/screens/schedule_info_musicians_page.dart';
 import 'package:worship_connect/schedules/screens/schedule_info_songs_page.dart';
 import 'package:worship_connect/schedules/utils/schedule_data.dart';
@@ -29,11 +28,9 @@ class _ScheduleInfoNavigatorState extends ConsumerState<ScheduleInfoNavigator> {
         title: ListTile(
           title: Text(
             _scheduleData.scheduleTitle,
-            style: GoogleFonts.exo2(),
           ),
           subtitle: Text(
             _scheduleData.timeString,
-            style: GoogleFonts.exo2(),
           ),
         ),
       ),
@@ -53,7 +50,7 @@ class _ScheduleInfoNavigatorState extends ConsumerState<ScheduleInfoNavigator> {
           ),
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.my_library_books,
+              Icons.queue_music,
             ),
             label: 'Musicians',
           ),

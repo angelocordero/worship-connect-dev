@@ -30,10 +30,7 @@ class JoinTeamForm extends ConsumerWidget {
           onChanged: (value) {
             joinTeamID.state = value;
           },
-          style: const TextStyle(
-            fontSize: 14,
-            color: Colors.white,
-          ),
+          style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.white),
           textAlign: TextAlign.center,
           decoration: InputDecoration(
             isDense: true,

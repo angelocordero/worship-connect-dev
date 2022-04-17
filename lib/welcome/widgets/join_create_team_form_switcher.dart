@@ -9,7 +9,6 @@ import 'package:worship_connect/welcome/widgets/create_team_form.dart';
 import 'package:worship_connect/welcome/widgets/join_team_form.dart';
 import 'package:worship_connect/wc_core/core_providers_definition.dart';
 
-
 final createTeamNameProvider = StateProvider.autoDispose<String>((ref) {
   return '';
 });
@@ -37,27 +36,31 @@ class _JoinCreateTeamFormSwitcherState extends State<JoinCreateTeamFormSwitcher>
     CreateTeamForm(),
   ];
 
-  Positioned _joinTeamButton() {
-    return Positioned(
-      top: 0,
-      left: 20,
-      right: 130,
-      height: 30,
-      child: TextButton(
-        onPressed: () {
-          setState(
-            () {
-              buttonText = 'Join Team';
-              joinColor = wcGradientColors;
-              createColor = inactiveButtonColor;
-              currentIndex = 0;
-              dividerRight = 146;
-            },
-          );
-        },
-        child: GradientText(
-          'JOIN',
-          colors: joinColor,
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 250,
+      width: 250,
+      decoration: BoxDecoration(
+        color: Colors.black38,
+        borderRadius: const BorderRadius.all(
+          Radius.circular(10),
+        ),
+        border: Border.all(color: wcAccentColor),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(14.0),
+        child: Stack(
+          alignment: AlignmentDirectional.center,
+          clipBehavior: Clip.none,
+          children: [
+            _joinTeamButton(),
+            _createTeamButton(),
+            _divider(),
+            _joinCreateButton(),
+            _joinCreateFormView(),
+            _dividerAnimated(),
+          ],
         ),
       ),
     );
@@ -101,16 +104,17 @@ class _JoinCreateTeamFormSwitcherState extends State<JoinCreateTeamFormSwitcher>
     );
   }
 
-  Positioned _joinCreateFormView() {
-    return Positioned(
-      top: 40,
-      height: 140,
-      width: 200,
-      child: Padding(
-        padding: const EdgeInsets.only(top: 10),
-        child: IndexedStack(
-          index: currentIndex,
-          children: pages,
+  AnimatedPositioned _dividerAnimated() {
+    return AnimatedPositioned(
+      top: 31,
+      right: dividerRight,
+      width: 40,
+      height: 4,
+      duration: const Duration(milliseconds: 300),
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: wcLinearGradient,
+          borderRadius: BorderRadius.circular(30),
         ),
       ),
     );
@@ -135,7 +139,7 @@ class _JoinCreateTeamFormSwitcherState extends State<JoinCreateTeamFormSwitcher>
           return ElevatedButton(
             style: ElevatedButton.styleFrom(
               padding: EdgeInsets.zero,
-              shape: wcButtonShape,
+              shape: const StadiumBorder(),
             ),
             onPressed: () async {
               if (currentIndex == 0) {
@@ -171,47 +175,42 @@ class _JoinCreateTeamFormSwitcherState extends State<JoinCreateTeamFormSwitcher>
     );
   }
 
-  AnimatedPositioned _dividerAnimated() {
-    return AnimatedPositioned(
-      top: 31,
-      right: dividerRight,
-      width: 40,
-      height: 4,
-      duration: const Duration(milliseconds: 300),
-      child: Container(
-        decoration: BoxDecoration(
-          gradient: wcLinearGradient,
-          borderRadius: BorderRadius.circular(30),
+  Positioned _joinCreateFormView() {
+    return Positioned(
+      top: 40,
+      height: 140,
+      width: 200,
+      child: Padding(
+        padding: const EdgeInsets.only(top: 10),
+        child: IndexedStack(
+          index: currentIndex,
+          children: pages,
         ),
       ),
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 250,
-      width: 250,
-      decoration: BoxDecoration(
-        color: Colors.black38,
-        borderRadius: const BorderRadius.all(
-          Radius.circular(10),
-        ),
-        border: Border.all(color: wcPrimaryColor),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(14.0),
-        child: Stack(
-          alignment: AlignmentDirectional.center,
-          clipBehavior: Clip.none,
-          children: [
-            _joinTeamButton(),
-            _createTeamButton(),
-            _divider(),
-            _joinCreateButton(),
-            _joinCreateFormView(),
-            _dividerAnimated(),
-          ],
+  Positioned _joinTeamButton() {
+    return Positioned(
+      top: 0,
+      left: 20,
+      right: 130,
+      height: 30,
+      child: TextButton(
+        onPressed: () {
+          setState(
+            () {
+              buttonText = 'Join Team';
+              joinColor = wcGradientColors;
+              createColor = inactiveButtonColor;
+              currentIndex = 0;
+              dividerRight = 146;
+            },
+          );
+        },
+        child: GradientText(
+          'JOIN',
+          colors: joinColor,
         ),
       ),
     );
