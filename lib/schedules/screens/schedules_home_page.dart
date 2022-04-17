@@ -106,20 +106,6 @@ class _SchedulesHomePageState extends ConsumerState<SchedulesHomePage> {
     );
   }
 
-  SchedulesCalendarTile _buildScheduleCalendarTiles(List<dynamic> scheduleList, int index) {
-    Map<String, dynamic> _scheduleDataFromList = scheduleList[index];
-    WCScheduleData _scheduleData = WCScheduleData(
-      scheduleTitle: _scheduleDataFromList[WCScheduleDataEnum.scheduleTitle.name],
-      scheduleID: _scheduleDataFromList[WCScheduleDataEnum.scheduleID.name],
-      timestamp: _scheduleDataFromList[WCScheduleDataEnum.timestamp.name],
-      scheduleDateCode: _scheduleDataFromList[WCScheduleDataEnum.scheduleDateCode.name],
-    );
-
-    return SchedulesCalendarTile(
-      scheduleData: _scheduleData,
-    );
-  }
-
   Widget _buildScheduleList(DateTime calendarSelectedDay) {
     List scheduleList = ref.watch(calendarScheduleListProvider)[DateFormat('yyyyMMdd').format(calendarSelectedDay)] ?? [];
 
@@ -132,10 +118,25 @@ class _SchedulesHomePageState extends ConsumerState<SchedulesHomePage> {
         ),
       );
     } else {
+      List<WCScheduleData> _scheduleDataList = scheduleList.map((element) {
+        return WCScheduleData(
+          scheduleTitle: element[WCScheduleDataEnum.scheduleTitle.name],
+          scheduleID: element[WCScheduleDataEnum.scheduleID.name],
+          timestamp: element[WCScheduleDataEnum.timestamp.name],
+          scheduleDateCode: element[WCScheduleDataEnum.scheduleDateCode.name],
+        );
+      }).toList();
+
+      _scheduleDataList.sort(
+        (a, b) {
+          return a.timestamp.compareTo(b.timestamp);
+        },
+      );
+
       return ListView.builder(
         itemCount: scheduleList.length,
         itemBuilder: (BuildContext context, int index) {
-          return _buildScheduleCalendarTiles(scheduleList, index);
+          return SchedulesCalendarTile(scheduleData: _scheduleDataList[index]);
         },
       );
     }

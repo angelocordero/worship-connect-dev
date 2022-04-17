@@ -30,7 +30,7 @@ class AnnouncementListProvider extends StateNotifier<List> {
 
       _announcementList.sort(
         (a, b) {
-          return a.timestamp!.compareTo(b.timestamp!);
+          return b.timestamp!.compareTo(a.timestamp!);
         },
       );
       state = _announcementList;

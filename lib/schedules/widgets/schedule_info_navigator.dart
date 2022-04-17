@@ -52,7 +52,7 @@ class _ScheduleInfoNavigatorState extends ConsumerState<ScheduleInfoNavigator> {
             icon: Icon(
               Icons.queue_music,
             ),
-            label: 'Instruments',
+            label: 'Musicians',
           ),
         ],
       ),

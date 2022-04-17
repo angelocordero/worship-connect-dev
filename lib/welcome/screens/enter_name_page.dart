@@ -24,9 +24,6 @@ class _EnterNamePageState extends ConsumerState<EnterNamePage> {
     bool isOnTop = ModalRoute.of(context)?.isCurrent ?? false;
 
     if (_wcUserInfoData != null && _wcUserInfoData.userName.isNotEmpty && _wcUserInfoData.teamID.isEmpty && isOnTop) {
-
-
-
       WidgetsBinding.instance?.addPostFrameCallback(
         (_) async {
           setState(() {
@@ -62,7 +59,10 @@ class _EnterNamePageState extends ConsumerState<EnterNamePage> {
             child: const WCLoginScreenLogo(),
           ),
         ),
-        const Spacer(),
+        Visibility(
+          visible: MediaQuery.of(context).viewInsets.bottom == 0,
+          child: const Spacer(),
+        ),
         Hero(
           tag: 'name',
           child: AnimatedOpacity(

@@ -35,6 +35,23 @@ class SchedulesSummaryPage extends ConsumerWidget {
             return Container();
           }
 
+          List<WCScheduleData> _scheduleDataList = _scheduleList.map(
+            (element) {
+              return WCScheduleData(
+                scheduleTitle: element['scheduleTitle'],
+                scheduleID: element['scheduleID'],
+                timestamp: element['timestamp'],
+                scheduleDateCode: element['scheduleDateCode'],
+              );
+            },
+          ).toList();
+
+          _scheduleDataList.sort(
+            (a, b) {
+              return a.timestamp.compareTo(b.timestamp);
+            },
+          );
+
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -45,16 +62,9 @@ class SchedulesSummaryPage extends ConsumerWidget {
                   ),
                 ),
               ),
-              ..._scheduleList.map(
+              ..._scheduleDataList.map(
                 (element) {
-                  WCScheduleData _data = WCScheduleData(
-                    scheduleTitle: element['scheduleTitle'],
-                    scheduleID: element['scheduleID'],
-                    timestamp: element['timestamp'],
-                    scheduleDateCode: element['scheduleDateCode'],
-                  );
-
-                  return SchedulesCalendarTile(scheduleData: _data);
+                  return SchedulesCalendarTile(scheduleData: element);
                 },
               ),
               const Divider(),

@@ -23,14 +23,20 @@ class JoinCreateTeamPage extends ConsumerWidget {
     }
 
     return Column(
-      children: const [
-        Hero(
+      children: [
+        const Hero(
           tag: 'name',
           child: EditNameWidget(),
         ),
-        Spacer(),
-        JoinCreateTeamFormSwitcher(),
-        Spacer(),
+        Visibility(
+          replacement: const SizedBox(
+            height: 50,
+          ),
+          visible: MediaQuery.of(context).viewInsets.bottom == 0,
+          child: const Spacer(),
+        ),
+        const JoinCreateTeamFormSwitcher(),
+        const Spacer(),
       ],
     );
   }

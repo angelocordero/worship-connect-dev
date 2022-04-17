@@ -26,10 +26,11 @@ class ScheduleMusiciansProvider extends StateNotifier<Map<String, dynamic>> {
       return;
     }
 
-    Map<String, dynamic> temp = doc['musicians'];
+    SplayTreeMap<String, dynamic> _tempSTMap = _sortUsingSTMap(doc['musicians']);
 
-    state = Map<String, dynamic>.from(temp);
+    state = Map<String, dynamic>.from(_tempSTMap);
 
+    //adds already assigned members to list so duplicate assignments are not allowed
     state.forEach((key, value) {
       _alreadyAssignedMembers.addAll(List<String>.from(value));
     });
@@ -56,9 +57,7 @@ class ScheduleMusiciansProvider extends StateNotifier<Map<String, dynamic>> {
   addInstrument(String _instrument) {
     state[_instrument] = [];
 
-    SplayTreeMap<String, dynamic> _tempSTMap = SplayTreeMap<String, dynamic>.from(state, (a, b) {
-      return wcCoreInstruments.indexOf(a).compareTo(wcCoreInstruments.indexOf(b));
-    });
+    SplayTreeMap<String, dynamic> _tempSTMap = _sortUsingSTMap(state);
 
     state = Map<String, dynamic>.from(_tempSTMap);
   }
@@ -79,7 +78,6 @@ class ScheduleMusiciansProvider extends StateNotifier<Map<String, dynamic>> {
   }
 
   addMusicians({required String instrument, required List<String> musicians}) {
-
     state[instrument].addAll(musicians);
     _alreadyAssignedMembers.addAll(musicians);
 
@@ -87,7 +85,6 @@ class ScheduleMusiciansProvider extends StateNotifier<Map<String, dynamic>> {
   }
 
   removeMusician({required String instrument, required String musician}) {
-
     state[instrument].remove(musician);
     _alreadyAssignedMembers.remove(musician);
     state = Map<String, dynamic>.from(state);
@@ -99,5 +96,12 @@ class ScheduleMusiciansProvider extends StateNotifier<Map<String, dynamic>> {
 
   deleteCustomInstrument(String _instrument) async {
     await TeamFirebaseAPI(teamID).deleteCustomInstrument(_instrument);
+  }
+
+  // sorts instrument map based on core instruments list order
+  SplayTreeMap<String, dynamic> _sortUsingSTMap(Map input) {
+    return SplayTreeMap<String, dynamic>.from(input, (a, b) {
+      return wcCoreInstruments.indexOf(a).compareTo(wcCoreInstruments.indexOf(b));
+    });
   }
 }
