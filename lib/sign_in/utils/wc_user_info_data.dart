@@ -7,6 +7,7 @@ enum WCUserInfoDataEnum {
   userName,
   userStatusString,
   teamID,
+  fcmToken,
 }
 
 class WCUserInfoData {
@@ -14,6 +15,7 @@ class WCUserInfoData {
   final String userName;
   final String userStatusString;
   final String teamID;
+  final String fcmToken;
 
   late UserStatusEnum userStatus;
 
@@ -22,6 +24,7 @@ class WCUserInfoData {
     required this.userName,
     required this.userStatusString,
     required this.teamID,
+    required this.fcmToken,
   }) {
     userStatus = EnumToString.fromString(UserStatusEnum.values, userStatusString) ?? UserStatusEnum.noTeam;
   }
@@ -29,7 +32,8 @@ class WCUserInfoData {
       : userID = '',
         userName = '',
         userStatusString = UserStatusEnum.noTeam.name,
-        teamID = '' {
+        teamID = '',
+        fcmToken = '' {
     userStatus = EnumToString.fromString(UserStatusEnum.values, userStatusString) ?? UserStatusEnum.noTeam;
   }
 

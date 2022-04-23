@@ -19,7 +19,6 @@ class TeamFirebaseAPI {
 
   Stream<WCTeamData> teamData() {
     try {
-
       if (teamID.isEmpty) {
         return const Stream.empty();
       }
@@ -110,7 +109,7 @@ class TeamFirebaseAPI {
     }
   }
 
-  Future<void> promoteToAdmin(WCUserInfoData _memberData) async {
+  Future<void> promoteToAdmin(WCUserInfoData _memberData, String senderName, String teamName) async {
     EasyLoading.show();
 
     try {
@@ -126,13 +125,20 @@ class TeamFirebaseAPI {
       });
 
       await _writeBatch.commit();
+
+      WCUtils.sendMemberNotification(
+        title: 'You are now an admin of $teamName',
+        body: '$senderName promoted you to admin of $teamName',
+        targetUserID: _memberData.userID,
+      );
+
       EasyLoading.dismiss();
     } catch (e, st) {
       WCUtils.wcShowError(e: e, st: st, wcError: 'Failed to promote');
     }
   }
 
-  Future<void> promoteToLeader({required WCUserInfoData userData, required WCUserInfoData memberData}) async {
+  Future<void> promoteToLeader({required WCUserInfoData userData, required WCUserInfoData memberData, required String teamName}) async {
     EasyLoading.show();
 
     try {
@@ -154,13 +160,20 @@ class TeamFirebaseAPI {
       });
 
       await _writeBatch.commit();
+
+      WCUtils.sendMemberNotification(
+        title: 'You are now the leader if $teamName',
+        body: '${userData.userName} passed the leadership of $teamName to you',
+        targetUserID: memberData.userID,
+      );
+
       EasyLoading.dismiss();
     } catch (e, st) {
       WCUtils.wcShowError(e: e, st: st, wcError: 'Failed to promote');
     }
   }
 
-  Future<void> demoteToMember(WCUserInfoData _memberData) async {
+  Future<void> demoteToMember(WCUserInfoData _memberData, String senderName, String teamName) async {
     EasyLoading.show();
 
     try {
@@ -176,13 +189,47 @@ class TeamFirebaseAPI {
       });
 
       await _writeBatch.commit();
+      WCUtils.sendMemberNotification(
+        title: 'You have been demoted to member of $teamName',
+        body: '$senderName demoted you to member of $teamName',
+        targetUserID: _memberData.userID,
+      );
       EasyLoading.dismiss();
     } catch (e, st) {
       WCUtils.wcShowError(e: e, st: st, wcError: 'Failed to demote');
     }
   }
 
-  Future<void> removeFromTeam(WCUserInfoData _memberData) async {
+  Future<void> demoteSelfToMember(WCUserInfoData _memberData) async {
+    EasyLoading.show();
+
+    try {
+      WriteBatch _writeBatch = _firebaseInstance.batch();
+
+      _writeBatch.update(WCUSerFirebaseAPI().wcUserDataCollection.doc(_memberData.userID), {
+        WCUserInfoDataEnum.userStatusString.name: UserStatusEnum.member.name,
+      });
+
+      _writeBatch.update(teamsDataCollection.doc(teamID).collection('data').doc('members'), {
+        'admin.${_memberData.userID}': FieldValue.delete(),
+        'members.${_memberData.userID}': _memberData.userName,
+      });
+
+      await _writeBatch.commit();
+
+      EasyLoading.dismiss();
+    } catch (e, st) {
+      WCUtils.wcShowError(e: e, st: st, wcError: 'Failed to demote');
+    }
+  }
+
+  Future<void> removeFromTeam(WCUserInfoData _memberData, String senderName, String teamName) async {
+    WCUtils.kickMemberNotification(
+      title: 'You have been removed from $teamName',
+      body: '$senderName removed you from $teamName',
+      targetUserID: _memberData.userID,
+    );
+
     await leaveTeam(_memberData);
   }
 

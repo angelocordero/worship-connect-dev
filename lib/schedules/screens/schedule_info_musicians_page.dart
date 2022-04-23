@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:worship_connect/schedules/providers/schedule_musicians_provider.dart';
 import 'package:worship_connect/schedules/utils/schedules_providers_definition.dart';
 import 'package:worship_connect/schedules/widgets/add_instruments_card.dart';
 import 'package:worship_connect/schedules/widgets/instruments_tile.dart';
@@ -14,6 +15,7 @@ class ScheduleInfoMusiciansPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     WCUserInfoData? _wcUserInfoData = ref.watch(wcUserInfoDataStream).asData!.value;
+    ScheduleMusiciansProvider _scheduleNotifier = ref.watch(scheduleMusiciansProvider.notifier);
 
     Map<String, dynamic> _instrumentsList = ref.watch(scheduleMusiciansProvider);
 
@@ -30,7 +32,7 @@ class ScheduleInfoMusiciansPage extends ConsumerWidget {
             ),
             child: RefreshIndicator(
               onRefresh: () {
-                return Future.delayed(const Duration(seconds: 1)); //TODO make refresh indicator functional
+                return _scheduleNotifier.reset();
               },
               child: ListView.builder(
                 padding: const EdgeInsets.all(4),
@@ -89,7 +91,9 @@ class ScheduleInfoMusiciansPage extends ConsumerWidget {
         Expanded(
           child: ElevatedButton(
             onPressed: () async {
-              ref.read(scheduleMusiciansProvider.notifier).saveMusicians();
+              WCUserInfoData _userData = ref.read(wcUserInfoDataStream).value!;
+
+              ref.read(scheduleMusiciansProvider.notifier).saveMusicians(_userData.userID, _userData.userName);
             },
             child: const Text('Save'),
           ),

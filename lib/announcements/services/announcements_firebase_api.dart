@@ -32,6 +32,14 @@ class AnnouncementsFirebaseAPI {
         }
       });
 
+      WCUtils.sendTeamNotification(
+        title: 'New Announcement',
+        body: 'New announcement added by $announcementPosterName',
+        teamID: _teamID,
+        posterID: announcementPosterID,
+        notificationType: 'announcement'
+      );
+
       EasyLoading.dismiss();
     } catch (e, st) {
       WCUtils.wcShowError(e: e, st: st, wcError: 'Failed to send announcement');

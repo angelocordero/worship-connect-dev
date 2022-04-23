@@ -132,9 +132,10 @@ class _JoinCreateTeamFormSwitcherState extends State<JoinCreateTeamFormSwitcher>
           String _createTeamName = ref.watch<String>(createTeamNameProvider);
           String _userName = ref.watch<String>(userNameProvider);
 
-          AsyncData<WCUserInfoData?>? _wcUserInfoData = ref.watch(wcUserInfoDataStream).asData;
+          WCUserInfoData? _wcUserInfoData = ref.watch(wcUserInfoDataStream).value;
 
-          String? _userID = _wcUserInfoData?.value?.userID;
+          String? _userID = _wcUserInfoData?.userID;
+          String? _fcmToken = _wcUserInfoData?.fcmToken;
 
           return ElevatedButton(
             style: ElevatedButton.styleFrom(
@@ -147,12 +148,14 @@ class _JoinCreateTeamFormSwitcherState extends State<JoinCreateTeamFormSwitcher>
                   teamID: _joinTeamID,
                   joinerName: _userName,
                   joinerID: _userID ?? '',
+                  fcmToken: _fcmToken ?? '',
                 );
               } else {
                 await CreateJoinTeamFirebaseAPI().createTeam(
                   teamName: _createTeamName,
                   creatorID: _userID ?? '',
                   creatorName: _userName,
+                  fcmToken: _fcmToken ?? '',
                 );
               }
             },

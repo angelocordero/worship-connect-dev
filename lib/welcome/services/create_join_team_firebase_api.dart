@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:worship_connect/announcements/utils/announcements_data.dart';
@@ -12,11 +13,7 @@ class CreateJoinTeamFirebaseAPI {
   final FirebaseFirestore _firebaseInstance = FirebaseFirestore.instance;
   late final CollectionReference wcWCTeamDataCollection = _firebaseInstance.collection('WCTeams');
 
-  Future createTeam({
-    required String teamName,
-    required String creatorID,
-    required String creatorName,
-  }) async {
+  Future createTeam({required String teamName, required String creatorID, required String creatorName, required String fcmToken}) async {
     try {
       if (creatorName.isEmpty) {
         EasyLoading.showError('User name cannot be empty');
@@ -75,6 +72,10 @@ class CreateJoinTeamFirebaseAPI {
 
       await _writeBatch.commit();
 
+      if (fcmToken.isNotEmpty) {
+        FirebaseMessaging.instance.subscribeToTopic(_teamID);
+      }
+
       EasyLoading.dismiss();
     } catch (e, st) {
       WCUtils.wcShowError(e: e, st: st, wcError: e.toString());
@@ -86,6 +87,7 @@ class CreateJoinTeamFirebaseAPI {
     required String teamID,
     required String joinerName,
     required String joinerID,
+    required String fcmToken,
   }) async {
     if (joinerName.isEmpty) {
       EasyLoading.showError('User name cannot be empty');
@@ -135,6 +137,10 @@ class CreateJoinTeamFirebaseAPI {
     });
 
     await _writeBatch.commit();
+
+    if (fcmToken.isNotEmpty) {
+      FirebaseMessaging.instance.subscribeToTopic(teamID);
+    }
 
     EasyLoading.dismiss();
   }

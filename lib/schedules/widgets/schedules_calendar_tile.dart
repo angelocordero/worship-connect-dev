@@ -3,13 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:worship_connect/schedules/utils/schedule_data.dart';
 import 'package:worship_connect/schedules/services/schedules_firebase_api.dart';
 import 'package:worship_connect/schedules/widgets/edit_schedule_card.dart';
-import 'package:worship_connect/schedules/widgets/schedule_info_navigator.dart';
 import 'package:worship_connect/sign_in/utils/wc_user_info_data.dart';
 import 'package:worship_connect/schedules/utils/schedules_providers_definition.dart';
 import 'package:worship_connect/wc_core/wc_custom_route.dart';
 import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
 import 'package:worship_connect/wc_core/core_providers_definition.dart';
-
 
 class SchedulesCalendarTile extends ConsumerWidget {
   const SchedulesCalendarTile({Key? key, required this.scheduleData}) : super(key: key);
@@ -41,12 +39,10 @@ class SchedulesCalendarTile extends ConsumerWidget {
                       },
                     ),
                   );
-
                   break;
                 case 1:
                   await SchedulesFirebaseAPI(_wcUserInfoData.teamID).deleteSchedule(scheduleData);
                   await ref.watch(calendarScheduleListProvider.notifier).resetScheduleProvider();
-
                   break;
               }
             },
@@ -68,13 +64,9 @@ class SchedulesCalendarTile extends ConsumerWidget {
         await ref.read(schedulesSongsProvider.notifier).init();
         await ref.read(scheduleMusiciansProvider.notifier).init();
 
-        Navigator.push(
+        Navigator.pushNamed(
           context,
-          MaterialPageRoute(
-            builder: (context) {
-              return const ScheduleInfoNavigator();
-            },
-          ),
+          '/scheduleInfo',
         );
       },
     );

@@ -194,7 +194,6 @@ class _EditScheduleCardState extends ConsumerState<EditScheduleCard> {
       maxLines: 2,
       autocorrect: true,
       enableSuggestions: true,
-      cursorColor: Colors.black,
       decoration: const InputDecoration(
         isDense: true,
         contentPadding: EdgeInsets.all(12),

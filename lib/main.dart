@@ -7,8 +7,14 @@ import 'package:worship_connect/wc_core/worship_connect.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp();
+
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
+
+
+
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
 
   runApp(

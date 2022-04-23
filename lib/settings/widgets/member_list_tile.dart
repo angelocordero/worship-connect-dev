@@ -9,10 +9,11 @@ import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
 import 'package:worship_connect/wc_core/core_providers_definition.dart';
 
 class MemberListTile extends ConsumerWidget {
-  const MemberListTile({Key? key, required this.memberData}) : super(key: key);
+  const MemberListTile({Key? key, required this.memberData, required this.reset}) : super(key: key);
 
   static bool _showPopupButton = false;
   final WCUserInfoData memberData;
+  final Function() reset;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -62,7 +63,7 @@ class MemberListTile extends ConsumerWidget {
                 width: 46,
               ),
               child: _popupMenuButton(_userData, ref),
-            ), // popup menu
+            ),
           ],
         ),
       ),
@@ -72,6 +73,7 @@ class MemberListTile extends ConsumerWidget {
   PopupMenuButton<int> _popupMenuButton(WCUserInfoData _userData, WidgetRef ref) {
     UserStatusEnum _userStatus = _userData.userStatus;
     UserStatusEnum _memberStatus = memberData.userStatus;
+    String _teamName = ref.watch(wcWCTeamDataStream).value?.teamName ?? '';
 
     bool _canPassLeader = _userStatus == UserStatusEnum.leader && _memberStatus == UserStatusEnum.admin && _userData.userID != memberData.userID;
     bool _canPromoteMemberToAdmin =
@@ -85,27 +87,24 @@ class MemberListTile extends ConsumerWidget {
       onSelected: (item) async {
         switch (item) {
           case 0:
-            await TeamFirebaseAPI(_userData.teamID).promoteToLeader(
-              userData: _userData,
-              memberData: memberData,
-            );
-            ref.read(membersListProvider.notifier).reset();
+            await TeamFirebaseAPI(_userData.teamID).promoteToLeader(userData: _userData, memberData: memberData, teamName: _teamName);
+            reset();
             break;
           case 1:
-            await TeamFirebaseAPI(_userData.teamID).promoteToAdmin(memberData);
-            ref.read(membersListProvider.notifier).reset();
+            await TeamFirebaseAPI(_userData.teamID).promoteToAdmin(memberData, _userData.userName, _teamName);
+            reset();
             break;
           case 2:
-            await TeamFirebaseAPI(_userData.teamID).demoteToMember(memberData);
-            ref.read(membersListProvider.notifier).reset();
+            await TeamFirebaseAPI(_userData.teamID).demoteToMember(memberData, _userData.userName, _teamName);
+            reset();
             break;
           case 3:
-            await TeamFirebaseAPI(_userData.teamID).removeFromTeam(memberData);
-            ref.read(membersListProvider.notifier).reset();
+            await TeamFirebaseAPI(_userData.teamID).removeFromTeam(memberData, _userData.userName, _teamName);
+            reset();
             break;
           case 4:
-            await TeamFirebaseAPI(_userData.teamID).demoteToMember(memberData);
-            ref.read(membersListProvider.notifier).reset();
+            await TeamFirebaseAPI(_userData.teamID).demoteSelfToMember(memberData);
+            reset();
             break;
           default:
             WCUtils.wcShowError(wcError: 'Error');
@@ -137,7 +136,7 @@ class MemberListTile extends ConsumerWidget {
           if (_canDemoteSelfToMember)
             const PopupMenuItem<int>(
               value: 4,
-              child: Text('Demote to Member'),
+              child: Text('Demote self to Member'),
             ),
         ];
       },

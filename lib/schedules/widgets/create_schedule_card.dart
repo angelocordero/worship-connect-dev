@@ -142,6 +142,9 @@ class _CreateScheduleCardState extends ConsumerState<CreateScheduleCard> {
           ),
           TapDebouncer(
             onTap: () async {
+
+              
+
               DateTime _date = WCUtils.setDateTimeFromDayAndTime(
                 dateTime: ref.watch(calendarSelectedDayProvider),
                 timeOfDay: _selectedTime,
@@ -152,9 +155,12 @@ class _CreateScheduleCardState extends ConsumerState<CreateScheduleCard> {
                 return;
               }
 
+
               await SchedulesFirebaseAPI(_userData.teamID).addSchedule(
                 scheduleTitle: _scheduleTextController.text.trim(),
                 timestamp: Timestamp.fromDate(_date),
+                posterName: _userData.userName,
+                posterID: _userData.userID,
               );
 
               await _calendarScheduleListNotifier.resetScheduleProvider();
@@ -186,7 +192,6 @@ class _CreateScheduleCardState extends ConsumerState<CreateScheduleCard> {
       maxLines: 2,
       autocorrect: true,
       enableSuggestions: true,
-      cursorColor: Colors.black,
       decoration: const InputDecoration(
         isDense: true,
         contentPadding: EdgeInsets.all(12),

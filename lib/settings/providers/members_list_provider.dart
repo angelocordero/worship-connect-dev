@@ -24,6 +24,7 @@ class MembersListProvider extends StateNotifier<Map<String, WCUserInfoData>> {
   Future<void> init() async {
     EasyLoading.show();
 
+
     DocumentSnapshot<Map<String, dynamic>> _doc = await _getMembersDoc() as DocumentSnapshot<Map<String, dynamic>>;
 
     _setMembers(_doc.data()?['members']);
@@ -37,12 +38,8 @@ class MembersListProvider extends StateNotifier<Map<String, WCUserInfoData>> {
     try {
       _map?.forEach(
         (key, value) {
-          WCUserInfoData _member = WCUserInfoData(
-            userID: key,
-            userName: value,
-            userStatusString: UserStatusEnum.member.name,
-            teamID: teamID,
-          );
+          WCUserInfoData _member =
+              WCUserInfoData(userID: key, userName: value, userStatusString: UserStatusEnum.member.name, teamID: teamID, fcmToken: '');
 
           state[_member.userID] = _member;
         },
@@ -58,12 +55,8 @@ class MembersListProvider extends StateNotifier<Map<String, WCUserInfoData>> {
     try {
       _map?.forEach(
         (key, value) {
-          WCUserInfoData _admin = WCUserInfoData(
-            userID: key,
-            userName: value,
-            userStatusString: UserStatusEnum.admin.name,
-            teamID: teamID,
-          );
+          WCUserInfoData _admin =
+              WCUserInfoData(userID: key, userName: value, userStatusString: UserStatusEnum.admin.name, teamID: teamID, fcmToken: '');
 
           state[_admin.userID] = _admin;
         },
@@ -77,11 +70,7 @@ class MembersListProvider extends StateNotifier<Map<String, WCUserInfoData>> {
 
   _setLeader(Map<String, dynamic> _map) {
     _leader = WCUserInfoData(
-      userID: _map.keys.first,
-      userName: _map.values.first,
-      userStatusString: UserStatusEnum.leader.name,
-      teamID: teamID,
-    );
+        userID: _map.keys.first, userName: _map.values.first, userStatusString: UserStatusEnum.leader.name, teamID: teamID, fcmToken: '');
 
     state[_leader.userID] = _leader;
 

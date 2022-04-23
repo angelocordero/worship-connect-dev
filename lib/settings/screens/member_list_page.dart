@@ -10,6 +10,10 @@ class MembersListPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    void _resetMemberList() async {
+      await ref.read(membersListProvider.notifier).reset();
+    }
+
     final _membersListNotifier = ref.watch(membersListProvider.notifier);
     final List<WCUserInfoData> _adminList = ref.watch(membersListProvider).values.where(
       (element) {
@@ -23,12 +27,16 @@ class MembersListPage extends ConsumerWidget {
       },
     ).toList();
 
-    _adminList.sort((a, b) {
-      return a.userName.compareTo(b.userName);
-    });
-    _membersList.sort((a, b) {
-      return a.userName.compareTo(b.userName);
-    });
+    _adminList.sort(
+      (a, b) {
+        return a.userName.compareTo(b.userName);
+      },
+    );
+    _membersList.sort(
+      (a, b) {
+        return a.userName.compareTo(b.userName);
+      },
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -43,6 +51,7 @@ class MembersListPage extends ConsumerWidget {
         child: ListView(
           children: [
             MemberListTile(
+              reset: _resetMemberList,
               memberData: ref.watch(membersListProvider).values.firstWhere(
                 (element) {
                   return element.userStatus == UserStatusEnum.leader;
@@ -54,12 +63,18 @@ class MembersListPage extends ConsumerWidget {
             ),
             ..._adminList.map(
               (admin) {
-                return MemberListTile(memberData: admin);
+                return MemberListTile(
+                  reset: _resetMemberList,
+                  memberData: admin,
+                );
               },
             ),
             ..._membersList.map(
               (member) {
-                return MemberListTile(memberData: member);
+                return MemberListTile(
+                  reset: _resetMemberList,
+                  memberData: member,
+                );
               },
             ),
           ],

@@ -24,11 +24,11 @@ final scheduleInfoProvider = StateProvider<WCScheduleData>((ref) {
 
 final schedulesSongsProvider = StateNotifierProvider<ScheduleSongsProvider, List>((ref) {
   WCUserInfoData? _wcUserInfoData = ref.watch(wcUserInfoDataStream).asData?.value;
-  String _scheduleID = ref.watch(scheduleInfoProvider).scheduleID;
+  WCScheduleData _scheduleData = ref.watch(scheduleInfoProvider);
 
   return ScheduleSongsProvider(
     teamID: _wcUserInfoData!.teamID,
-    scheduleID: _scheduleID,
+  scheduleData: _scheduleData,
   );
 });
 
@@ -38,11 +38,11 @@ final songKeyProvider = StateProvider<String>((ref) {
 
 final scheduleMusiciansProvider = StateNotifierProvider<ScheduleMusiciansProvider, Map<String, dynamic>>((ref) {
   WCUserInfoData? _wcUserInfoData = ref.watch(wcUserInfoDataStream).asData?.value;
-  String _scheduleID = ref.watch(scheduleInfoProvider).scheduleID;
+  WCScheduleData _scheduleData = ref.watch(scheduleInfoProvider);
 
   return ScheduleMusiciansProvider(
     teamID: _wcUserInfoData!.teamID,
-    scheduleID: _scheduleID,
+    scheduleData: _scheduleData,
   );
 });
 

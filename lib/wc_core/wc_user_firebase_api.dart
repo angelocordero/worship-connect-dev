@@ -10,13 +10,17 @@ class WCUSerFirebaseAPI {
   final FirebaseFirestore _firebaseInstance = FirebaseFirestore.instance;
   late final CollectionReference wcUserDataCollection = _firebaseInstance.collection('WCUsers');
 
-  initializeWCUserData(String userID) {
+  initializeWCUserData({
+    required String userID,
+    required String fcmToken,
+  }) {
     try {
       wcUserDataCollection.doc(userID).set(<String, dynamic>{
         WCUserInfoDataEnum.userID.name: userID,
         WCUserInfoDataEnum.userName.name: '',
         WCUserInfoDataEnum.userStatusString.name: UserStatusEnum.noTeam.name,
         WCUserInfoDataEnum.teamID.name: '',
+        WCUserInfoDataEnum.fcmToken.name: fcmToken,
       });
     } catch (e, st) {
       debugPrint('WCError: ' + e.toString());
@@ -37,6 +41,7 @@ class WCUSerFirebaseAPI {
             userName: data[WCUserInfoDataEnum.userName.name],
             userStatusString: data[WCUserInfoDataEnum.userStatusString.name],
             teamID: data[WCUserInfoDataEnum.teamID.name],
+            fcmToken: data[WCUserInfoDataEnum.fcmToken.name] ?? '',
           );
         },
       );
@@ -70,5 +75,19 @@ class WCUSerFirebaseAPI {
     } catch (e, st) {
       WCUtils.wcShowError(e: e, st: st, wcError: 'Failed to update user name');
     }
+  }
+
+   updateUserFCMToken (String userID, String fcmToken) {
+    try {
+      wcUserDataCollection.doc(userID).update(<String, dynamic>{
+        WCUserInfoDataEnum.fcmToken.name: fcmToken,
+      });
+    } catch (e, st) {
+      debugPrint('WCError: ' + e.toString());
+      WCUtils.wcShowError(e: e, st: st, wcError: 'Failed to turn off notifications');
+    }
+
+
+
   }
 }

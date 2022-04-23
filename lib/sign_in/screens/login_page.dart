@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:worship_connect/sign_in/utils/wc_user_info_data.dart';
@@ -27,9 +28,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     if (_wcUserInfoData != null && _wcUserInfoData.userName.isEmpty && isOnTop) {
       WidgetsBinding.instance?.addPostFrameCallback(
         (_) async {
-          setState(() {
-            _opacity = 0;
-          });
+          setState(
+            () {
+              _opacity = 0;
+            },
+          );
 
           await Navigator.push(
             context,
@@ -43,7 +46,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     }
 
     if (_wcUserInfoData != null && _wcUserInfoData.userName.isNotEmpty && _wcUserInfoData.teamID.isEmpty && isOnTop) {
-
       WidgetsBinding.instance?.addPostFrameCallback(
         (_) async {
           setState(() {
@@ -68,8 +70,15 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       );
     }
 
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle.dark.copyWith(
+        statusBarIconBrightness: Brightness.light,
+        statusBarBrightness: Brightness.dark,
+      ),
+    );
+
     return Container(
-      color: Colors.black,
+      color: Colors.grey.shade900,
       child: SafeArea(
         child: Container(
           decoration: BoxDecoration(
@@ -107,7 +116,25 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 child: const FacebookSignInButton(),
               ),
               const SizedBox(
-                height: 70,
+                height: 50,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    'Photo by James Barr on Unsplash',
+                    style: TextStyle(
+                      color: Colors.grey.shade700,
+                      fontSize: 10,
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 20,
+                  )
+                ],
+              ),
+              const SizedBox(
+                height: 10,
               ),
             ],
           ),

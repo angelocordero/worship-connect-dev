@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:worship_connect/schedules/widgets/schedule_info_navigator.dart';
 import 'package:worship_connect/sign_in/screens/login_page.dart';
 import 'package:worship_connect/sign_in/utils/wc_user_info_data.dart';
 import 'package:worship_connect/wc_core/wc_home_navigator.dart';
@@ -16,7 +17,7 @@ class WorshipConnect extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final _wcTheme = ref.watch(wcThemeProvider);
     final _wcThemeNotifier = ref.watch(wcThemeProvider.notifier);
-    WCUserInfoData? _wcUserInfoData = ref.watch(wcUserInfoDataStream).asData?.value;
+    WCUserInfoData? _wcUserInfoData = ref.watch(wcUserInfoDataStream).value;
 
     _wcThemeNotifier.init();
 
@@ -44,6 +45,7 @@ class WorshipConnect extends ConsumerWidget {
       routes: {
         '/': (context) => const LoginPage(),
         '/home': (context) => const HomeNavigator(),
+        '/scheduleInfo': (context) => const ScheduleInfoNavigator(),
       },
     );
   }

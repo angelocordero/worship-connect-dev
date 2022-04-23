@@ -65,7 +65,6 @@ class _EditSongCardState extends ConsumerState<EditSongCard> {
                     controller: _titleEditingController,
                     autocorrect: true,
                     enableSuggestions: true,
-                    cursorColor: Colors.black,
                     decoration: const InputDecoration(
                       isDense: true,
                       hintText: 'Title',
@@ -90,7 +89,6 @@ class _EditSongCardState extends ConsumerState<EditSongCard> {
                     controller: _linkEditingController,
                     autocorrect: true,
                     enableSuggestions: true,
-                    cursorColor: Colors.black,
                     decoration: const InputDecoration(
                       isDense: true,
                       hintText: 'Link',

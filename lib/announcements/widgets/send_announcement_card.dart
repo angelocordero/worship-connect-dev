@@ -134,7 +134,6 @@ class SendAnnouncementCard extends ConsumerWidget {
       keyboardType: TextInputType.multiline,
       autocorrect: true,
       enableSuggestions: true,
-      cursorColor: Colors.black,
       decoration: const InputDecoration(
         isDense: true,
         contentPadding: EdgeInsets.all(12),

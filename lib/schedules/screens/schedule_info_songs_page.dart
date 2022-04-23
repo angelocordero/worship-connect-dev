@@ -48,7 +48,7 @@ class ScheduleInfoSongsPage extends ConsumerWidget {
             ),
           ),
         ),
-        if (WCUtils.isAdminOrLeader(_wcUserInfoData!)) _buildButtons(context, ref, _songsNotifier),
+        if (WCUtils.isAdminOrLeader(_wcUserInfoData!)) _buildButtons(context, ref, _songsNotifier, _wcUserInfoData.userName, _wcUserInfoData.userID),
         const SizedBox(
           height: 4,
         ),
@@ -56,7 +56,13 @@ class ScheduleInfoSongsPage extends ConsumerWidget {
     );
   }
 
-  Row _buildButtons(BuildContext context, WidgetRef ref, ScheduleSongsProvider _songsNotifier) {
+  Row _buildButtons(
+    BuildContext context,
+    WidgetRef ref,
+    ScheduleSongsProvider _songsNotifier,
+    String posterName,
+    String posterID,
+  ) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -65,7 +71,7 @@ class ScheduleInfoSongsPage extends ConsumerWidget {
         ),
         Expanded(
           child: ElevatedButton(
-            onPressed: () {
+            onPressed: ()  {
               ref.read(songKeyProvider.state).state = 'A';
               showDialog(
                 context: context,
@@ -83,7 +89,7 @@ class ScheduleInfoSongsPage extends ConsumerWidget {
         Expanded(
           child: ElevatedButton(
             onPressed: () async {
-              await _songsNotifier.saveSchedule();
+              await _songsNotifier.saveSongs(posterID, posterName);
             },
             child: const Text('Save'),
           ),

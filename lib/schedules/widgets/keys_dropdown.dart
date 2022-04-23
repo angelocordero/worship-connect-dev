@@ -38,9 +38,7 @@ class SongKeyDropdown extends ConsumerWidget {
         isDense: true,
         menuMaxHeight: 300,
         value: key,
-        style: const TextStyle(
-          fontSize: 12,
-        ),
+        style: Theme.of(context).textTheme.subtitle1,
         icon: const Icon(Icons.keyboard_arrow_down),
         items: songKeyList.map<DropdownMenuItem<String>>(
           (String value) {

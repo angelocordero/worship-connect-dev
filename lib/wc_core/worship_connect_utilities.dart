@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -5,6 +7,7 @@ import 'package:nanoid/nanoid.dart';
 import 'package:intl/intl.dart';
 import 'package:worship_connect/sign_in/utils/wc_user_info_data.dart';
 import 'package:worship_connect/wc_core/worship_connect_constants.dart';
+import 'package:http/http.dart' as http;
 
 class WCUtils {
   static const String _wcAlphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
@@ -122,5 +125,76 @@ class WCUtils {
         ),
       ),
     );
+  }
+
+// notify team for schedule and announcement updates
+  static void sendTeamNotification({
+    required String title,
+    required String body,
+    required String teamID,
+    required String posterID,
+    required String notificationType,
+  }) {
+    String _embedURL = 'https://wc-notifications-server.herokuapp.com/notify-team';
+
+    Map _notification = {
+      'title': title,
+      'body': body,
+      'topic': teamID,
+      'posterID': posterID,
+      'notificationType': notificationType,
+    };
+
+    http.post(Uri.parse(_embedURL),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: jsonEncode(_notification));
+  }
+
+//notify members for demotions and promotions
+  static void sendMemberNotification({
+    required String title,
+    required String body,
+    required String targetUserID,
+  }) {
+    String _embedURL = 'https://wc-notifications-server.herokuapp.com/notify-member';
+
+    Map _notification = {
+      'title': title,
+      'body': body,
+      'userID': targetUserID,
+      'notificationType': 'member',
+    };
+
+    http.post(Uri.parse(_embedURL),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: jsonEncode(_notification));
+  }
+
+  static void kickMemberNotification({
+    required String title,
+    required String body,
+    required String targetUserID,
+  }) {
+    String _embedURL = 'https://wc-notifications-server.herokuapp.com/kick-member';
+
+    Map _notification = {
+      'title': title,
+      'body': body,
+      'userID': targetUserID,
+      'notificationType': 'kick',
+    };
+
+    http.post(Uri.parse(_embedURL),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: jsonEncode(_notification));
   }
 }

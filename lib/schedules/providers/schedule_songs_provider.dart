@@ -1,18 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:worship_connect/schedules/services/schedules_firebase_api.dart';
+import 'package:worship_connect/schedules/utils/schedule_data.dart';
 import 'package:worship_connect/schedules/utils/song_data.dart';
 import 'package:worship_connect/wc_core/wc_url_utilities.dart';
 import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
 
 class ScheduleSongsProvider extends StateNotifier<List<Map<String, dynamic>>> {
-  ScheduleSongsProvider({required this.teamID, required this.scheduleID}) : super([]);
-  
+  ScheduleSongsProvider({required this.teamID, required this.scheduleData}) : super([]);
+
   String teamID;
-  String scheduleID;
+  WCScheduleData scheduleData;
 
   init() async {
-    DocumentSnapshot<Map<String, dynamic>>? doc = await SchedulesFirebaseAPI(teamID).getScheduleInfo(scheduleID);
+    DocumentSnapshot<Map<String, dynamic>>? doc = await SchedulesFirebaseAPI(teamID).getScheduleInfo(scheduleData.scheduleID);
 
     if (doc == null) {
       return;
@@ -50,8 +51,13 @@ class ScheduleSongsProvider extends StateNotifier<List<Map<String, dynamic>>> {
     state = temp.toList();
   }
 
-  saveSchedule() async {
-    await SchedulesFirebaseAPI(teamID).saveScheduleData(state, scheduleID);
+  saveSongs(String posterID, String posterName) async {
+    await SchedulesFirebaseAPI(teamID).saveSongsData(
+      songsData: state,
+      scheduleData: scheduleData,
+      posterName: posterName,
+      posterID: posterID,
+    );
   }
 
   reorderSongs(int oldIndex, int newIndex) {

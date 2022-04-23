@@ -14,6 +14,8 @@ class SchedulesFirebaseAPI {
   Future<void> addSchedule({
     required Timestamp timestamp,
     required String scheduleTitle,
+    required String? posterName,
+    required String posterID,
   }) async {
     String scheduleID = WCUtils.generateRandomID();
     String scheduleDateCode = WCUtils.setDateCode(timestamp.toDate());
@@ -66,6 +68,14 @@ class SchedulesFirebaseAPI {
       );
 
       _writeBatch.commit();
+
+      WCUtils.sendTeamNotification(
+        title: 'New Schedule',
+        body: 'New schedule added by $posterName',
+        teamID: teamID,
+        posterID: posterID,
+        notificationType: 'schedule',
+      );
 
       EasyLoading.dismiss();
     } catch (e, st) {
@@ -172,26 +182,54 @@ class SchedulesFirebaseAPI {
     }
   }
 
-  Future saveScheduleData(List<dynamic> scheduleData, String scheduleID) async {
+  Future saveSongsData({
+    required List<dynamic> songsData,
+    required WCScheduleData scheduleData,
+    required String posterName,
+    required String posterID,
+  }) async {
     EasyLoading.show();
 
     try {
-      await _scheduleDoc.collection('scheduleData').doc(scheduleID).update({
-        'songs': scheduleData,
+      await _scheduleDoc.collection('scheduleData').doc(scheduleData.scheduleID).update({
+        'songs': songsData,
       });
+
+      WCUtils.sendTeamNotification(
+        title: 'Song List Updated',
+        body: 'The song list for ${scheduleData.scheduleTitle} on ${scheduleData.dateString} has been updated by $posterName',
+        teamID: teamID,
+        posterID: posterID,
+        notificationType: 'schedule',
+      );
+
       EasyLoading.dismiss();
     } catch (e, st) {
       WCUtils.wcShowError(e: e, st: st, wcError: 'Failed to save schedule data');
     }
   }
 
-  Future saveMusiciansData(Map<String, dynamic> musiciansData, String scheduleID) async {
+  Future saveMusiciansData({
+    required Map<String, dynamic> musiciansData,
+    required WCScheduleData scheduleData,
+    required String posterName,
+    required String posterID,
+  }) async {
     EasyLoading.show();
 
     try {
-      await _scheduleDoc.collection('scheduleData').doc(scheduleID).update({
+      await _scheduleDoc.collection('scheduleData').doc(scheduleData.scheduleID).update({
         'musicians': musiciansData,
       });
+
+      WCUtils.sendTeamNotification(
+        title: 'Song List Updated',
+        body: 'The musicians list for ${scheduleData.scheduleTitle} on ${scheduleData.dateString} has been updated by $posterName',
+        teamID: teamID,
+        posterID: posterID,
+        notificationType: 'schedule',
+      );
+
       EasyLoading.dismiss();
     } catch (e, st) {
       WCUtils.wcShowError(e: e, st: st, wcError: 'Failed to save musicians data');

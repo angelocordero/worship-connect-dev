@@ -3,20 +3,21 @@ import 'dart:collection';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:worship_connect/schedules/services/schedules_firebase_api.dart';
+import 'package:worship_connect/schedules/utils/schedule_data.dart';
 import 'package:worship_connect/settings/services/team_firebase_api.dart';
 import 'package:worship_connect/wc_core/worship_connect_constants.dart';
 
 class ScheduleMusiciansProvider extends StateNotifier<Map<String, dynamic>> {
-  ScheduleMusiciansProvider({required this.teamID, required this.scheduleID}) : super({});
+  ScheduleMusiciansProvider({required this.teamID, required this.scheduleData}) : super({});
 
   String teamID;
-  String scheduleID;
+  WCScheduleData scheduleData;
   static final List<String> _alreadyAssignedMembers = [];
 
   init() async {
     _alreadyAssignedMembers.clear();
 
-    DocumentSnapshot<Map<String, dynamic>>? doc = await SchedulesFirebaseAPI(teamID).getScheduleInfo(scheduleID);
+    DocumentSnapshot<Map<String, dynamic>>? doc = await SchedulesFirebaseAPI(teamID).getScheduleInfo(scheduleData.scheduleID);
 
     if (doc == null) {
       return;
@@ -42,8 +43,13 @@ class ScheduleMusiciansProvider extends StateNotifier<Map<String, dynamic>> {
     await init();
   }
 
-  saveMusicians() async {
-    await SchedulesFirebaseAPI(teamID).saveMusiciansData(state, scheduleID);
+  saveMusicians(String posterID, String posterName) async {
+    await SchedulesFirebaseAPI(teamID).saveMusiciansData(
+      musiciansData: state,
+      scheduleData: scheduleData,
+      posterName: posterName,
+      posterID: posterID,
+    );
   }
 
   addInstrumentsList(List<String> totalInstrumentsList) {
