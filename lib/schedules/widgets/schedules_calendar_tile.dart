@@ -66,7 +66,7 @@ class SchedulesCalendarTile extends ConsumerWidget {
 
         Navigator.pushNamed(
           context,
-          '/scheduleInfo',
+          '/scheduleInfoPage',
         );
       },
     );

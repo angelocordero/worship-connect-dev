@@ -78,8 +78,8 @@ class TeamFirebaseAPI {
       });
 
       // update team members list
-      _writeBatch.update(CreateJoinTeamFirebaseAPI().wcWCTeamDataCollection.doc(teamID).collection('data').doc('members'), {
-        'members.${_userData.userID}': FieldValue.delete(),
+      _writeBatch.update(CreateJoinTeamFirebaseAPI().wcTeamsDataCollection.doc(teamID).collection('data').doc('members'), {
+        'member.${_userData.userID}': FieldValue.delete(),
       });
 
       await _writeBatch.commit();
@@ -120,7 +120,7 @@ class TeamFirebaseAPI {
       });
 
       _writeBatch.update(teamsDataCollection.doc(teamID).collection('data').doc('members'), {
-        'members.${_memberData.userID}': FieldValue.delete(),
+        'member.${_memberData.userID}': FieldValue.delete(),
         'admin.${_memberData.userID}': _memberData.userName,
       });
 
@@ -185,7 +185,7 @@ class TeamFirebaseAPI {
 
       _writeBatch.update(teamsDataCollection.doc(teamID).collection('data').doc('members'), {
         'admin.${_memberData.userID}': FieldValue.delete(),
-        'members.${_memberData.userID}': _memberData.userName,
+        'member.${_memberData.userID}': _memberData.userName,
       });
 
       await _writeBatch.commit();
@@ -212,7 +212,7 @@ class TeamFirebaseAPI {
 
       _writeBatch.update(teamsDataCollection.doc(teamID).collection('data').doc('members'), {
         'admin.${_memberData.userID}': FieldValue.delete(),
-        'members.${_memberData.userID}': _memberData.userName,
+        'member.${_memberData.userID}': _memberData.userName,
       });
 
       await _writeBatch.commit();
@@ -223,11 +223,16 @@ class TeamFirebaseAPI {
     }
   }
 
-  Future<void> removeFromTeam(WCUserInfoData _memberData, String senderName, String teamName) async {
+  Future<void> removeFromTeam(
+    WCUserInfoData _memberData,
+    String senderName,
+    String teamName,
+  ) async {
     WCUtils.kickMemberNotification(
       title: 'You have been removed from $teamName',
       body: '$senderName removed you from $teamName',
       targetUserID: _memberData.userID,
+      teamID: teamID,
     );
 
     await leaveTeam(_memberData);
@@ -238,7 +243,7 @@ class TeamFirebaseAPI {
       DocumentSnapshot<Map<String, dynamic>> _doc = await teamsDataCollection.doc(teamID).collection('data').doc('members').get();
 
       Map<String, dynamic> _admin = _doc.data()!['admin'] ?? {};
-      Map<String, dynamic> _members = _doc.data()?['members'] ?? {};
+      Map<String, dynamic> _members = _doc.data()?['member'] ?? {};
       Map<String, dynamic> _leader = _doc.data()?['leader'];
 
       List<String> _list = [

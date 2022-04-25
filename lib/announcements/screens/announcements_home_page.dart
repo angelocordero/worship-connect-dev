@@ -9,16 +9,11 @@ import 'package:worship_connect/wc_core/core_providers_definition.dart';
 import 'package:worship_connect/wc_core/wc_custom_route.dart';
 import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
 
-class AnnouncementsHomePage extends ConsumerStatefulWidget {
+class AnnouncementsHomePage extends ConsumerWidget {
   const AnnouncementsHomePage({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _AnnouncementsHomePageState();
-}
-
-class _AnnouncementsHomePageState extends ConsumerState<AnnouncementsHomePage> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     WCUserInfoData? _wcUserInfoData = ref.watch(wcUserInfoDataStream).asData?.value;
     List _announcementList = ref.watch(announcementListProvider);
     AnnouncementListProvider _announcementNotifier = ref.watch(announcementListProvider.notifier);
@@ -29,47 +24,78 @@ class _AnnouncementsHomePageState extends ConsumerState<AnnouncementsHomePage> {
           'Announcements',
         ),
       ),
-      floatingActionButton: _newAnnouncementButton(context, _wcUserInfoData),
-      body: Builder(
-        builder: (context) {
-          if (_announcementList.isEmpty) {
-            return Center(
-              child: Text(
-                "No announcement",
-                style: Theme.of(context).textTheme.subtitle1,
-              ),
-            );
-          } else {
-            return RefreshIndicator(
-              onRefresh: () async {
-                return await _announcementNotifier.getAnnouncements();
-              },
-              child: ListView.builder(
-                padding: const EdgeInsets.all(4),
-                itemCount: _announcementList.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return AnnouncementListTile(
-                    index: index,
-                    key: UniqueKey(),
-                  );
-                },
-              ),
-            );
-          }
+      floatingActionButton: _newAnnouncementButton(context, ref, _wcUserInfoData),
+      body: RefreshIndicator(
+        onRefresh: () async {
+          return await _announcementNotifier.getAnnouncements();
         },
+        child: Visibility(
+          visible: _announcementList.isNotEmpty,
+          replacement: SingleChildScrollView(
+            child: SizedBox(
+              height: WCUtils.screenHeightSafeAreaAppBarBottomBar(context),
+              width: WCUtils.screenWidth(context),
+              child: Center(
+                child: Text(
+                  "No announcement",
+                  style: Theme.of(context).textTheme.subtitle1,
+                ),
+              ),
+            ),
+          ),
+          child: ListView.builder(
+            padding: const EdgeInsets.all(4),
+            itemCount: _announcementList.length,
+            itemBuilder: (BuildContext context, int index) {
+              return AnnouncementListTile(
+                index: index,
+                key: UniqueKey(),
+              );
+            },
+          ),
+        ),
       ),
+
+      // body: Builder(
+      //   builder: (context) {
+      //     if (_announcementList.isEmpty) {
+      //       return Center(
+      //         child: Text(
+      //           "No announcement",
+      //           style: Theme.of(context).textTheme.subtitle1,
+      //         ),
+      //       );
+      //     } else {
+      //       return RefreshIndicator(
+      //         onRefresh: () async {
+      //           return await _announcementNotifier.getAnnouncements();
+      //         },
+      //         child: ListView.builder(
+      //           padding: const EdgeInsets.all(4),
+      //           itemCount: _announcementList.length,
+      //           itemBuilder: (BuildContext context, int index) {
+      //             return AnnouncementListTile(
+      //               index: index,
+      //               key: UniqueKey(),
+      //             );
+      //           },
+      //         ),
+      //       );
+      //     }
+      //   },
+      // ),
     );
   }
 
-  Visibility _newAnnouncementButton(BuildContext context, WCUserInfoData? wcUserInfoData) {
+  Visibility _newAnnouncementButton(BuildContext context, WidgetRef ref, WCUserInfoData? wcUserInfoData) {
     return Visibility(
       visible: WCUtils.isAdminOrLeader(wcUserInfoData),
       child: WCUtils.wcExtendedFloatingActionButton(
         heroTag: 'newAnnouncement',
         labelText: 'New Announcement',
         onPressed: () {
-          if (ref.read(announcementListProvider).length >= 10) {
-            WCUtils.wcShowError(wcError: 'You can only post up to 10 announcements.');
+          if (ref.read(announcementListProvider).length >= 20) {
+            WCUtils.wcShowError(wcError: 'You can only post up to 20 announcements.');
             return;
           }
           Navigator.push(

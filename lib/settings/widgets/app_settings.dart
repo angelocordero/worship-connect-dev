@@ -1,4 +1,3 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,8 +12,6 @@ import 'package:worship_connect/wc_core/worship_connect_constants.dart';
 
 class AppSettings extends StatelessWidget {
   const AppSettings({Key? key}) : super(key: key);
-
-  static final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -41,28 +38,27 @@ class AppSettings extends StatelessWidget {
   }
 
   Consumer _notificationsTile() {
-    return Consumer(builder: (context, ref, _) {
-      WCUserInfoData? _userData = ref.watch(wcUserInfoDataStream).value;
+    return Consumer(
+      builder: (context, ref, _) {
+        WCUserInfoData? _userData = ref.watch(wcUserInfoDataStream).value;
 
-      String? _fcmToken = _userData?.fcmToken;
+        String? _fcmToken = _userData?.fcmToken;
 
-      return SwitchListTile(
-        title: const Text('Notifications'),
-        value: _fcmToken?.isNotEmpty ?? false,
-        onChanged: (value) async {
-          if (_userData == null) return;
+        return SwitchListTile(
+          title: const Text('Notifications'),
+          value: _fcmToken?.isNotEmpty ?? false,
+          onChanged: (newValue) async {
+            if (_userData == null) return;
 
-          if (value) {
-            String _token = await _firebaseMessaging.getToken() ?? '';
-            await WCUSerFirebaseAPI().updateUserFCMToken(_userData.userID, _token);
-            await _firebaseMessaging.subscribeToTopic(_userData.teamID);
-          } else {
-            await WCUSerFirebaseAPI().updateUserFCMToken(_userData.userID, '');
-            await _firebaseMessaging.unsubscribeFromTopic(_userData.teamID);
-          }
-        },
-      );
-    });
+            if (newValue) {
+              await WCUSerFirebaseAPI().turnOnUserNotifications(_userData.userID, _userData.teamID);
+            } else {
+              await WCUSerFirebaseAPI().turnOffUserNotifications(_userData.userID, _userData.teamID);
+            }
+          },
+        );
+      },
+    );
   }
 
   Padding _signOutButton() {

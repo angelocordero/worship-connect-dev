@@ -10,9 +10,46 @@ import 'package:worship_connect/wc_core/worship_connect_constants.dart';
 class ScheduleMusiciansProvider extends StateNotifier<Map<String, dynamic>> {
   ScheduleMusiciansProvider({required this.teamID, required this.scheduleData}) : super({});
 
-  String teamID;
   WCScheduleData scheduleData;
+  String teamID;
+
   static final List<String> _alreadyAssignedMembers = [];
+
+  addCustomInstrument(String _instrument) async {
+    await TeamFirebaseAPI(teamID).addCustomInstrument(_instrument);
+    addInstrument(_instrument);
+  }
+
+  addInstrument(String _instrument) {
+    state[_instrument] = [];
+
+    SplayTreeMap<String, dynamic> _tempSTMap = _sortUsingSTMap(state);
+
+    state = Map<String, dynamic>.from(_tempSTMap);
+  }
+
+  addInstrumentsList(List<String> totalInstrumentsList) {
+    List<String> alreadyAddedInstruments = [];
+
+    alreadyAddedInstruments.addAll(state.keys);
+
+    return totalInstrumentsList.toSet().difference(alreadyAddedInstruments.toSet()).toList();
+  }
+
+  addMusicians({required String instrument, required List<String> musicians}) {
+    state[instrument].addAll(musicians);
+    _alreadyAssignedMembers.addAll(musicians);
+
+    state = Map<String, dynamic>.from(state);
+  }
+
+  deleteCustomInstrument(String _instrument) async {
+    await TeamFirebaseAPI(teamID).deleteCustomInstrument(_instrument);
+  }
+
+  List<String> getUnassignedMembersList(List<String> completeMembersList) {
+    return completeMembersList.toSet().difference(_alreadyAssignedMembers.toSet()).toList();
+  }
 
   init() async {
     _alreadyAssignedMembers.clear();
@@ -37,6 +74,22 @@ class ScheduleMusiciansProvider extends StateNotifier<Map<String, dynamic>> {
     });
   }
 
+  removeInstruments(String _instrument) {
+    for (var element in state[_instrument]) {
+      _alreadyAssignedMembers.remove(element);
+    }
+
+    state.remove(_instrument);
+
+    state = Map<String, dynamic>.from(state);
+  }
+
+  removeMusician({required String instrument, required String musician}) {
+    state[instrument].remove(musician);
+    _alreadyAssignedMembers.remove(musician);
+    state = Map<String, dynamic>.from(state);
+  }
+
   reset() async {
     state.clear();
     _alreadyAssignedMembers.clear();
@@ -52,61 +105,17 @@ class ScheduleMusiciansProvider extends StateNotifier<Map<String, dynamic>> {
     );
   }
 
-  addInstrumentsList(List<String> totalInstrumentsList) {
-    List<String> alreadyAddedInstruments = [];
-
-    alreadyAddedInstruments.addAll(state.keys);
-
-    return totalInstrumentsList.toSet().difference(alreadyAddedInstruments.toSet()).toList();
-  }
-
-  addInstrument(String _instrument) {
-    state[_instrument] = [];
-
-    SplayTreeMap<String, dynamic> _tempSTMap = _sortUsingSTMap(state);
-
-    state = Map<String, dynamic>.from(_tempSTMap);
-  }
-
-  addCustomInstrument(String _instrument) async {
-    await TeamFirebaseAPI(teamID).addCustomInstrument(_instrument);
-    addInstrument(_instrument);
-  }
-
-  removeInstruments(String _instrument) {
-    for (var element in state[_instrument]) {
-      _alreadyAssignedMembers.remove(element);
-    }
-
-    state.remove(_instrument);
-
-    state = Map<String, dynamic>.from(state);
-  }
-
-  addMusicians({required String instrument, required List<String> musicians}) {
-    state[instrument].addAll(musicians);
-    _alreadyAssignedMembers.addAll(musicians);
-
-    state = Map<String, dynamic>.from(state);
-  }
-
-  removeMusician({required String instrument, required String musician}) {
-    state[instrument].remove(musician);
-    _alreadyAssignedMembers.remove(musician);
-    state = Map<String, dynamic>.from(state);
-  }
-
-  List<String> getUnassignedMembersList(List<String> completeMembersList) {
-    return completeMembersList.toSet().difference(_alreadyAssignedMembers.toSet()).toList();
-  }
-
-  deleteCustomInstrument(String _instrument) async {
-    await TeamFirebaseAPI(teamID).deleteCustomInstrument(_instrument);
-  }
-
   // sorts instrument map based on core instruments list order
   SplayTreeMap<String, dynamic> _sortUsingSTMap(Map input) {
     return SplayTreeMap<String, dynamic>.from(input, (a, b) {
+      if (!wcCoreInstruments.contains(a)) {
+        return 1;
+      }
+
+      if (!wcCoreInstruments.contains(b)) {
+        return -1;
+      }
+
       return wcCoreInstruments.indexOf(a).compareTo(wcCoreInstruments.indexOf(b));
     });
   }

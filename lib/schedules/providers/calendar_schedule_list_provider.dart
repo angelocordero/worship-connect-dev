@@ -14,6 +14,18 @@ class CalendarScheduleListProvider extends StateNotifier<Map<String, dynamic>> {
     }
   }
 
+  int getScheduleLength() {
+    int _scheduleLength = 0;
+
+    state.forEach((key, value) {
+      List _valuesList = value;
+
+      _scheduleLength += _valuesList.length;
+    });
+
+    return _scheduleLength;
+  }
+
   resetScheduleProvider() async {
     await _fetchScheduleList();
   }

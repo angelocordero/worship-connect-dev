@@ -40,36 +40,40 @@ class InstrumentsTile extends ConsumerWidget {
     );
   }
 
-  SizedBox _buildAddButton(BuildContext context, WidgetRef ref) {
+  Visibility _buildAddButton(BuildContext context, WidgetRef ref) {
     WCUserInfoData? _wcUserInfoData = ref.watch(wcUserInfoDataStream).asData!.value;
 
-    return SizedBox(
-      width: MediaQuery.of(context).size.width * 2 / 3,
-      child: ListTile(
-        leading: const Icon(Icons.add_circle_outline),
-        title: const Text('Assign members'),
-        onTap: () async {
-          List<String> _completeMembersList = await TeamFirebaseAPI(_wcUserInfoData!.teamID).getCompleteMembersNamesList();
-          List<String> _unassignedMembersList = ref.read(scheduleMusiciansProvider.notifier).getUnassignedMembersList(_completeMembersList);
+    return Visibility(
+      visible: WCUtils.isAdminOrLeader(_wcUserInfoData),
+      replacement: Container(),
+      child: SizedBox(
+        width: WCUtils.screenWidth(context) * 2 / 3,
+        child: ListTile(
+          leading: const Icon(Icons.add_circle_outline),
+          title: const Text('Assign members'),
+          onTap: () async {
+            List<String> _completeMembersList = await TeamFirebaseAPI(_wcUserInfoData!.teamID).getCompleteMembersNamesList();
+            List<String> _unassignedMembersList = ref.read(scheduleMusiciansProvider.notifier).getUnassignedMembersList(_completeMembersList);
 
-          _unassignedMembersList.sort(
-            (a, b) {
-              return a.toLowerCase().compareTo(b.toLowerCase());
-            },
-          );
-
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) {
-                return AssignMembersPage(
-                  unassignedMembersList: _unassignedMembersList,
-                  instrumentName: instrument.keys.first,
-                );
+            _unassignedMembersList.sort(
+              (a, b) {
+                return a.toLowerCase().compareTo(b.toLowerCase());
               },
-            ),
-          );
-        },
+            );
+
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) {
+                  return AssignMembersPage(
+                    unassignedMembersList: _unassignedMembersList,
+                    instrumentName: instrument.keys.first,
+                  );
+                },
+              ),
+            );
+          },
+        ),
       ),
     );
   }

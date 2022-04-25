@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:worship_connect/schedules/widgets/schedule_info_navigator.dart';
+import 'package:worship_connect/settings/screens/member_list_page.dart';
 import 'package:worship_connect/sign_in/screens/login_page.dart';
 import 'package:worship_connect/sign_in/utils/wc_user_info_data.dart';
 import 'package:worship_connect/wc_core/wc_home_navigator.dart';
@@ -45,7 +46,8 @@ class WorshipConnect extends ConsumerWidget {
       routes: {
         '/': (context) => const LoginPage(),
         '/home': (context) => const HomeNavigator(),
-        '/scheduleInfo': (context) => const ScheduleInfoNavigator(),
+        '/scheduleInfoPage': (context) => const ScheduleInfoNavigator(),
+        '/memberListPage': (context) => const MembersListPage(),
       },
     );
   }

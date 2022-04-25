@@ -16,24 +16,29 @@ class ScheduleInfoMusiciansPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     WCUserInfoData? _wcUserInfoData = ref.watch(wcUserInfoDataStream).asData!.value;
     ScheduleMusiciansProvider _scheduleNotifier = ref.watch(scheduleMusiciansProvider.notifier);
-
     Map<String, dynamic> _instrumentsList = ref.watch(scheduleMusiciansProvider);
 
     return Column(
       children: [
         Expanded(
-          child: Visibility(
-            visible: _instrumentsList.isNotEmpty,
-            replacement: Center(
-              child: Text(
-                'No instrument added for this schedule',
-                style: Theme.of(context).textTheme.subtitle1,
+          child: RefreshIndicator(
+            onRefresh: () {
+              return _scheduleNotifier.reset();
+            },
+            child: Visibility(
+              visible: _instrumentsList.isNotEmpty,
+              replacement: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: SizedBox(
+                  height: WCUtils.screenHeightSafeAreaAppBarBottomBar(context) - 100,
+                  child: Center(
+                    child: Text(
+                      'No instrument added for this schedule',
+                      style: Theme.of(context).textTheme.subtitle1,
+                    ),
+                  ),
+                ),
               ),
-            ),
-            child: RefreshIndicator(
-              onRefresh: () {
-                return _scheduleNotifier.reset();
-              },
               child: ListView.builder(
                 padding: const EdgeInsets.all(4),
                 itemBuilder: (context, index) {

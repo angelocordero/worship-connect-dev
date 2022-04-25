@@ -36,7 +36,6 @@ class AnnouncementsFirebaseAPI {
         title: 'New Announcement',
         body: 'New announcement added by $announcementPosterName',
         teamID: _teamID,
-        posterID: announcementPosterID,
         notificationType: 'announcement'
       );
 

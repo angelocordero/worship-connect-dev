@@ -68,8 +68,6 @@ class AddCustomInstrumentExpansionTileState extends ConsumerState<AddCustomInstr
           },
         );
 
-      
-
         await Future.delayed(const Duration(milliseconds: 250));
 
         if (expanded) {

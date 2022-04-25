@@ -97,7 +97,7 @@ class SongTile extends ConsumerWidget {
         width: 30,
         height: 30,
       );
-    } else if (songData.songURL!.contains('youtube')) {
+    } else if (songData.songURL!.contains('youtube') || songData.songURL!.contains('youtu.be')) {
       return Image.asset(
         'assets/youtube_logo.png',
         height: 30,

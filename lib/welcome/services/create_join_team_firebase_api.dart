@@ -11,9 +11,9 @@ import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
 
 class CreateJoinTeamFirebaseAPI {
   final FirebaseFirestore _firebaseInstance = FirebaseFirestore.instance;
-  late final CollectionReference wcWCTeamDataCollection = _firebaseInstance.collection('WCTeams');
+  late final CollectionReference wcTeamsDataCollection = _firebaseInstance.collection('WCTeams');
 
-  Future createTeam({required String teamName, required String creatorID, required String creatorName, required String fcmToken}) async {
+  Future createTeam({required String teamName, required String creatorID, required String creatorName}) async {
     try {
       if (creatorName.isEmpty) {
         EasyLoading.showError('User name cannot be empty');
@@ -27,13 +27,13 @@ class CreateJoinTeamFirebaseAPI {
 
       EasyLoading.show();
 
+      String? _fcmToken = await FirebaseMessaging.instance.getToken();
       String _teamID = WCUtils.generateTeamID();
       String createdDay = WCUtils.dateToString(DateTime.now());
-
       WriteBatch _writeBatch = _firebaseInstance.batch();
 
       //set team info
-      _writeBatch.set(wcWCTeamDataCollection.doc(_teamID), {
+      _writeBatch.set(wcTeamsDataCollection.doc(_teamID), {
         WCTeamDataEnum.teamName.name: teamName,
         WCTeamDataEnum.creatorID.name: creatorID,
         WCTeamDataEnum.isOpen.name: true,
@@ -41,12 +41,12 @@ class CreateJoinTeamFirebaseAPI {
       });
 
       //create member file
-      _writeBatch.set(wcWCTeamDataCollection.doc(_teamID).collection('data').doc('members'), {
+      _writeBatch.set(wcTeamsDataCollection.doc(_teamID).collection('data').doc('members'), {
         UserStatusEnum.leader.name: <String, String>{creatorID: creatorName},
       });
 
       //create team instruments list
-      _writeBatch.set(wcWCTeamDataCollection.doc(_teamID).collection('data').doc('instruments'), {
+      _writeBatch.set(wcTeamsDataCollection.doc(_teamID).collection('data').doc('instruments'), {
         'customInstruments': [],
       });
 
@@ -55,12 +55,13 @@ class CreateJoinTeamFirebaseAPI {
         WCUserInfoDataEnum.userName.name: creatorName,
         WCUserInfoDataEnum.teamID.name: _teamID,
         WCUserInfoDataEnum.userStatusString.name: UserStatusEnum.leader.name,
+        WCUserInfoDataEnum.fcmToken.name: _fcmToken,
       });
 
       //sends new team announcement
       String _announcementID = WCUtils.generateRandomID();
 
-      _writeBatch.set(wcWCTeamDataCollection.doc(_teamID).collection('data').doc('announcements'), {
+      _writeBatch.set(wcTeamsDataCollection.doc(_teamID).collection('data').doc('announcements'), {
         _announcementID: <String, dynamic>{
           WCAnnouncementsDataEnum.announcementText.name: 'Welcome to $teamName. Created $createdDay by $creatorName.',
           WCAnnouncementsDataEnum.announcementPosterID.name: 'Worship Connect',
@@ -70,15 +71,15 @@ class CreateJoinTeamFirebaseAPI {
         }
       });
 
+      // sets team notifications fcm token list
+      _writeBatch.set(wcTeamsDataCollection.doc(_teamID).collection('data').doc('fcmTokens'), <String, dynamic>{
+        'fcmTokensList': FieldValue.arrayUnion([_fcmToken]),
+      });
+
       await _writeBatch.commit();
-
-      if (fcmToken.isNotEmpty) {
-        FirebaseMessaging.instance.subscribeToTopic(_teamID);
-      }
-
       EasyLoading.dismiss();
     } catch (e, st) {
-      WCUtils.wcShowError(e: e, st: st, wcError: e.toString());
+      WCUtils.wcShowError(e: e, st: st, wcError: 'Failed to create team');
       debugPrint(e.toString());
     }
   }
@@ -87,61 +88,70 @@ class CreateJoinTeamFirebaseAPI {
     required String teamID,
     required String joinerName,
     required String joinerID,
-    required String fcmToken,
   }) async {
-    if (joinerName.isEmpty) {
-      EasyLoading.showError('User name cannot be empty');
-      return;
+    try {
+      if (joinerName.isEmpty) {
+        EasyLoading.showError('User name cannot be empty');
+        return;
+      }
+      
+      if (teamID.isEmpty) {
+        EasyLoading.showError('Team ID cannot be empty');
+        return;
+      }
+      
+      String? _fcmToken = await FirebaseMessaging.instance.getToken();
+      
+      EasyLoading.show();
+      
+      WriteBatch _writeBatch = _firebaseInstance.batch();
+      
+      // try to get team document
+      DocumentSnapshot _doc = await wcTeamsDataCollection.doc(teamID).get();
+      
+      // check if the team exists
+      if (!_doc.exists) {
+        EasyLoading.showError(
+          'Team does not exist.',
+          dismissOnTap: true,
+        );
+        return;
+      }
+      
+      // check if team is open
+      if (!(_doc.data() as Map<String, dynamic>)[WCTeamDataEnum.isOpen.name]) {
+        EasyLoading.showError(
+          'Team is not open.',
+          dismissOnTap: true,
+        );
+        return;
+      }
+      
+      // update member list
+      _writeBatch.update(wcTeamsDataCollection.doc(teamID).collection('data').doc('members'), {
+        'member.$joinerID': joinerName,
+      });
+
+      // update team notifications fcm token list
+        _writeBatch.update(wcTeamsDataCollection.doc(teamID).collection('data').doc('fcmTokens'), <String, dynamic>{
+        'fcmTokensList': FieldValue.arrayUnion([_fcmToken]),
+      });
+
+      
+      // update user data
+      _writeBatch.update(WCUSerFirebaseAPI().wcUserDataCollection.doc(joinerID), {
+        WCUserInfoDataEnum.userName.name: joinerName,
+        WCUserInfoDataEnum.teamID.name: teamID,
+        WCUserInfoDataEnum.userStatusString.name: UserStatusEnum.member.name,
+        WCUserInfoDataEnum.fcmToken.name: _fcmToken,
+      });
+      
+      await _writeBatch.commit();
+      
+      EasyLoading.dismiss();
+    } catch (e, st) {
+      WCUtils.wcShowError(e: e, st: st, wcError: 'Failed to join team');
+      debugPrint(e.toString());
     }
-
-    if (teamID.isEmpty) {
-      EasyLoading.showError('Team ID cannot be empty');
-      return;
-    }
-
-    EasyLoading.show();
-
-    WriteBatch _writeBatch = _firebaseInstance.batch();
-
-    // try to get team document
-    DocumentSnapshot _doc = await wcWCTeamDataCollection.doc(teamID).get();
-
-    // check if the team exists
-    if (!_doc.exists) {
-      EasyLoading.showError(
-        'Team does not exist.',
-        dismissOnTap: true,
-      );
-      return;
-    }
-
-    // check if team is open
-    if (!(_doc.data() as Map<String, dynamic>)[WCTeamDataEnum.isOpen.name]) {
-      EasyLoading.showError(
-        'Team is not open.',
-        dismissOnTap: true,
-      );
-      return;
-    }
-
-    // update member list
-    _writeBatch.update(wcWCTeamDataCollection.doc(teamID).collection('data').doc('members'), {
-      'members.$joinerID': joinerName,
-    });
-
-    // update user data
-    _writeBatch.update(WCUSerFirebaseAPI().wcUserDataCollection.doc(joinerID), {
-      WCUserInfoDataEnum.userName.name: joinerName,
-      WCUserInfoDataEnum.teamID.name: teamID,
-      WCUserInfoDataEnum.userStatusString.name: UserStatusEnum.member.name,
-    });
-
-    await _writeBatch.commit();
-
-    if (fcmToken.isNotEmpty) {
-      FirebaseMessaging.instance.subscribeToTopic(teamID);
-    }
-
-    EasyLoading.dismiss();
   }
 }

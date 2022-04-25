@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:worship_connect/settings/utils/settings_providers_definition.dart';
 import 'package:worship_connect/settings/utils/wc_team_data.dart';
-import 'package:worship_connect/settings/screens/member_list_page.dart';
 import 'package:worship_connect/settings/services/team_firebase_api.dart';
 import 'package:worship_connect/settings/widgets/change_team_name_card.dart';
 import 'package:worship_connect/sign_in/utils/wc_user_info_data.dart';
@@ -44,7 +43,7 @@ class TeamSettings extends ConsumerWidget {
               isAdminOrLeader: _isAdminOrLeader,
             ),
             _membersTile(context, ref),
-            _leaveTeamButton(userData: _userData, context: context)
+            _leaveTeamButton(userData: _userData, context: context),
           ],
         ),
       ),
@@ -63,7 +62,6 @@ class TeamSettings extends ConsumerWidget {
             WCUtils.wcShowError(wcError: 'Team leader and admin cannot leave team');
             return;
           }
-
           showDialog(
             context: context,
             builder: (context) {
@@ -95,22 +93,13 @@ class TeamSettings extends ConsumerWidget {
   }
 
   ListTile _membersTile(BuildContext context, WidgetRef ref) {
-
-
     return ListTile(
       title: const Text('Members'),
       trailing: wcTrailingIcon,
       onTap: () async {
-        await ref.read(membersListProvider.notifier).init();
+        ref.read(membersListProvider.notifier).init();
 
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (BuildContext context) {
-              return const MembersListPage();
-            },
-          ),
-        );
+        Navigator.pushNamed(context, '/memberListPage');
       },
     );
   }

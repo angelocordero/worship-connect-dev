@@ -73,7 +73,6 @@ class SchedulesFirebaseAPI {
         title: 'New Schedule',
         body: 'New schedule added by $posterName',
         teamID: teamID,
-        posterID: posterID,
         notificationType: 'schedule',
       );
 
@@ -82,6 +81,18 @@ class SchedulesFirebaseAPI {
       WCUtils.wcShowError(e: e, st: st, wcError: 'Failed to add schedule');
     }
   }
+
+  // Future<int> getScheduleDataDocuments() async {
+  //   EasyLoading.show();
+
+  //   try {
+  //     QuerySnapshot<Map<String, dynamic>> _scheduleData = await _scheduleDoc.collection('scheduleData').get();
+  //     return _scheduleData.docs.length;
+  //   } catch (e, st) {
+  //     WCUtils.wcShowError(e: e, st: st, wcError: 'Failed to get schedule data');
+  //     return Future.value(0);
+  //   }
+  // }
 
   Future<DocumentSnapshot<Map<String, dynamic>>?> getScheduleDocument() async {
     EasyLoading.show();
@@ -199,7 +210,6 @@ class SchedulesFirebaseAPI {
         title: 'Song List Updated',
         body: 'The song list for ${scheduleData.scheduleTitle} on ${scheduleData.dateString} has been updated by $posterName',
         teamID: teamID,
-        posterID: posterID,
         notificationType: 'schedule',
       );
 
@@ -226,7 +236,6 @@ class SchedulesFirebaseAPI {
         title: 'Song List Updated',
         body: 'The musicians list for ${scheduleData.scheduleTitle} on ${scheduleData.dateString} has been updated by $posterName',
         teamID: teamID,
-        posterID: posterID,
         notificationType: 'schedule',
       );
 

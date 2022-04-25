@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:worship_connect/settings/services/team_firebase_api.dart';
 import 'package:worship_connect/sign_in/utils/wc_user_info_data.dart';
@@ -9,29 +8,28 @@ class MembersListProvider extends StateNotifier<Map<String, WCUserInfoData>> {
   MembersListProvider({required this.teamID}) : super({});
 
   final String teamID;
-
   static WCUserInfoData _leader = WCUserInfoData.empty();
+  bool isLoading = true;
 
   Future<DocumentSnapshot> _getMembersDoc() async {
     return await TeamFirebaseAPI(teamID).getMembersDocument();
   }
 
   Future<void> reset() async {
-    state.clear();
-    await init();
+    init();
+    state = {};
   }
 
   Future<void> init() async {
-    EasyLoading.show();
-
+    isLoading = true;
 
     DocumentSnapshot<Map<String, dynamic>> _doc = await _getMembersDoc() as DocumentSnapshot<Map<String, dynamic>>;
 
-    _setMembers(_doc.data()?['members']);
+    _setMembers(_doc.data()?['member']);
     _setAdmins(_doc.data()?['admin']);
     _setLeader(_doc.data()!['leader']);
 
-    EasyLoading.dismiss();
+    isLoading = false;
   }
 
   void _setMembers(Map<String, dynamic>? _map) {

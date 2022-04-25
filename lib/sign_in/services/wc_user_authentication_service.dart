@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
@@ -16,11 +15,8 @@ class WCUserAuthentication {
 
     // initialize user data in firebase if new user
     if (wcUserCredential.additionalUserInfo!.isNewUser) {
-      final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
       User? _newUser = wcUserCredential.user;
-      String? _fcmToken = await _firebaseMessaging.getToken();
-
-      WCUSerFirebaseAPI().initializeWCUserData(userID: _newUser!.uid, fcmToken: _fcmToken ?? '');
+      WCUSerFirebaseAPI().initializeWCUserData(userID: _newUser!.uid);
     }
   }
 
@@ -35,6 +31,7 @@ class WCUserAuthentication {
 
       await _googleSignIn.signOut();
       await _googleSignIn.disconnect();
+
       await FirebaseCrashlytics.instance.setUserIdentifier('');
     } catch (e) {
       debugPrint('wcError ' + e.toString());

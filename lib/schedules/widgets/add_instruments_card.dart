@@ -92,18 +92,18 @@ class AddInstrumentsCard extends ConsumerWidget {
         ),
         TextButton(
           onPressed: () {
-            String _selectedInstrument = ref.read(selectedInstrumentsProvider);
-            String _customInstrument = ref.read(customInstrumentProvider);
+            String _selectedInstrument = ref.read(selectedInstrumentsProvider).trim();
+            String _customInstrument = ref.read(customInstrumentProvider).trim();
 
             if (_selectedInstrument.isEmpty && _customInstrument.isEmpty) {
               WCUtils.wcShowError(wcError: 'No instrument selected');
               return;
             }
 
-            if (wcCoreInstruments.contains(_selectedInstrument)) {
-              ref.read(scheduleMusiciansProvider.notifier).addInstrument(_selectedInstrument);
-            } else {
+            if (_customInstrument.isNotEmpty && !wcCoreInstruments.contains(_customInstrument)) {
               ref.read(scheduleMusiciansProvider.notifier).addCustomInstrument(_customInstrument);
+            } else {
+              ref.read(scheduleMusiciansProvider.notifier).addInstrument(_selectedInstrument);
             }
 
             Navigator.pop(context);

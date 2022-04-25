@@ -12,23 +12,18 @@ import 'package:worship_connect/wc_core/core_providers_definition.dart';
 import 'package:worship_connect/wc_core/wc_custom_route.dart';
 import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
 
-class SchedulesHomePage extends ConsumerStatefulWidget {
+class SchedulesHomePage extends ConsumerWidget {
   const SchedulesHomePage({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _SchedulesHomePageState();
-}
-
-class _SchedulesHomePageState extends ConsumerState<SchedulesHomePage> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final calendarSelectedDay = ref.watch(calendarSelectedDayProvider);
     WCUserInfoData? _wcUserInfoData = ref.watch(wcUserInfoDataStream).asData?.value;
 
     return Scaffold(
       floatingActionButton: Visibility(
         visible: WCUtils.isAdminOrLeader(_wcUserInfoData),
-        child: _addScheduleButton(context),
+        child: _addScheduleButton(context, ref),
       ),
       appBar: AppBar(
         title: const Text(
@@ -70,7 +65,7 @@ class _SchedulesHomePageState extends ConsumerState<SchedulesHomePage> {
                       child: Builder(
                         builder: (context) {
                           try {
-                            return _buildScheduleList(calendarSelectedDay);
+                            return _buildScheduleList(context, ref, calendarSelectedDay);
                           } catch (e) {
                             return Container();
                           }
@@ -87,12 +82,16 @@ class _SchedulesHomePageState extends ConsumerState<SchedulesHomePage> {
     );
   }
 
-  Visibility _addScheduleButton(BuildContext context) {
+  Visibility _addScheduleButton(BuildContext context, WidgetRef ref) {
     return Visibility(
       child: WCUtils.wcExtendedFloatingActionButton(
         heroTag: 'addSchedule',
         labelText: 'Add Schedule',
         onPressed: () {
+          if (ref.read(calendarScheduleListProvider.notifier).getScheduleLength() >= 20) {
+            WCUtils.wcShowError(wcError: 'You can only post up to 20 schedules.');
+            return;
+          }
           Navigator.push(
             context,
             WCCustomRoute(
@@ -106,7 +105,7 @@ class _SchedulesHomePageState extends ConsumerState<SchedulesHomePage> {
     );
   }
 
-  Widget _buildScheduleList(DateTime calendarSelectedDay) {
+  Widget _buildScheduleList(BuildContext context, WidgetRef ref, DateTime calendarSelectedDay) {
     List scheduleList = ref.watch(calendarScheduleListProvider)[DateFormat('yyyyMMdd').format(calendarSelectedDay)] ?? [];
 
     if (scheduleList.isEmpty) {

@@ -22,18 +22,24 @@ class ScheduleInfoSongsPage extends ConsumerWidget {
     return Column(
       children: [
         Expanded(
-          child: Visibility(
-            visible: _songList.isNotEmpty,
-            replacement: Center(
-              child: Text(
-                'No songs for this schedule',
-                style: Theme.of(context).textTheme.subtitle1,
+          child: RefreshIndicator(
+            onRefresh: () {
+              return _songsNotifier.reset();
+            },
+            child: Visibility(
+              visible: _songList.isNotEmpty,
+              replacement: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: SizedBox(
+                  height: WCUtils.screenHeightSafeAreaAppBarBottomBar(context) - 100,
+                  child: Center(
+                    child: Text(
+                      'No songs for this schedule',
+                      style: Theme.of(context).textTheme.subtitle1,
+                    ),
+                  ),
+                ),
               ),
-            ),
-            child: RefreshIndicator(
-              onRefresh: () {
-                return _songsNotifier.reset();
-              },
               child: ReorderableListView.builder(
                 padding: const EdgeInsets.all(4),
                 itemBuilder: (context, index) {
@@ -71,7 +77,7 @@ class ScheduleInfoSongsPage extends ConsumerWidget {
         ),
         Expanded(
           child: ElevatedButton(
-            onPressed: ()  {
+            onPressed: () {
               ref.read(songKeyProvider.state).state = 'A';
               showDialog(
                 context: context,

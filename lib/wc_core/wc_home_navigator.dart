@@ -42,7 +42,6 @@ class HomeNavigator extends ConsumerWidget {
     }
 
     _initData(ref);
-
     _listenForNotifications(_wcUserInfoData, ref);
 
     return Consumer(

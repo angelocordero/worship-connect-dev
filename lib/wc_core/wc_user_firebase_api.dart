@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:worship_connect/settings/services/team_firebase_api.dart';
@@ -12,7 +13,6 @@ class WCUSerFirebaseAPI {
 
   initializeWCUserData({
     required String userID,
-    required String fcmToken,
   }) {
     try {
       wcUserDataCollection.doc(userID).set(<String, dynamic>{
@@ -20,7 +20,6 @@ class WCUSerFirebaseAPI {
         WCUserInfoDataEnum.userName.name: '',
         WCUserInfoDataEnum.userStatusString.name: UserStatusEnum.noTeam.name,
         WCUserInfoDataEnum.teamID.name: '',
-        WCUserInfoDataEnum.fcmToken.name: fcmToken,
       });
     } catch (e, st) {
       debugPrint('WCError: ' + e.toString());
@@ -48,7 +47,12 @@ class WCUSerFirebaseAPI {
     }
   }
 
-  Future updateUserName({required String userID, required String userName, String? teamID, UserStatusEnum? userStatus}) async {
+  Future updateUserName({
+    required String userID,
+    required String userName,
+    String? teamID,
+    UserStatusEnum? userStatus,
+  }) async {
     EasyLoading.show();
 
     try {
@@ -77,17 +81,44 @@ class WCUSerFirebaseAPI {
     }
   }
 
-   updateUserFCMToken (String userID, String fcmToken) {
-    try {
-      wcUserDataCollection.doc(userID).update(<String, dynamic>{
-        WCUserInfoDataEnum.fcmToken.name: fcmToken,
-      });
-    } catch (e, st) {
-      debugPrint('WCError: ' + e.toString());
-      WCUtils.wcShowError(e: e, st: st, wcError: 'Failed to turn off notifications');
+  Future<void> turnOnUserNotifications(String userID, String teamID) async {
+    await _updateUserNotification(userID, teamID, true);
+  }
+
+  Future<void> turnOffUserNotifications(String userID, String teamID) async {
+    await _updateUserNotification(userID, teamID, false);
+  }
+
+  Future<void> _updateUserNotification(String userID, String teamID, bool turnOn) async {
+    EasyLoading.show();
+
+    String? _fcmToken = await FirebaseMessaging.instance.getToken();
+
+    if (_fcmToken == null) {
+      EasyLoading.dismiss();
+      return Future.error('Fcm token not found');
     }
 
+    try {
+      WriteBatch _writeBatch = _firebaseInstance.batch();
+      _writeBatch.update(wcUserDataCollection.doc(userID), <String, dynamic>{
+        WCUserInfoDataEnum.fcmToken.name: turnOn ? _fcmToken : '',
+      });
 
+      if (turnOn) {
+        _writeBatch.update(TeamFirebaseAPI(teamID).teamsDataCollection.doc(teamID).collection('data').doc('fcmTokens'), <String, dynamic>{
+          'fcmTokensList': FieldValue.arrayUnion([_fcmToken]),
+        });
+      } else {
+        _writeBatch.update(TeamFirebaseAPI(teamID).teamsDataCollection.doc(teamID).collection('data').doc('fcmTokens'), <String, dynamic>{
+          'fcmTokensList': FieldValue.arrayRemove([_fcmToken.toString()]),
+        });
+      }
 
+      await _writeBatch.commit();
+      EasyLoading.dismiss();
+    } catch (e, st) {
+      WCUtils.wcShowError(e: e, st: st, wcError: 'Failed to update notifications');
+    }
   }
 }

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:nanoid/nanoid.dart';
@@ -71,7 +72,7 @@ class WCUtils {
 
   static Future<void> wcShowError({Object? e, StackTrace? st, required String wcError}) async {
     if (e != null && st != null) {
-      debugPrint(e.toString());
+      debugPrint('WCError: ${e.toString()}');
       await FirebaseCrashlytics.instance.recordError(
         e,
         st,
@@ -132,16 +133,22 @@ class WCUtils {
     required String title,
     required String body,
     required String teamID,
-    required String posterID,
     required String notificationType,
-  }) {
-    String _embedURL = 'https://wc-notifications-server.herokuapp.com/notify-team';
+  }) async {
+//    String _embedURL = 'https://wc-notifications-server.herokuapp.com/notify-team';
+
+    String _embedURL = 'http://192.168.1.12:5000/notify-team';
+
+    //! IMPORTANT
+    //TODO change embed url
+
+    String _fcmToken = await FirebaseMessaging.instance.getToken() ?? '';
 
     Map _notification = {
       'title': title,
       'body': body,
-      'topic': teamID,
-      'posterID': posterID,
+      'teamID': teamID,
+      'posterFcmToken': _fcmToken,
       'notificationType': notificationType,
     };
 
@@ -159,7 +166,12 @@ class WCUtils {
     required String body,
     required String targetUserID,
   }) {
-    String _embedURL = 'https://wc-notifications-server.herokuapp.com/notify-member';
+    //  String _embedURL = 'https://wc-notifications-server.herokuapp.com/notify-member';
+
+    String _embedURL = 'http://192.168.1.12:5000/notify-member';
+
+    //! IMPORTANT
+    //TODO change embed url
 
     Map _notification = {
       'title': title,
@@ -180,14 +192,21 @@ class WCUtils {
     required String title,
     required String body,
     required String targetUserID,
+    required String teamID,
   }) {
-    String _embedURL = 'https://wc-notifications-server.herokuapp.com/kick-member';
+//    String _embedURL = 'https://wc-notifications-server.herokuapp.com/kick-member';
+
+    //! IMPORTANT
+    //TODO change embed url
+
+    String _embedURL = 'http://192.168.1.12:5000/kick-member';
 
     Map _notification = {
       'title': title,
       'body': body,
       'userID': targetUserID,
       'notificationType': 'kick',
+      'teamID': teamID,
     };
 
     http.post(Uri.parse(_embedURL),
