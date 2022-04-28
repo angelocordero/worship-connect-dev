@@ -33,6 +33,8 @@ List<Color> wcGradientColors = const [
 
 Color wcAccentColor = const Color(0xff00d8d8);
 
+Color wcWarningColor = const Color(0xffff5555);
+
 LinearGradient wcLinearGradient = LinearGradient(
   colors: wcGradientColors,
   begin: Alignment.centerLeft,
@@ -67,6 +69,9 @@ ThemeData wcDarkTheme = ThemeData(
       ),
     ),
     headline6: GoogleFonts.raleway(),
+  ),
+  iconTheme: IconThemeData(
+    color: Colors.grey.shade400,
   ),
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ButtonStyle(
@@ -116,7 +121,11 @@ ThemeData wcLightTheme = ThemeData(
         color: Colors.grey.shade700,
       ),
     ),
+
     headline6: GoogleFonts.raleway(),
+  ),
+  iconTheme: IconThemeData(
+    color: Colors.grey.shade700,
   ),
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ButtonStyle(

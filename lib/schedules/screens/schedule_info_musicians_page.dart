@@ -4,6 +4,7 @@ import 'package:worship_connect/schedules/providers/schedule_musicians_provider.
 import 'package:worship_connect/schedules/utils/schedules_providers_definition.dart';
 import 'package:worship_connect/schedules/widgets/add_instruments_card.dart';
 import 'package:worship_connect/schedules/widgets/instruments_tile.dart';
+import 'package:worship_connect/schedules/widgets/wc_custom_collapsible_widget.dart';
 import 'package:worship_connect/settings/utils/settings_providers_definition.dart';
 import 'package:worship_connect/sign_in/utils/wc_user_info_data.dart';
 import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
@@ -14,7 +15,6 @@ class ScheduleInfoMusiciansPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    WCUserInfoData? _wcUserInfoData = ref.watch(wcUserInfoDataStream).asData!.value;
     ScheduleMusiciansProvider _scheduleNotifier = ref.watch(scheduleMusiciansProvider.notifier);
     Map<String, dynamic> _instrumentsList = ref.watch(scheduleMusiciansProvider);
 
@@ -52,14 +52,16 @@ class ScheduleInfoMusiciansPage extends ConsumerWidget {
                     ),
                   );
 
-                  return InstrumentsTile(instrument: _instrumentData);
+                  return InstrumentsTile(
+                    instrument: _instrumentData,
+                  );
                 },
                 itemCount: _instrumentsList.keys.length,
               ),
             ),
           ),
         ),
-        if (WCUtils.isAdminOrLeader(_wcUserInfoData!)) _buildButtons(context, ref),
+        _buildButtons(context, ref),
         const SizedBox(
           height: 4,
         ),
@@ -67,46 +69,49 @@ class ScheduleInfoMusiciansPage extends ConsumerWidget {
     );
   }
 
-  Row _buildButtons(BuildContext context, WidgetRef ref) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        const SizedBox(
-          width: 12,
-        ),
-        Expanded(
-          child: ElevatedButton(
-            onPressed: () async {
-              await ref.read(customInstrumentsListProvider.notifier).init();
-              ref.read(customInstrumentProvider.state).state = '';
-
-              showDialog(
-                context: context,
-                builder: (context) {
-                  return const AddInstrumentsCard();
-                },
-              );
-            },
-            child: const Text('Add Instruments'),
+  WCCustomCollapsibleWidget _buildButtons(BuildContext context, WidgetRef ref) {
+    return WCCustomCollapsibleWidget(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const SizedBox(
+            width: 12,
           ),
-        ),
-        const SizedBox(
-          width: 12,
-        ),
-        Expanded(
-          child: ElevatedButton(
-            onPressed: () async {
-              WCUserInfoData _userData = ref.read(wcUserInfoDataStream).value!;
+          Expanded(
+            child: ElevatedButton(
+              onPressed: () async {
+                await ref.read(customInstrumentsListProvider.notifier).init();
+                ref.read(customInstrumentProvider.state).state = '';
 
-              ref.read(scheduleMusiciansProvider.notifier).saveMusicians(_userData.userID, _userData.userName);
-            },
-            child: const Text('Save'),
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return const AddInstrumentsCard();
+                  },
+                );
+              },
+              child: const Text('Add Instruments'),
+            ),
           ),
-        ),
-        const SizedBox(
-          width: 12,
-        ),
-      ],
+          const SizedBox(
+            width: 12,
+          ),
+          Expanded(
+            child: ElevatedButton(
+              onPressed: () async {
+                WCUserInfoData _userData = ref.read(wcUserInfoDataStream).value!;
+
+                ref.read(scheduleMusiciansProvider.notifier).saveMusicians(_userData.userID, _userData.userName);
+              },
+              child: const Text('Save'),
+            ),
+          ),
+          const SizedBox(
+            width: 12,
+          ),
+        ],
+      ),
+      axisAlignment: -1,
     );
   }
 }

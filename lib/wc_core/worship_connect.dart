@@ -32,9 +32,9 @@ class WorshipConnect extends ConsumerWidget {
       ..backgroundColor = Colors.white10
       ..userInteractions = false
       ..dismissOnTap = false
-      ..errorWidget = const Icon(
+      ..errorWidget = Icon(
         Icons.error,
-        color: Colors.red,
+        color: wcWarningColor,
       );
 
     return MaterialApp(

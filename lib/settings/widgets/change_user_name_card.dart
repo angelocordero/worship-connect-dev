@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tap_debouncer/tap_debouncer.dart';
 import 'package:worship_connect/sign_in/utils/wc_user_info_data.dart';
 import 'package:worship_connect/wc_core/wc_user_firebase_api.dart';
-import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
 import 'package:worship_connect/wc_core/core_providers_definition.dart';
 
 class ChangeUserNameCard extends ConsumerWidget {
@@ -20,7 +19,7 @@ class ChangeUserNameCard extends ConsumerWidget {
     return SafeArea(
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(32),
-        child: Material(
+        child: Card(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
@@ -28,10 +27,14 @@ class ChangeUserNameCard extends ConsumerWidget {
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
             child: Column(
               mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
-                Text(
-                  'Change username',
-                  style: Theme.of(context).textTheme.headline6,
+                Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    'Change username',
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
                 ),
                 const SizedBox(
                   height: 10,
@@ -51,6 +54,7 @@ class ChangeUserNameCard extends ConsumerWidget {
 
   Future<dynamic> showCancelDialog(BuildContext context) async {
     showDialog(
+      barrierColor: Colors.black87,
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
@@ -84,11 +88,8 @@ class ChangeUserNameCard extends ConsumerWidget {
       scrollDirection: Axis.horizontal,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
-        mainAxisSize: MainAxisSize.min,
+        mainAxisSize: MainAxisSize.max,
         children: [
-          SizedBox(
-            width: (WCUtils.screenWidth(context) - 96) / 3,
-          ),
           TextButton(
             onPressed: () async {
               if (newName.isNotEmpty) {
@@ -137,7 +138,7 @@ class ChangeUserNameCard extends ConsumerWidget {
       decoration: const InputDecoration(
         isDense: true,
         contentPadding: EdgeInsets.all(12),
-        hintText: 'User name',
+        hintText: 'Username',
         border: OutlineInputBorder(
           borderRadius: BorderRadius.all(
             Radius.circular(12.0),

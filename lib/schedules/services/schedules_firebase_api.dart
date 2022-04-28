@@ -82,18 +82,6 @@ class SchedulesFirebaseAPI {
     }
   }
 
-  // Future<int> getScheduleDataDocuments() async {
-  //   EasyLoading.show();
-
-  //   try {
-  //     QuerySnapshot<Map<String, dynamic>> _scheduleData = await _scheduleDoc.collection('scheduleData').get();
-  //     return _scheduleData.docs.length;
-  //   } catch (e, st) {
-  //     WCUtils.wcShowError(e: e, st: st, wcError: 'Failed to get schedule data');
-  //     return Future.value(0);
-  //   }
-  // }
-
   Future<DocumentSnapshot<Map<String, dynamic>>?> getScheduleDocument() async {
     EasyLoading.show();
 
@@ -128,6 +116,13 @@ class SchedulesFirebaseAPI {
       _writeBatch.delete(_scheduleDoc.collection('scheduleData').doc(_scheduleData.scheduleID));
 
       await _writeBatch.commit();
+
+        WCUtils.sendTeamNotification(
+        title: '',
+        body: '',
+        teamID: teamID,
+        notificationType: 'schedule',
+      );
 
       EasyLoading.dismiss();
     } catch (e, st) {

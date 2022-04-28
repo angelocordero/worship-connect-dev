@@ -20,6 +20,8 @@ class MemberListTile extends ConsumerWidget {
     final WCUserInfoData _userData = ref.watch(wcUserInfoDataStream).asData!.value!;
     Text _nameText = Text(memberData.userName);
 
+    TextStyle _popUpDialogTextStyle = Theme.of(context).textTheme.bodyText2!.copyWith(fontSize: 16);
+
     if (_userData.userStatus == UserStatusEnum.leader && memberData.userID != _userData.userID) {
       _showPopupButton = true;
     } else if (_userData.userStatus == UserStatusEnum.admin &&
@@ -62,7 +64,7 @@ class MemberListTile extends ConsumerWidget {
               replacement: const SizedBox(
                 width: 46,
               ),
-              child: _popupMenuButton(_userData, ref),
+              child: _popupMenuButton(context, ref, _userData, _popUpDialogTextStyle),
             ),
           ],
         ),
@@ -70,7 +72,7 @@ class MemberListTile extends ConsumerWidget {
     );
   }
 
-  PopupMenuButton<int> _popupMenuButton(WCUserInfoData _userData, WidgetRef ref) {
+  PopupMenuButton<int> _popupMenuButton(BuildContext context, WidgetRef ref, WCUserInfoData _userData, TextStyle _popUpDialogTextStyle) {
     UserStatusEnum _userStatus = _userData.userStatus;
     UserStatusEnum _memberStatus = memberData.userStatus;
     String _teamName = ref.watch(wcWCTeamDataStream).value?.teamName ?? '';
@@ -87,24 +89,19 @@ class MemberListTile extends ConsumerWidget {
       onSelected: (item) async {
         switch (item) {
           case 0:
-            await TeamFirebaseAPI(_userData.teamID).promoteToLeader(userData: _userData, memberData: memberData, teamName: _teamName);
-            reset();
+            await _handlePromoteToLeader(context, _popUpDialogTextStyle, _userData, _teamName);
             break;
           case 1:
-            await TeamFirebaseAPI(_userData.teamID).promoteToAdmin(memberData, _userData.userName, _teamName);
-            reset();
+            await _handlePromoteToAdmin(context, _popUpDialogTextStyle, _userData, _teamName);
             break;
           case 2:
-            await TeamFirebaseAPI(_userData.teamID).demoteToMember(memberData, _userData.userName, _teamName);
-            reset();
+            await _handleDemoteToMember(context, _popUpDialogTextStyle, _userData, _teamName);
             break;
           case 3:
-            await TeamFirebaseAPI(_userData.teamID).removeFromTeam(memberData, _userData.userName, _teamName);
-            reset();
+            await _handleRemoveFromTeam(context, _popUpDialogTextStyle, _userData, _teamName);
             break;
           case 4:
-            await TeamFirebaseAPI(_userData.teamID).demoteSelfToMember(memberData);
-            reset();
+            await _handleDemoteSelfToMember(context, _popUpDialogTextStyle, _userData);
             break;
           default:
             WCUtils.wcShowError(wcError: 'Error');
@@ -139,6 +136,183 @@ class MemberListTile extends ConsumerWidget {
               child: Text('Demote self to Member'),
             ),
         ];
+      },
+    );
+  }
+
+  Future<void> _handleDemoteSelfToMember(BuildContext context, TextStyle _popUpDialogTextStyle, WCUserInfoData _userData) async {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(
+            'Are you sure you want to demote yourself to member?',
+            style: _popUpDialogTextStyle.copyWith(color: wcWarningColor),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('No'),
+            ),
+            TextButton(
+              onPressed: () async {
+                await TeamFirebaseAPI(_userData.teamID).demoteSelfToMember(memberData);
+                reset();
+                Navigator.pop(context);
+              },
+              child: const Text('Yes'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _handleRemoveFromTeam(BuildContext context, TextStyle _popUpDialogTextStyle, WCUserInfoData _userData, String _teamName) async {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: RichText(
+            text: TextSpan(
+              style: _popUpDialogTextStyle.copyWith(color: wcWarningColor),
+              text: 'Are you sure you want to remove ',
+              children: [
+                TextSpan(text: memberData.userName, style: _popUpDialogTextStyle.copyWith(fontStyle: FontStyle.italic, color: wcWarningColor)),
+                const TextSpan(text: '?'),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('No'),
+            ),
+            TextButton(
+              onPressed: () async {
+                await TeamFirebaseAPI(_userData.teamID).removeFromTeam(memberData, _userData.userName, _teamName);
+                reset();
+                Navigator.pop(context);
+              },
+              child: const Text('Yes'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _handleDemoteToMember(BuildContext context, TextStyle _popUpDialogTextStyle, WCUserInfoData _userData, String _teamName) async {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: RichText(
+            text: TextSpan(
+              style: _popUpDialogTextStyle,
+              text: 'Demote ',
+              children: [
+                TextSpan(text: memberData.userName, style: _popUpDialogTextStyle.copyWith(fontStyle: FontStyle.italic)),
+                const TextSpan(text: ' to member?'),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('No'),
+            ),
+            TextButton(
+              onPressed: () async {
+                await TeamFirebaseAPI(_userData.teamID).demoteToMember(memberData, _userData.userName, _teamName);
+                reset();
+                Navigator.pop(context);
+              },
+              child: const Text('Yes'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _handlePromoteToAdmin(BuildContext context, TextStyle _popUpDialogTextStyle, WCUserInfoData _userData, String _teamName) async {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: RichText(
+            text: TextSpan(
+              text: 'Promote ',
+              style: _popUpDialogTextStyle,
+              children: [
+                TextSpan(text: memberData.userName, style: _popUpDialogTextStyle.copyWith(fontStyle: FontStyle.italic)),
+                const TextSpan(text: ' to admin?'),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('No'),
+            ),
+            TextButton(
+              onPressed: () async {
+                await TeamFirebaseAPI(_userData.teamID).promoteToAdmin(memberData, _userData.userName, _teamName);
+                reset();
+
+                Navigator.pop(context);
+              },
+              child: const Text('Yes'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _handlePromoteToLeader(BuildContext context, TextStyle _popUpDialogTextStyle, WCUserInfoData _userData, String _teamName) async {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: RichText(
+            text: TextSpan(
+              text: 'Are you sure you want to pass the leadership of ',
+              style: _popUpDialogTextStyle.copyWith(color: wcWarningColor),
+              children: [
+                TextSpan(text: _teamName, style: _popUpDialogTextStyle.copyWith(fontStyle: FontStyle.italic, color: wcWarningColor)),
+                const TextSpan(text: ' to '),
+                TextSpan(text: memberData.userName, style: _popUpDialogTextStyle.copyWith(fontStyle: FontStyle.italic, color: wcWarningColor)),
+                const TextSpan(text: '?'),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('No'),
+            ),
+            TextButton(
+              onPressed: () async {
+                await TeamFirebaseAPI(_userData.teamID).promoteToLeader(userData: _userData, memberData: memberData, teamName: _teamName);
+                reset();
+                Navigator.pop(context);
+              },
+              child: const Text('Yes'),
+            ),
+          ],
+        );
       },
     );
   }

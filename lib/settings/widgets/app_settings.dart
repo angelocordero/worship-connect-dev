@@ -22,9 +22,12 @@ class AppSettings extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              'Application Settings',
-              style: Theme.of(context).textTheme.subtitle1,
+            Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: Text(
+                'Application Settings',
+                style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 16),
+              ),
             ),
             const Divider(),
             _notificationsTile(),

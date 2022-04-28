@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tap_debouncer/tap_debouncer.dart';
@@ -43,7 +42,7 @@ class _EditSongCardState extends ConsumerState<EditSongCard> {
       child: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(32.0),
-          child: Material(
+          child: Card(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12.0),
             ),
@@ -53,11 +52,14 @@ class _EditSongCardState extends ConsumerState<EditSongCard> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Text(
-                      'Edit Song',
-                      style: Theme.of(context).textTheme.headline6?.copyWith(fontWeight: FontWeight.bold),
+                  Align(
+                    alignment: Alignment.center,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Text(
+                        'Edit Song',
+                        style: Theme.of(context).textTheme.headline6,
+                      ),
                     ),
                   ),
                   TextField(
@@ -67,7 +69,7 @@ class _EditSongCardState extends ConsumerState<EditSongCard> {
                     enableSuggestions: true,
                     decoration: const InputDecoration(
                       isDense: true,
-                      hintText: 'Title',
+                      hintText: 'Title (Required)',
                       contentPadding: EdgeInsets.all(12),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(
@@ -91,7 +93,7 @@ class _EditSongCardState extends ConsumerState<EditSongCard> {
                     enableSuggestions: true,
                     decoration: const InputDecoration(
                       isDense: true,
-                      hintText: 'Link',
+                      hintText: 'Link (Optional)',
                       contentPadding: EdgeInsets.all(12),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(
@@ -103,9 +105,7 @@ class _EditSongCardState extends ConsumerState<EditSongCard> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width / 4 - 16,
-                      ),
+                      const Spacer(),
                       TapDebouncer(
                         onTap: () async {
                           if (_titleEditingController.text.isNotEmpty) {
@@ -125,9 +125,6 @@ class _EditSongCardState extends ConsumerState<EditSongCard> {
                             ),
                           );
                         },
-                      ),
-                      const SizedBox(
-                        width: 16,
                       ),
                       TapDebouncer(
                         onTap: () async {
@@ -150,7 +147,7 @@ class _EditSongCardState extends ConsumerState<EditSongCard> {
                           return TextButton(
                             onPressed: onTap,
                             child: const Text(
-                              'Edit Song',
+                              'Edit',
                               style: TextStyle(
                                 fontSize: 12.0,
                               ),
@@ -170,10 +167,10 @@ class _EditSongCardState extends ConsumerState<EditSongCard> {
   }
 
   Future<dynamic> showCancelDialog(BuildContext context) {
-    return showCupertinoDialog(
+    return showDialog(
       context: context,
       builder: (BuildContext context) {
-        return CupertinoAlertDialog(
+        return AlertDialog(
           title: const Text('Confirm cancel?'),
           actions: [
             TextButton(

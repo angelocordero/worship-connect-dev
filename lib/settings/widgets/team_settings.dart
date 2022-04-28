@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:worship_connect/settings/screens/manage_team_access_page.dart';
 import 'package:worship_connect/settings/utils/settings_providers_definition.dart';
 import 'package:worship_connect/settings/utils/wc_team_data.dart';
 import 'package:worship_connect/settings/services/team_firebase_api.dart';
@@ -26,9 +27,12 @@ class TeamSettings extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              'Team Settings',
-              style: Theme.of(context).textTheme.subtitle1,
+            Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: Text(
+                'Team Settings',
+                style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 16),
+              ),
             ),
             const Divider(),
             _teamNameTile(
@@ -37,15 +41,31 @@ class TeamSettings extends ConsumerWidget {
               isAdminOrLeader: _isAdminOrLeader,
             ),
             _teamIDTile(_teamData.teamID),
-            _teamInvitesTile(
-              isOpen: _teamData.isOpen,
-              teamID: _teamData.teamID,
-              isAdminOrLeader: _isAdminOrLeader,
-            ),
             _membersTile(context, ref),
+            _manageTeamAccessTile(_isAdminOrLeader, context),
             _leaveTeamButton(userData: _userData, context: context),
           ],
         ),
+      ),
+    );
+  }
+
+  Visibility _manageTeamAccessTile(bool _isAdminOrLeader, BuildContext context) {
+    return Visibility(
+      visible: _isAdminOrLeader,
+      child: ListTile(
+        title: const Text('Manage Team Access'),
+        trailing: wcTrailingIcon,
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) {
+                return const ManageTeamAccessPage();
+              },
+            ),
+          );
+        },
       ),
     );
   }
@@ -59,10 +79,11 @@ class TeamSettings extends ConsumerWidget {
       child: ElevatedButton(
         onPressed: () async {
           if (WCUtils.isAdminOrLeader(userData)) {
-            WCUtils.wcShowError(wcError: 'Team leader and admin cannot leave team');
+            WCUtils.wcShowError(wcError: 'Team leader and admins cannot leave the team.');
             return;
           }
           showDialog(
+            barrierColor: Colors.black87,
             context: context,
             builder: (context) {
               return AlertDialog(
@@ -120,23 +141,6 @@ class TeamSettings extends ConsumerWidget {
     );
   }
 
-  Visibility _teamInvitesTile({
-    required bool isOpen,
-    required bool isAdminOrLeader,
-    required String teamID,
-  }) {
-    return Visibility(
-      visible: isAdminOrLeader,
-      child: SwitchListTile(
-        title: const Text('Allow Team Invites'),
-        value: isOpen,
-        onChanged: (value) async {
-          await TeamFirebaseAPI(teamID).toggleIsTeamOpen(isOpen);
-        },
-      ),
-    );
-  }
-
   ListTile _teamNameTile({
     required String teamName,
     required bool isAdminOrLeader,
@@ -153,6 +157,7 @@ class TeamSettings extends ConsumerWidget {
       ),
       onTap: () {
         showDialog(
+          barrierColor: Colors.black87,
           context: context,
           builder: (context) {
             return ChangeTeamNameCard(

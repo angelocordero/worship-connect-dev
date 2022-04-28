@@ -19,18 +19,22 @@ class SendAnnouncementCard extends ConsumerWidget {
         padding: const EdgeInsets.all(32),
         child: Hero(
           tag: 'newAnnouncement',
-          child: Material(
+          child: Card(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
             ),
             child: SingleChildScrollView(
               padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  Text(
-                    'Send Announcement',
-                    style: Theme.of(context).textTheme.headline6,
+                  Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      'Send Announcement',
+                      style: Theme.of(context).textTheme.headline6,
+                    ),
                   ),
                   const SizedBox(
                     height: 10,
@@ -79,13 +83,9 @@ class SendAnnouncementCard extends ConsumerWidget {
 
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
+      reverse: true,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        mainAxisSize: MainAxisSize.min,
         children: [
-          SizedBox(
-            width: (WCUtils.screenWidth(context) - 96) / 3,
-          ),
           TextButton(
             onPressed: () async {
               if (_announcementTextController.text.isNotEmpty) {

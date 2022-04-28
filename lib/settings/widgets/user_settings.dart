@@ -20,9 +20,12 @@ class UserSettings extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              'User Settings',
-              style: Theme.of(context).textTheme.subtitle1,
+            Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: Text(
+                'User Settings',
+                style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 16),
+              ),
             ),
             const Divider(),
             _userNameListTIle(
@@ -65,6 +68,7 @@ class UserSettings extends ConsumerWidget {
       trailing: const Icon(Icons.edit_outlined),
       onTap: () {
         showDialog(
+          barrierColor: Colors.black87,
           context: context,
           builder: (context) {
             return ChangeUserNameCard(

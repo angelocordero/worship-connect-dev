@@ -108,8 +108,31 @@ class AnnouncementListTile extends ConsumerWidget {
               size: 14,
             ),
             onPressed: () async {
-              await AnnouncementsFirebaseAPI(userInfoData.teamID).deleteAnnouncement(announcementID: announcementData.announcementID);
-              await announcementListNotifier.getAnnouncements();
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: const Text('Confirm delete?'),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text('No'),
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                          await AnnouncementsFirebaseAPI(userInfoData.teamID).deleteAnnouncement(announcementID: announcementData.announcementID);
+                          await announcementListNotifier.getAnnouncements();
+
+                          Navigator.pop(context);
+                        },
+                        child: const Text('Yes'),
+                      ),
+                    ],
+                  );
+                },
+              );
             },
           ),
       ],

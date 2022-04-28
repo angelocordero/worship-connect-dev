@@ -55,35 +55,6 @@ class AnnouncementsHomePage extends ConsumerWidget {
           ),
         ),
       ),
-
-      // body: Builder(
-      //   builder: (context) {
-      //     if (_announcementList.isEmpty) {
-      //       return Center(
-      //         child: Text(
-      //           "No announcement",
-      //           style: Theme.of(context).textTheme.subtitle1,
-      //         ),
-      //       );
-      //     } else {
-      //       return RefreshIndicator(
-      //         onRefresh: () async {
-      //           return await _announcementNotifier.getAnnouncements();
-      //         },
-      //         child: ListView.builder(
-      //           padding: const EdgeInsets.all(4),
-      //           itemCount: _announcementList.length,
-      //           itemBuilder: (BuildContext context, int index) {
-      //             return AnnouncementListTile(
-      //               index: index,
-      //               key: UniqueKey(),
-      //             );
-      //           },
-      //         ),
-      //       );
-      //     }
-      //   },
-      // ),
     );
   }
 

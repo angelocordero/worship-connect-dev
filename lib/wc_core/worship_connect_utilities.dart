@@ -46,11 +46,11 @@ class WCUtils {
   }
 
   static String dateToString(DateTime _dateTime) {
-    return '${DateFormat.EEEE().format(_dateTime)} ${DateFormat.yMMMd().format(_dateTime)}';
+    return DateFormat.yMMMMEEEEd().format(_dateTime);
   }
 
   static String dateTimeToString(DateTime _dateTime) {
-    return '${DateFormat.EEEE().format(_dateTime)} ${DateFormat.yMMMd().format(_dateTime)} ${DateFormat.jm().format(_dateTime)}';
+    return '${DateFormat.yMMMMEEEEd().format(_dateTime)} ${DateFormat.jm().format(_dateTime)}';
   }
 
   static DateTime setDateTimeFromDayAndTime({
@@ -137,27 +137,31 @@ class WCUtils {
   }) async {
 //    String _embedURL = 'https://wc-notifications-server.herokuapp.com/notify-team';
 
-    String _embedURL = 'http://192.168.1.12:5000/notify-team';
+    try {
+      String _embedURL = 'http://192.168.1.12:5000/notify-team';
 
-    //! IMPORTANT
-    //TODO change embed url
+      //! IMPORTANT
+      //TODO change embed url
 
-    String _fcmToken = await FirebaseMessaging.instance.getToken() ?? '';
+      String _fcmToken = await FirebaseMessaging.instance.getToken() ?? '';
 
-    Map _notification = {
-      'title': title,
-      'body': body,
-      'teamID': teamID,
-      'posterFcmToken': _fcmToken,
-      'notificationType': notificationType,
-    };
+      Map _notification = {
+        'title': title,
+        'body': body,
+        'teamID': teamID,
+        'posterFcmToken': _fcmToken,
+        'notificationType': notificationType,
+      };
 
-    http.post(Uri.parse(_embedURL),
-        headers: {
-          'Content-type': 'application/json',
-          'Accept': 'application/json',
-        },
-        body: jsonEncode(_notification));
+      http.post(Uri.parse(_embedURL),
+          headers: {
+            'Content-type': 'application/json',
+            'Accept': 'application/json',
+          },
+          body: jsonEncode(_notification));
+    } catch (e) {
+//
+    }
   }
 
 //notify members for demotions and promotions
@@ -168,24 +172,28 @@ class WCUtils {
   }) {
     //  String _embedURL = 'https://wc-notifications-server.herokuapp.com/notify-member';
 
-    String _embedURL = 'http://192.168.1.12:5000/notify-member';
+    try {
+      String _embedURL = 'http://192.168.1.12:5000/notify-member';
 
-    //! IMPORTANT
-    //TODO change embed url
+      //! IMPORTANT
+      //TODO change embed url
 
-    Map _notification = {
-      'title': title,
-      'body': body,
-      'userID': targetUserID,
-      'notificationType': 'member',
-    };
+      Map _notification = {
+        'title': title,
+        'body': body,
+        'userID': targetUserID,
+        'notificationType': 'member',
+      };
 
-    http.post(Uri.parse(_embedURL),
-        headers: {
-          'Content-type': 'application/json',
-          'Accept': 'application/json',
-        },
-        body: jsonEncode(_notification));
+      http.post(Uri.parse(_embedURL),
+          headers: {
+            'Content-type': 'application/json',
+            'Accept': 'application/json',
+          },
+          body: jsonEncode(_notification));
+    } catch (e) {
+      //
+    }
   }
 
   static void kickMemberNotification({
@@ -199,21 +207,25 @@ class WCUtils {
     //! IMPORTANT
     //TODO change embed url
 
-    String _embedURL = 'http://192.168.1.12:5000/kick-member';
+    try {
+      String _embedURL = 'http://192.168.1.12:5000/kick-member';
 
-    Map _notification = {
-      'title': title,
-      'body': body,
-      'userID': targetUserID,
-      'notificationType': 'kick',
-      'teamID': teamID,
-    };
+      Map _notification = {
+        'title': title,
+        'body': body,
+        'userID': targetUserID,
+        'notificationType': 'kick',
+        'teamID': teamID,
+      };
 
-    http.post(Uri.parse(_embedURL),
-        headers: {
-          'Content-type': 'application/json',
-          'Accept': 'application/json',
-        },
-        body: jsonEncode(_notification));
+      http.post(Uri.parse(_embedURL),
+          headers: {
+            'Content-type': 'application/json',
+            'Accept': 'application/json',
+          },
+          body: jsonEncode(_notification));
+    } catch (e) {
+      //
+    }
   }
 }

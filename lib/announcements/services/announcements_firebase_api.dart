@@ -33,11 +33,7 @@ class AnnouncementsFirebaseAPI {
       });
 
       WCUtils.sendTeamNotification(
-        title: 'New Announcement',
-        body: 'New announcement added by $announcementPosterName',
-        teamID: _teamID,
-        notificationType: 'announcement'
-      );
+          title: 'New Announcement', body: 'New announcement added by $announcementPosterName', teamID: _teamID, notificationType: 'announcement');
 
       EasyLoading.dismiss();
     } catch (e, st) {
@@ -56,6 +52,13 @@ class AnnouncementsFirebaseAPI {
         '$announcementID.${WCAnnouncementsDataEnum.announcementText.name}': announcementText,
       });
 
+      WCUtils.sendTeamNotification(
+        title: '',
+        body: '',
+        teamID: _teamID,
+        notificationType: 'announcement',
+      );
+
       EasyLoading.dismiss();
     } catch (e, st) {
       WCUtils.wcShowError(e: e, st: st, wcError: 'Failed to edit announcement');
@@ -69,6 +72,13 @@ class AnnouncementsFirebaseAPI {
       await _teamAnnouncementsData.update({
         announcementID: FieldValue.delete(),
       });
+
+      WCUtils.sendTeamNotification(
+        title: '',
+        body: '',
+        teamID: _teamID,
+        notificationType: 'announcement',
+      );
 
       EasyLoading.dismiss();
     } catch (e, st) {

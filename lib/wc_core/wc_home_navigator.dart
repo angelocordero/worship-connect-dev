@@ -68,14 +68,7 @@ class HomeNavigator extends ConsumerWidget {
     FirebaseMessaging.onMessage.listen(
       (RemoteMessage event) async {
         RemoteNotification? _notification = event.notification;
-        String _userID = _wcUserInfoData?.userID ?? '';
-
-        String posterID = event.data['posterID'] ?? '';
         String notificationType = event.data['notificationType'] ?? '';
-
-        if (posterID == _userID) return;
-
-        if (_notification == null) return;
 
         if (notificationType == 'schedule') {
           await ref.read(calendarScheduleListProvider.notifier).resetScheduleProvider();
@@ -84,11 +77,11 @@ class HomeNavigator extends ConsumerWidget {
             await ref.read(schedulesSongsProvider.notifier).init();
             await ref.read(scheduleMusiciansProvider.notifier).init();
           } catch (e) {
-//
+            //
           }
         }
 
-        if (notificationType == 'announcement') {
+        if (notificationType.trim() == 'announcement') {
           await ref.read(announcementListProvider.notifier).getAnnouncements();
         }
 
@@ -96,12 +89,29 @@ class HomeNavigator extends ConsumerWidget {
           await ref.read(membersListProvider.notifier).reset();
         }
 
+        if (_notification == null) return;
+
+        if (_notification.title!.isEmpty || _notification.body!.isEmpty) return;
         EasyLoading.showToast(
           _notification.body!,
           toastPosition: EasyLoadingToastPosition.top,
           duration: const Duration(seconds: 5),
           dismissOnTap: true,
         );
+      },
+    );
+    FirebaseMessaging.onMessageOpenedApp.listen(
+      (RemoteMessage event) async {
+        String notificationType = await event.data['notificationType'] ?? '';
+
+        if (notificationType == 'schedule') {
+          await ref.read(calendarScheduleListProvider.notifier).resetScheduleProvider();
+        }
+
+        if (notificationType.trim() == 'announcement') {
+          await ref.read(announcementListProvider.notifier).getAnnouncements();
+          ref.read(homeNavigationIndexProvider.state).state = 1;
+        }
       },
     );
   }

@@ -38,19 +38,23 @@ class _EditScheduleCardState extends ConsumerState<EditScheduleCard> {
           padding: const EdgeInsets.all(32.0),
           child: Hero(
             tag: widget.scheduleData.scheduleID,
-            child: Material(
+            child: Card(
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
               child: SingleChildScrollView(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Text(
-                          'Edit schedule',
-                          style: Theme.of(context).textTheme.headline6,
+                      Align(
+                        alignment: Alignment.center,
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Text(
+                            'Edit schedule',
+                            style: Theme.of(context).textTheme.headline6,
+                          ),
                         ),
                       ),
                       _scheduleTitleTextField(),
@@ -113,12 +117,9 @@ class _EditScheduleCardState extends ConsumerState<EditScheduleCard> {
 
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
+      reverse: true,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          SizedBox(
-            width: WCUtils.screenWidth(context) / 4 - 16,
-          ),
           TapDebouncer(
             onTap: () async {
               if (_scheduleTextController.text.trim() != widget.scheduleData.scheduleTitle) {
@@ -138,9 +139,6 @@ class _EditScheduleCardState extends ConsumerState<EditScheduleCard> {
                 ),
               );
             },
-          ),
-          const SizedBox(
-            width: 16,
           ),
           TapDebouncer(
             onTap: () async {

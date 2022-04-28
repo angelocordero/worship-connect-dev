@@ -25,7 +25,7 @@ class AddInstrumentsCard extends ConsumerWidget {
           padding: const EdgeInsets.all(32.0),
           child: Hero(
             tag: 'instruments',
-            child: Material(
+            child: Card(
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
               child: SingleChildScrollView(
                 child: Padding(
@@ -36,9 +36,12 @@ class AddInstrumentsCard extends ConsumerWidget {
                     children: [
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
-                        child: Text(
-                          'Add Instrument',
-                          style: Theme.of(context).textTheme.headline6?.copyWith(fontWeight: FontWeight.bold),
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            'Add Instrument',
+                            style: Theme.of(context).textTheme.headline6,
+                          ),
                         ),
                       ),
                       const SizedBox(

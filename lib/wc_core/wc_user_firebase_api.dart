@@ -30,21 +30,20 @@ class WCUSerFirebaseAPI {
   Stream<WCUserInfoData?> wcUserInfoDataStream(String? userID) {
     if (userID == null) {
       return Stream.value(null);
-    } else {
-      return wcUserDataCollection.doc(userID).snapshots().map(
-        (DocumentSnapshot snapshot) {
-          Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
-
-          return WCUserInfoData(
-            userID: data[WCUserInfoDataEnum.userID.name],
-            userName: data[WCUserInfoDataEnum.userName.name],
-            userStatusString: data[WCUserInfoDataEnum.userStatusString.name],
-            teamID: data[WCUserInfoDataEnum.teamID.name],
-            fcmToken: data[WCUserInfoDataEnum.fcmToken.name] ?? '',
-          );
-        },
-      );
     }
+    return wcUserDataCollection.doc(userID).snapshots().map(
+      (DocumentSnapshot snapshot) {
+        Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
+
+        return WCUserInfoData(
+          userID: data[WCUserInfoDataEnum.userID.name],
+          userName: data[WCUserInfoDataEnum.userName.name],
+          userStatusString: data[WCUserInfoDataEnum.userStatusString.name],
+          teamID: data[WCUserInfoDataEnum.teamID.name],
+          fcmToken: data[WCUserInfoDataEnum.fcmToken.name] ?? '',
+        );
+      },
+    );
   }
 
   Future updateUserName({
@@ -90,7 +89,7 @@ class WCUSerFirebaseAPI {
   }
 
   Future<void> _updateUserNotification(String userID, String teamID, bool turnOn) async {
-    EasyLoading.show();
+//    EasyLoading.show();
 
     String? _fcmToken = await FirebaseMessaging.instance.getToken();
 
@@ -116,7 +115,7 @@ class WCUSerFirebaseAPI {
       }
 
       await _writeBatch.commit();
-      EasyLoading.dismiss();
+      //  EasyLoading.dismiss();
     } catch (e, st) {
       WCUtils.wcShowError(e: e, st: st, wcError: 'Failed to update notifications');
     }

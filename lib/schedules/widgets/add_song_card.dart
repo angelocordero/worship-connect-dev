@@ -24,7 +24,7 @@ class _AddSongCardState extends ConsumerState<AddSongCard> {
       child: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(32.0),
-          child: Material(
+          child: Card(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12.0),
             ),
@@ -34,11 +34,14 @@ class _AddSongCardState extends ConsumerState<AddSongCard> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Text(
-                      'Add Song',
-                      style: Theme.of(context).textTheme.headline6?.copyWith(fontWeight: FontWeight.bold),
+                  Align(
+                    alignment: Alignment.center,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Text(
+                        'Add Song',
+                        style: Theme.of(context).textTheme.headline6,
+                      ),
                     ),
                   ),
                   TextField(
@@ -48,7 +51,7 @@ class _AddSongCardState extends ConsumerState<AddSongCard> {
                     enableSuggestions: true,
                     decoration: const InputDecoration(
                       isDense: true,
-                      hintText: 'Title',
+                      hintText: 'Title (Required)',
                       contentPadding: EdgeInsets.all(12),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(
@@ -72,7 +75,7 @@ class _AddSongCardState extends ConsumerState<AddSongCard> {
                     enableSuggestions: true,
                     decoration: const InputDecoration(
                       isDense: true,
-                      hintText: 'Link',
+                      hintText: 'Link (Optional)',
                       contentPadding: EdgeInsets.all(12),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(
@@ -82,11 +85,8 @@ class _AddSongCardState extends ConsumerState<AddSongCard> {
                     ),
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width / 4 - 16,
-                      ),
+                      const Spacer(),
                       TapDebouncer(
                         onTap: () async {
                           if (_titleEditingController.text.isNotEmpty) {
@@ -107,9 +107,6 @@ class _AddSongCardState extends ConsumerState<AddSongCard> {
                           );
                         },
                       ),
-                      const SizedBox(
-                        width: 16,
-                      ),
                       TapDebouncer(
                         onTap: () async {
                           if (_titleEditingController.text.isEmpty) {
@@ -128,7 +125,7 @@ class _AddSongCardState extends ConsumerState<AddSongCard> {
                           return TextButton(
                             onPressed: onTap,
                             child: const Text(
-                              'Add Song',
+                              'Add',
                               style: TextStyle(
                                 fontSize: 12.0,
                               ),

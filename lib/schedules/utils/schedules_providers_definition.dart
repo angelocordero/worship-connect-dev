@@ -7,7 +7,6 @@ import 'package:worship_connect/schedules/providers/calendar_schedule_list_provi
 import 'package:worship_connect/sign_in/utils/wc_user_info_data.dart';
 import 'package:worship_connect/wc_core/core_providers_definition.dart';
 
-
 final calendarSelectedDayProvider = StateProvider<DateTime>((ref) {
   return DateTime.now();
 });
@@ -28,7 +27,7 @@ final schedulesSongsProvider = StateNotifierProvider<ScheduleSongsProvider, List
 
   return ScheduleSongsProvider(
     teamID: _wcUserInfoData!.teamID,
-  scheduleData: _scheduleData,
+    scheduleData: _scheduleData,
   );
 });
 
@@ -52,4 +51,8 @@ final selectedInstrumentsProvider = StateProvider.autoDispose<String>((ref) {
 
 final customInstrumentProvider = StateProvider<String>((ref) {
   return '';
+});
+
+final isEditingProvider = StateProvider.autoDispose<bool>((ref) {
+  return false;
 });

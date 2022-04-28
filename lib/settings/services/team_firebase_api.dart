@@ -52,12 +52,12 @@ class TeamFirebaseAPI {
     }
   }
 
-  Future<void> toggleIsTeamOpen(bool currentStatus) async {
+  Future<void> toggleIsTeamOpen(bool value) async {
     EasyLoading.show();
 
     try {
       await teamsDataCollection.doc(teamID).update({
-        WCTeamDataEnum.isOpen.name: !currentStatus,
+        WCTeamDataEnum.isOpen.name: value,
       });
       EasyLoading.dismiss();
     } catch (e, st) {

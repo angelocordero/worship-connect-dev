@@ -23,7 +23,7 @@ class WCCustomRoute<T> extends PageRoute<T> {
   bool get maintainState => false;
 
   @override
-  Color get barrierColor => Colors.black54;
+  Color get barrierColor => Colors.black87;
 
   @override
   Widget buildTransitions(BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child) {

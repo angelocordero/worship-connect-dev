@@ -22,7 +22,7 @@ class SchedulesSummaryPage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Schedules Summary '),
+        title: const Text('Schedules Summary'),
       ),
       body: ListView.builder(
         itemCount: _scheduleKeys.length,
@@ -60,14 +60,19 @@ class SchedulesSummaryPage extends ConsumerWidget {
                   WCUtils.dateToString(
                     DateTime.parse(_indexKey),
                   ),
+                  style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 16),
                 ),
+                dense: true,
+                visualDensity: VisualDensity.compact,
               ),
               ..._scheduleDataList.map(
                 (element) {
                   return SchedulesCalendarTile(scheduleData: element);
                 },
               ),
-              const Divider(),
+              const Divider(
+                height: 2,
+              ),
             ],
           );
         },

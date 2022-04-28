@@ -35,19 +35,23 @@ class _CreateScheduleCardState extends ConsumerState<CreateScheduleCard> {
           padding: const EdgeInsets.all(32.0),
           child: Hero(
             tag: 'addSchedule',
-            child: Material(
+            child: Card(
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
               child: SingleChildScrollView(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Text(
-                          'Create schedule',
-                          style: Theme.of(context).textTheme.headline6,
+                      Align(
+                        alignment: Alignment.center,
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Text(
+                            'Create schedule',
+                            style: Theme.of(context).textTheme.headline6,
+                          ),
                         ),
                       ),
                       _scheduleTitleTextField(),
@@ -111,12 +115,9 @@ class _CreateScheduleCardState extends ConsumerState<CreateScheduleCard> {
 
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
+      reverse: true,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          SizedBox(
-            width: WCUtils.screenWidth(context) / 4 - 16,
-          ),
           TapDebouncer(
             onTap: () async {
               if (_scheduleTextController.text.isNotEmpty) {
@@ -137,14 +138,8 @@ class _CreateScheduleCardState extends ConsumerState<CreateScheduleCard> {
               );
             },
           ),
-          const SizedBox(
-            width: 16,
-          ),
           TapDebouncer(
             onTap: () async {
-
-              
-
               DateTime _date = WCUtils.setDateTimeFromDayAndTime(
                 dateTime: ref.watch(calendarSelectedDayProvider),
                 timeOfDay: _selectedTime,
@@ -154,7 +149,6 @@ class _CreateScheduleCardState extends ConsumerState<CreateScheduleCard> {
                 WCUtils.wcShowError(wcError: 'Schedule title cannot be empty');
                 return;
               }
-
 
               await SchedulesFirebaseAPI(_userData.teamID).addSchedule(
                 scheduleTitle: _scheduleTextController.text.trim(),

@@ -4,6 +4,9 @@ import 'package:worship_connect/schedules/screens/schedule_info_musicians_page.d
 import 'package:worship_connect/schedules/screens/schedule_info_songs_page.dart';
 import 'package:worship_connect/schedules/utils/schedule_data.dart';
 import 'package:worship_connect/schedules/utils/schedules_providers_definition.dart';
+import 'package:worship_connect/sign_in/utils/wc_user_info_data.dart';
+import 'package:worship_connect/wc_core/core_providers_definition.dart';
+import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
 
 class ScheduleInfoNavigator extends ConsumerStatefulWidget {
   const ScheduleInfoNavigator({Key? key}) : super(key: key);
@@ -22,6 +25,7 @@ class _ScheduleInfoNavigatorState extends ConsumerState<ScheduleInfoNavigator> {
   @override
   Widget build(BuildContext context) {
     WCScheduleData _scheduleData = ref.watch(scheduleInfoProvider);
+    WCUserInfoData? _wcUserInfoData = ref.watch(wcUserInfoDataStream).asData!.value;
 
     return Scaffold(
       appBar: AppBar(
@@ -33,6 +37,24 @@ class _ScheduleInfoNavigatorState extends ConsumerState<ScheduleInfoNavigator> {
             _scheduleData.timeString,
           ),
         ),
+        actions: [
+          Visibility(
+            visible: WCUtils.isAdminOrLeader(_wcUserInfoData),
+            child: IconButton(
+              onPressed: () {
+                bool _isEditing = ref.read(isEditingProvider);
+
+                ref.read(isEditingProvider.state).state = !_isEditing;
+              },
+              icon: AnimatedCrossFade(
+                duration: const Duration(milliseconds: 250),
+                firstChild: const Icon(Icons.edit_off_outlined),
+                secondChild: const Icon(Icons.edit_outlined),
+                crossFadeState: ref.watch(isEditingProvider) ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+              ),
+            ),
+          ),
+        ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentIndex,

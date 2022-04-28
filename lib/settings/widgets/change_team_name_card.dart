@@ -18,20 +18,23 @@ class ChangeTeamNameCard extends ConsumerWidget {
     return SafeArea(
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(32),
-        child: Material(
+        child: Card(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
           child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                Text(
-                  'Change team name',
-                  style: Theme.of(context).textTheme.headline6,
+                Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    'Change Team Name',
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
                 ),
                 const SizedBox(
                   height: 10,

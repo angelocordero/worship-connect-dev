@@ -5,6 +5,7 @@ import 'package:worship_connect/schedules/utils/schedules_providers_definition.d
 import 'package:worship_connect/schedules/utils/song_data.dart';
 import 'package:worship_connect/schedules/widgets/add_song_card.dart';
 import 'package:worship_connect/schedules/widgets/song_tile.dart';
+import 'package:worship_connect/schedules/widgets/wc_custom_collapsible_widget.dart';
 import 'package:worship_connect/sign_in/utils/wc_user_info_data.dart';
 import 'package:worship_connect/wc_core/worship_connect_utilities.dart';
 import 'package:worship_connect/wc_core/core_providers_definition.dart';
@@ -54,7 +55,7 @@ class ScheduleInfoSongsPage extends ConsumerWidget {
             ),
           ),
         ),
-        if (WCUtils.isAdminOrLeader(_wcUserInfoData!)) _buildButtons(context, ref, _songsNotifier, _wcUserInfoData.userName, _wcUserInfoData.userID),
+        _buildButtons(context, ref, _songsNotifier, _wcUserInfoData!.userName, _wcUserInfoData.userID),
         const SizedBox(
           height: 4,
         ),
@@ -62,48 +63,51 @@ class ScheduleInfoSongsPage extends ConsumerWidget {
     );
   }
 
-  Row _buildButtons(
+  WCCustomCollapsibleWidget _buildButtons(
     BuildContext context,
     WidgetRef ref,
     ScheduleSongsProvider _songsNotifier,
     String posterName,
     String posterID,
   ) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        const SizedBox(
-          width: 12,
-        ),
-        Expanded(
-          child: ElevatedButton(
-            onPressed: () {
-              ref.read(songKeyProvider.state).state = 'A';
-              showDialog(
-                context: context,
-                builder: (context) {
-                  return const AddSongCard();
-                },
-              );
-            },
-            child: const Text('Add Song'),
+    return WCCustomCollapsibleWidget(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const SizedBox(
+            width: 12,
           ),
-        ),
-        const SizedBox(
-          width: 12,
-        ),
-        Expanded(
-          child: ElevatedButton(
-            onPressed: () async {
-              await _songsNotifier.saveSongs(posterID, posterName);
-            },
-            child: const Text('Save'),
+          Expanded(
+            child: ElevatedButton(
+              onPressed: () {
+                ref.read(songKeyProvider.state).state = 'A';
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return const AddSongCard();
+                  },
+                );
+              },
+              child: const Text('Add Song'),
+            ),
           ),
-        ),
-        const SizedBox(
-          width: 12,
-        ),
-      ],
+          const SizedBox(
+            width: 12,
+          ),
+          Expanded(
+            child: ElevatedButton(
+              onPressed: () async {
+                await _songsNotifier.saveSongs(posterID, posterName);
+              },
+              child: const Text('Save'),
+            ),
+          ),
+          const SizedBox(
+            width: 12,
+          ),
+        ],
+      ),
+      axisAlignment: -1,
     );
   }
 

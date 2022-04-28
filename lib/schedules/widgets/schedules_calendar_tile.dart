@@ -41,8 +41,32 @@ class SchedulesCalendarTile extends ConsumerWidget {
                   );
                   break;
                 case 1:
-                  await SchedulesFirebaseAPI(_wcUserInfoData.teamID).deleteSchedule(scheduleData);
-                  await ref.watch(calendarScheduleListProvider.notifier).resetScheduleProvider();
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: const Text('Confirm delete?'),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text('No'),
+                          ),
+                          TextButton(
+                            onPressed: () async {
+                              await SchedulesFirebaseAPI(_wcUserInfoData.teamID).deleteSchedule(scheduleData);
+                              await ref.watch(calendarScheduleListProvider.notifier).resetScheduleProvider();
+
+                              Navigator.pop(context);
+                            },
+                            child: const Text('Yes'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+
                   break;
               }
             },

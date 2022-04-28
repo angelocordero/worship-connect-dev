@@ -23,6 +23,8 @@ class MembersListProvider extends StateNotifier<Map<String, WCUserInfoData>> {
   Future<void> init() async {
     isLoading = true;
 
+    await Future.delayed(const Duration(milliseconds: 500));
+
     DocumentSnapshot<Map<String, dynamic>> _doc = await _getMembersDoc() as DocumentSnapshot<Map<String, dynamic>>;
 
     _setMembers(_doc.data()?['member']);

@@ -22,9 +22,12 @@ class ThemeSelectionCard extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Theme',
-                  style: Theme.of(context).textTheme.headline6?.copyWith(fontWeight: FontWeight.bold),
+                Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    'Theme',
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
                 ),
                 const SizedBox(
                   height: 10,
@@ -41,48 +44,39 @@ class ThemeSelectionCard extends ConsumerWidget {
     );
   }
 
-  Row _systemDefaultRadioButton(WCThemeProvider _wcThemeNotifier, ThemeMode _wcTheme) {
-    return Row(
-      children: [
-        Radio<ThemeMode>(
-          value: ThemeMode.system,
-          groupValue: _wcTheme,
-          onChanged: (value) {
-            _wcThemeNotifier.toggleTheme(value!);
-          },
-        ),
-        const Text('System Default'),
-      ],
+  RadioListTile<ThemeMode> _systemDefaultRadioButton(WCThemeProvider _wcThemeNotifier, ThemeMode _wcTheme) {
+    return RadioListTile<ThemeMode>(
+      visualDensity: VisualDensity.compact,
+      title: const Text('System Default'),
+      value: ThemeMode.system,
+      groupValue: _wcTheme,
+      onChanged: (value) {
+        _wcThemeNotifier.toggleTheme(value!);
+      },
     );
   }
 
-  Row _darkRadioButton(WCThemeProvider _wcThemeNotifier, ThemeMode _wcTheme) {
-    return Row(
-      children: [
-        Radio<ThemeMode>(
-          value: ThemeMode.dark,
-          groupValue: _wcTheme,
-          onChanged: (value) {
-            _wcThemeNotifier.toggleTheme(value!);
-          },
-        ),
-        const Text('Dark'),
-      ],
+  RadioListTile<ThemeMode> _darkRadioButton(WCThemeProvider _wcThemeNotifier, ThemeMode _wcTheme) {
+    return RadioListTile<ThemeMode>(
+      visualDensity: VisualDensity.compact,
+      title: const Text('Dark'),
+      value: ThemeMode.dark,
+      groupValue: _wcTheme,
+      onChanged: (value) {
+        _wcThemeNotifier.toggleTheme(value!);
+      },
     );
   }
 
-  Row _lightRadioButton(WCThemeProvider _wcThemeNotifier, ThemeMode _wcTheme) {
-    return Row(
-      children: [
-        Radio<ThemeMode>(
-          value: ThemeMode.light,
-          groupValue: _wcTheme,
-          onChanged: (value) {
-            _wcThemeNotifier.toggleTheme(value!);
-          },
-        ),
-        const Text('Light'),
-      ],
+  RadioListTile<ThemeMode> _lightRadioButton(WCThemeProvider _wcThemeNotifier, ThemeMode _wcTheme) {
+    return RadioListTile<ThemeMode>(
+      visualDensity: VisualDensity.compact,
+      title: const Text('Light'),
+      value: ThemeMode.light,
+      groupValue: _wcTheme,
+      onChanged: (value) {
+        _wcThemeNotifier.toggleTheme(value!);
+      },
     );
   }
 
