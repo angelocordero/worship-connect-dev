@@ -26,6 +26,9 @@ class WCCustomCollapsibleWidgetState extends ConsumerState<WCCustomCollapsibleWi
       parent: _controller,
       curve: Curves.linear,
     );
+    if (ref.read(isEditingProvider)) {
+      _controller.forward();
+    }
     super.initState();
   }
 

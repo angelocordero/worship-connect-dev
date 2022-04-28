@@ -121,6 +121,7 @@ class WCUtils {
           onPressed: onPressed,
           label: Text(
             labelText,
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
           icon: icon,
         ),

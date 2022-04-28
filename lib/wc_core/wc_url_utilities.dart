@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:worship_connect/wc_core/wc_about_details.dart';
 import 'package:worship_connect/wc_core/worship_connect_utilities.dart';

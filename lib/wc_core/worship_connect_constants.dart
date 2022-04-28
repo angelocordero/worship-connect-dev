@@ -77,8 +77,7 @@ ThemeData wcDarkTheme = ThemeData(
     style: ButtonStyle(
       textStyle: MaterialStateProperty.all<TextStyle>(
         GoogleFonts.raleway(
-          fontSize: 14,
-        ),
+          fontSize: 14        ),
       ),
       shape: MaterialStateProperty.all<OutlinedBorder>(
         const StadiumBorder(),
